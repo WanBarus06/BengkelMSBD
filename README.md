@@ -6,7 +6,7 @@
 - git clone https://github.com/WanBarus06/BengkelMSBD.git
   Clone repository ke dalam folder
 
-- cd <nama-folder-proyek>
+- cd nama-folder-proyek
    | Masuk ke dalam folder
 - composer install
    | Install dependensi backend
