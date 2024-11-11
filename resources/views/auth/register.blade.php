@@ -1,5 +1,79 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <div class="bg-sky-100 flex justify-center items-center h-screen">    
+        <div class= "lg:p-24 md:p-52 sm:20 p-6 w-full lg:w-1/2 bg-white">
+          <h1 class="text-4xl font-semibold mb-7">Registrasi</h1>
+          <form action="{{ route('register') }}" method="POST">
+            @csrf
+
+            <div class="mb-4" "bg-sky-100">
+                <label for="name" class="block text-gray-600">Nama Lengkap</label>
+                <input 
+                type="text"
+                id="name"
+                name="name"
+                class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                autocomplete="off"
+                :value="old('name')">
+            </div>
+            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+
+            <div class="mb-4 bg-sky-100">
+                <label for="email" class="block text-gray-600">Email</label>
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" 
+                  autocomplete="off"
+                  :value="old('email')"
+                >
+            </div>
+            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+
+            <div class="mb-4">
+              <label for="password" class="block text-gray-800">Password</label>
+              <input type="password"
+                id="password" 
+                name="password" \
+                class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" 
+                autocomplete="off"
+                :value="old('password')">
+            </div>
+            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+
+            <div class="mb-4">
+                <label for="password_confirmation" class="block text-gray-800">Password Confirmation</label>
+                <input 
+                type="password"
+                id="password_confirmation" 
+                name="password_confirmation" \
+                class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" 
+                autocomplete="off"
+                :value="old('password_confirmation')">
+            </div>
+            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        
+            {{-- <div class="mb-4">
+              <label for="phone" class="block text-gray-800">Nomor Telepon</label>
+              <input type="phone" id="phone" name="phone" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autocomplete="off">
+            </div> --}}
+        
+            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold rounded-md py-2 px-4 w-full">
+                {{ __('Register') }}
+            </button>
+          </form>
+          <div class="mt-6 ">
+            <p >Sudah mempunyai akun? Anda bisa melakukan <a href="/login" class="hover:underline text-red-500">login </a>disini.</p>
+          </div>
+        </div>
+            <div class="w-1/2 h-screen hidden lg:block relative lg">
+                <img src="../assets/img/register.png" alt="Gambar" class="object-cover w-full h-full">
+              </div>
+        </div>
+
+
+
+    {{-- <form method="POST" action="{{ route('register') }}">
         @csrf
 
         <!-- Name -->
@@ -48,5 +122,5 @@
                 {{ __('Register') }}
             </x-primary-button>
         </div>
-    </form>
+    </form> --}}
 </x-guest-layout>
