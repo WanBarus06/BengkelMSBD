@@ -9,7 +9,8 @@
     <div class= "lg:p-32 md:p-52 sm:20 p-6 w-full lg:w-1/2 bg-white">
       <h1 class="text-4xl font-semibold mb-8">Selamat datang</h1>
       <form action="{{ route('login') }}" method="POST">
-    
+        @csrf
+
         <div class="mb-4" "bg-sky-100">
           <label for="email" class="block text-gray-600">Email</label>
           <input 
