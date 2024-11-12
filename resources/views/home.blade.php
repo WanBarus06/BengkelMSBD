@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Dasboard</title>
+    <title>Homepage</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -29,7 +29,7 @@
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="../assets/css/dashboard.css" rel="stylesheet">
+    <link href="../assets/css/style.css" rel="stylesheet">
 </head>
 
 <body>
@@ -56,6 +56,7 @@
     </div>
     <!-- Topbar End -->
 
+
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
         <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
@@ -77,24 +78,13 @@
                         <a href="testimonial.html" class="dropdown-item">Karet Ban</a>
                     </div>
                 </div>
-                <a href="contact.html" class="nav-item nav-link">Messaging</a>
-                <a href="contact.html" class="nav-item nav-link">Notification</a>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><img
-                                        src="../assets/img/account-profile.png"
-                                        class="rounded-circle"
-                                        height="30"
-                                        alt=""
-                                        loading="lazy"
-                                        /></a>
-                    <div class="dropdown-menu fade-up m-0">
-                        <a href="booking.html" class="dropdown-item">My Profile</a>
-                        <a href="team.html" class="dropdown-item">Settings</a>
-                        <a href="testimonial.html" class="dropdown-item">Log Out</a>
-                    </div>
+                <a href="contact.html" class="nav-item nav-link">Contact</a>
             </div>
+            <a href="{{ route('login') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Register / Login<i class="fa fa-arrow-right ms-3"></i></a>
+        </div>
     </nav>
     <!-- Navbar End -->
+
 
     <!-- Carousel Start -->
     <div class="container-fluid p-0 mb-5">
