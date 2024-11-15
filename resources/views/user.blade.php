@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Dasboard</title>
+    <title>Dashboard</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -29,7 +29,7 @@
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="../assets/css/dashboard.css" rel="stylesheet">
+    <link href="../assets/css/user.css" rel="stylesheet">
 </head>
 
 <body>
@@ -38,23 +38,24 @@
         <div class="row gx-0 d-none d-lg-flex">
             <div class="col-lg-7 px-5 text-start">
                 <div class="h-100 d-inline-flex align-items-center py-3 me-4">
-                    <small class="fa fa-map-marker-alt text-primary me-2"></small>
-                    <small>Jalan H. Anif No.361 Rt 02 Jati Asri Susun XXIV Desa Sampali, Kec. Percut Sei Tuan, Kab. Deli Serdang</small>
+                    <small class="fa fa-home text-primary me-2"></small>
+                    <small>Home</small>
                 </div>
                 <div class="h-100 d-inline-flex align-items-center py-3">
-                    <small class="far fa-clock text-primary me-2"></small>
-                    <small>Senin - Sabtu : 08.30 - 19.00</small>
+                    <small class="far fa-user text-primary me-2"></small>
+                    <small>My Profile</small>
                 </div>
             </div>
             <div class="col-lg-5 px-5 text-end">
                 <div class="h-100 d-inline-flex align-items-center py-3 me-4">
-                    <small class="fa fa-phone-alt text-primary me-2"></small>
-                    <small>+62 813 7550 6448</small>
+                    <small class="text-primary me-2"></small>
+                    <small></small>
                 </div>
             </div>
         </div>
     </div>
     <!-- Topbar End -->
+
 
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
@@ -68,33 +69,22 @@
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="{{ route('home') }}" class="nav-item nav-link active">Home</a>
                 <a href="#about" class="nav-item nav-link">About</a>
-                <a href="service.html" class="nav-item nav-link">Products</a>
+                <a href="{{ route('products') }}" class="nav-item nav-link">Products</a>
+                <a href="http://wa.me/6281375506448" class="nav-item nav-link">Contact</a>
+                <a href="contact.html" class="nav-item nav-link">Notifications</a>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Categories</a>
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profile</a>
                     <div class="dropdown-menu fade-up m-0">
-                        <a href="booking.html" class="dropdown-item">Ban Vulkanisir</a>
-                        <a href="team.html" class="dropdown-item">Ban Biasa</a>
-                        <a href="testimonial.html" class="dropdown-item">Karet Ban</a>
-                    </div>
+                    <a href="{{ route('settings') }}" class="dropdown-item">Settings</a>
+                    <a href="{{ route('transaction') }}" class="dropdown-item">Transaction History</a>
+                    <a href="booking.html" class="dropdown-item">Log Out</a>
                 </div>
-                <a href="contact.html" class="nav-item nav-link">Messaging</a>
-                <a href="contact.html" class="nav-item nav-link">Notification</a>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><img
-                                        src="../assets/img/account-profile.png"
-                                        class="rounded-circle"
-                                        height="30"
-                                        alt=""
-                                        loading="lazy"
-                                        /></a>
-                    <div class="dropdown-menu fade-up m-0">
-                        <a href="booking.html" class="dropdown-item">My Profile</a>
-                        <a href="team.html" class="dropdown-item">Settings</a>
-                        <a href="testimonial.html" class="dropdown-item">Log Out</a>
-                    </div>
-            </div>
+                </div>
+                <a href="contact.html" class="nav-item nav-link">Logo</a>
+        </div>
     </nav>
     <!-- Navbar End -->
+
 
     <!-- Carousel Start -->
     <div class="container-fluid p-0 mb-5">
@@ -108,7 +98,7 @@
                                 <div class="col-10 col-lg-7 text-center text-lg-start">
                                     <h6 class="text-white text-uppercase mb-3 animated slideInDown">Ban Panbres</h6>
                                     <h1 class="display-3 text-white mb-4 pb-3 animated slideInDown">Performa Kendaraan Anda, Prioritas Kami</h1>
-                                    <a href="" class="btn btn-primary py-3 px-5 animated slideInDown">Learn More<i class="fa fa-arrow-right ms-3"></i></a>
+                                    <a href="" class="btn btn-primary py-3 px-5 animated slideInDown">Products<i class="fa fa-arrow-right ms-3"></i></a>
                                 </div>
                                 <div class="col-lg-5 d-none d-lg-flex animated zoomIn">
                                     <img class="img-fluid" src="../assets/img/bengkel-1.png" alt="">
@@ -125,7 +115,7 @@
                                 <div class="col-10 col-lg-7 text-center text-lg-start">
                                     <h6 class="text-white text-uppercase mb-3 animated slideInDown">Ban Panbres</h6>
                                     <h1 class="display-3 text-white mb-4 pb-3 animated slideInDown">Dapatkan Layanan Ban Terpercaya di Sini!</h1>
-                                    <a href="" class="btn btn-primary py-3 px-5 animated slideInDown">Learn More<i class="fa fa-arrow-right ms-3"></i></a>
+                                    <a href="" class="btn btn-primary py-3 px-5 animated slideInDown">Products<i class="fa fa-arrow-right ms-3"></i></a>
                                 </div>
                                 <div class="col-lg-5 d-none d-lg-flex animated zoomIn">
                                     <img class="img-fluid" src="../assets/img/bengkel-2.png" alt="">
@@ -418,7 +408,7 @@
     <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script src="../assets/js/main.js"></script>
     
     <script>
         function toggleText(link) {
