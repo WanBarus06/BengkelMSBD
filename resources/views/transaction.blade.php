@@ -59,7 +59,7 @@
   <div class="container mt-4">
     <!-- Home Link and Title -->
     <div class="header-container">
-      <a href="{{ route('user') }}" class="home-link">
+      <a href="{{ route('home') }}" class="home-link">
         <i class="fa fa-home"></i>
       </a>
     </div>

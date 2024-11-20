@@ -98,17 +98,20 @@
         </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto p-4 p-lg-0">
-            <a href="{{ route('home') }}" class="nav-item nav-link active">Home</a>
+            <a href="{{ route('home') }}" class="nav-item nav-link">Home</a>
             <a href="#about" class="nav-item nav-link">About</a>
-            <a href="{{ route('products') }}" class="nav-item nav-link">Products</a>
+            <a href="{{ route('products') }}" class="nav-item nav-link active">Products</a>
             <a href="http://wa.me/6281375506448" class="nav-item nav-link">Contact</a>
             <a href="contact.html" class="nav-item nav-link">Notifications</a>
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profile</a>
                 <div class="dropdown-menu fade-up m-0">
-                    <a href="{{ route('settings') }}" class="dropdown-item">Settings</a>
+                    <a href="{{ route('profile.edit') }}" class="dropdown-item">Settings</a>
                     <a href="{{ route('transaction') }}" class="dropdown-item">Transaction History</a>
-                    <a href="" class="dropdown-item">Log Out</a>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="dropdown-item">Log Out</button>
+                    </form>
                 </div>
                 </div>
                 <a href="" class="nav-item nav-link"><i class="fas fa-shopping-bag fa-lg"></i></a>

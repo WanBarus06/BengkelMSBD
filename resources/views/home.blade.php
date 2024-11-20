@@ -41,10 +41,14 @@
                     <small class="fa fa-home text-primary me-2"></small>
                     <small>Home</small>
                 </div>
-                <div class="h-100 d-inline-flex align-items-center py-3">
-                    <small class="text-primary me-2"></small>
-                    <small></small>
-                </div>
+                @if (Route::has('login'))
+                    @auth
+                    <div class="h-100 d-inline-flex align-items-center py-3">
+                        <small class="far fa-user text-primary me-2"></small>
+                        <small> {{ Auth::user()->name }} </small>
+                    </div>
+                    @endauth
+                @endif
             </div>
             <div class="col-lg-5 px-5 text-end">
                 <div class="h-100 d-inline-flex align-items-center py-3 me-4">
@@ -71,8 +75,27 @@
                 <a href="#about" class="nav-item nav-link">About</a>
                 <a href="{{ route('products') }}" class="nav-item nav-link">Products</a>
                 <a href="http://wa.me/6281375506448" class="nav-item nav-link">Contact</a>
+                @if (Route::has('login'))
+                    @auth
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profile</a>
+                        <div class="dropdown-menu fade-up m-0">
+                            <a href="{{ route('profile.edit') }}" class="dropdown-item">Settings</a>
+                            <a href="{{ route('transaction') }}" class="dropdown-item">Transaction History</a>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item">Log Out</button>
+                            </form>
+                        </div>
+                    </div>
+                        <a href="contact.html" class="nav-item nav-link">Logo</a>
+                @else
+                <a href="{{ route('login') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Register / Login<i class="fa fa-arrow-right ms-3"></i></a>
+                    @endauth
+                @endif
+                
             </div>
-            <a href="{{ route('login') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Register / Login<i class="fa fa-arrow-right ms-3"></i></a>
+
         </div>
     </nav>
     <!-- Navbar End -->

@@ -100,78 +100,143 @@
 <body>
   <div class="container">
     <div class="link-container">
-      <span class="tab"><a href="{{ route('user') }}" class="fa fa-home me-3"></a></span>
+      <span class="tab"><a href="{{ route('home') }}" class="fa fa-home me-3"></a></span>
       <span class="tab" onclick="showSection('edit-profile')">Edit Profile</span>
       <span class="tab" onclick="showSection('change-password')">Change Password</span>
       <span class="tab" onclick="showSection('delete-account')">Delete Account</span>
     </div>
+    <form id="send-verification" method="post" action="{{ route('verification.send') }}">
+      @csrf
+    </form>
 
     <div id="edit-profile" class="section active">
       <h2 class="m-0 text-primary">Kelola Akun Anda</h2>
-      <form>
-        <label for="name">Nama</label>
-        <input type="text" id="name" placeholder="Nama">
+      <form method="POST" action="{{ route('profile.update') }}">
+        @csrf
+        @method('patch')
+
+        <label for="name">Nama Lengkap</label>
+        {{-- <input type="text"
+        id="name"
+        placeholder="Nama Lengkap"
+        name="name"
+        :value="old('name', $user->name)"> --}}
+        <x-text-input id="name" name="name" type="text" class="text-gray-500 mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
+        <x-input-error class="mt-2" :messages="$errors->get('name')" />
 
         <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Email">
+        {{-- <input type="email" 
+        id="email" 
+        placeholder="Email"
+        name="email"
+        :value="old('email', $user->email)"> --}}
+        <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" disabled required/>
+        <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
         <label for="phone">No. Telepon</label>
-        <input type="tel" id="phone" placeholder="Nomor Telepon">
+        {{-- <input type="number" \
+        id="phone" 
+        placeholder="Nomor Telepon"
+        name="phone_number"
+        :value="old('email', $user->phone_number)"> --}}
+        <x-text-input id="phone_number" name="phone_number" type="number" class="mt-1 block w-full" :value="old('phone_number', $user->phone_number)"/>
+        <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
 
         <label for="address">Alamat</label>
-        <input type="text" id="address" placeholder="Alamat">
+        {{-- <input type="text" id="address" placeholder="Alamat"> --}}
+        <x-text-input id="address" name="address" type="text" class="mt-1 block w-full" :value="old('address', $user->address)" />
+        <x-input-error class="mt-2" :messages="$errors->get('address')" />
 
         <div class="buttons">
-          <button type="button" class="cancel-btn">Cancel</button>
           <button type="submit" class="save-btn">Save Changes</button>
         </div>
       </form>
+      @if (session('status') === 'profile-updated')
+      <p
+          x-data="{ show: true }"
+          x-show="show"
+          x-transition
+          x-init="setTimeout(() => show = false, 2000)"
+          class="text-sm text-gray-600 dark:text-gray-400"
+      >{{ __('Saved.') }}</p>
+      @elseif (session('status') === 'failed')
+      <p
+          x-data="{ show: false }"
+          x-show="show"
+          x-transition
+          x-init="setTimeout(() => show = false, 2000)"
+          class="text-sm text-gray-600 dark:text-gray-400"/>
+          {{ __('Failed.') }}
+      @endif
     </div>
 
     <div id="change-password" class="section">
       <h2 class="m-0 text-primary">Kelola Keamanan Akun Anda</h2>
-      <form>
-        <label for="username">Username</label>
-        <input type="text" id="username" placeholder="Username">
+      <form action="{{ route('password.update') }}" method = "POST">
+        @csrf
+        @method('put')
 
-        <label for="email-password">Email</label>
-        <input type="email" id="email-password" placeholder="Email">
+        <label for="email-password">Password Lama</label>
+        <x-text-input id="update_password_current_password" name="current_password" type="password" class="" autocomplete="current-password" />
+        <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2 text-red-600" />
 
-        <label for="new-password">Masukkan Password Anda</label>
-        <input type="password" id="new-password" placeholder="Password">
+        <label for="new-password">Password Baru</label>
+        <x-text-input id="update_password_password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
+        <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2 text-red-600" />
 
         <label for="confirm-password">Konfirmasi Password</label>
-        <input type="password" id="confirm-password" placeholder="Konfirmasi password">
+        <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
+        <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2 text-red-600" />
 
         <div class="buttons">
-          <button type="button" class="cancel-btn">Cancel</button>
           <button type="submit" class="save-btn">Save Changes</button>
         </div>
       </form>
+      @if (session('status') === 'password-updated')
+      <p
+          x-data="{ show: true }"
+          x-show="show"
+          x-transition
+          x-init="setTimeout(() => show = false, 2000)"
+          class="text-sm text-gray-600 dark:text-gray-400"
+      >{{ __('Saved.') }}</p>
+      @elseif (session('status') === 'failed')
+      <p
+          x-data="{ show: false }"
+          x-show="show"
+          x-transition
+          x-init="setTimeout(() => show = false, 2000)"
+          class="text-sm text-gray-600 dark:text-gray-400"/>
+          {{ __('Failed.') }}
+      @endif
     </div>
 
     <div id="delete-account" class="section">
       <h2 class="m-0 text-primary">Hapus Akun Anda</h2>
-      <form>
-        <label for="username">Username</label>
-        <input type="text" id="username" placeholder="Username">
-
-        <label for="email-password">Email</label>
-        <input type="email" id="email-password" placeholder="Email">
+      <form method="POST" action="{{ route('profile.destroy') }}">
+        @csrf
+        @method('delete')
 
         <label for="new-password">Masukkan Password Anda</label>
-        <input type="password" id="new-password" placeholder="Password">
+        <x-text-input
+          id="password"
+          name="password"
+          type="password"
+          class="mt-1 block w-3/4"
+          placeholder="{{ __('Password') }}"
+          />
 
-        <div class="confirmation-container">
+          <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+
+        {{-- <div class="confirmation-container">
           <p>Apa Anda Yakin Untuk Menghapus Akun?</p>
           <div class="toggle-buttons">
               <button type="button" class="toggle-button" id="yes-btn" onclick="selectOption('yes')">Yes</button>
               <button type="button" class="toggle-button" id="no-btn" onclick="selectOption('no')">No</button>
           </div>
-        </div>
+        </div> --}}
 
         <div class="buttons">
-          <button type="button" class="cancel-btn">Cancel</button>
           <button type="submit" class="save-btn">Delete Account</button>
         </div>
       </form>
