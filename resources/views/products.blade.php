@@ -74,16 +74,6 @@
                 <small>Products</small>
             </div>
         </div>
-        
-        <!-- Search Bar -->
-        <div class="col-lg-5 d-flex justify-content-end align-items-center pe-5">
-            <form class="d-flex align-items-center" role="search" style="max-width: 250px; width: 100%;">
-                <input type="search" class="form-control" placeholder="Search" aria-label="Search" 
-                    style="border-radius: 20px; padding: 6px 10px; border: 1px solid #ddd; font-size: 14px;">
-                <button type="submit" class="btn btn-primary ms-2" 
-                    style="border-radius: 20px; padding: 4px 10px; font-size: 14px; background-color: #D81324; border: none;">Go</button>
-            </form>
-        </div>
     </div>
 </div>
 <!-- Topbar End -->
@@ -98,9 +88,9 @@
         </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto p-4 p-lg-0">
-            <a href="{{ route('home') }}" class="nav-item nav-link">Home</a>
+            <a href="{{ route('home') }}" class="nav-item nav-link active">Home</a>
             <a href="#about" class="nav-item nav-link">About</a>
-            <a href="{{ route('products') }}" class="nav-item nav-link active">Products</a>
+            <a href="{{ route('products') }}" class="nav-item nav-link">Products</a>
             <a href="http://wa.me/6281375506448" class="nav-item nav-link">Contact</a>
             <a href="contact.html" class="nav-item nav-link">Notifications</a>
             <div class="nav-item dropdown">
@@ -108,210 +98,153 @@
                 <div class="dropdown-menu fade-up m-0">
                     <a href="{{ route('profile.edit') }}" class="dropdown-item">Settings</a>
                     <a href="{{ route('transaction') }}" class="dropdown-item">Transaction History</a>
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="dropdown-item">Log Out</button>
-                    </form>
+                    <a href="" class="dropdown-item">Log Out</a>
                 </div>
                 </div>
-                <a href="" class="nav-item nav-link"><i class="fas fa-shopping-bag fa-lg"></i></a>
+                <a href="{{ route('cart') }}" class="nav-item nav-link"><i class="fas fa-shopping-bag fa-lg"></i></a>
         </div>
 </nav>
 <!-- Navbar End -->
 
-<!-- Products Start -->
-<div class="container-cair">
-    <div class="card-container d-flex justify-content-center">
-        <div class="row mt-5">
-<h2 class="m-0 text-primary"><i class="fas fa-tire me-3"></i>BAN RADIAL</h2>
-</div>
-</div>
-</div>
+<!-- Filter and Search Section Start -->
+<div class="container-fluid mt-5">
+    <div class="row">
+        <!-- Sidebar Filter -->
+        <div class="col-lg-3 col-md-4 mb-4">
+        <div class="filter-bar">
+    <h5 class="m-0 text-primary"><i class="fa fa-filter me-3"></i> Filter</h5>
+    <div class="filter-section mb-4">
+        <ul class="list-unstyled bg-light p-2 rounded">
+            <li>Popular</li>
+            <li>Nama A - Z</li>
+            <li>Nama Z - A</li>
+            <li>Harga Rendah - Tinggi</li>
+            <li>Harga Tinggi - Rendah</li>
+            <li>Hapus Filter</li>
+        </ul>
+    </div>
 
-<div class="container-cair">
-    <div class="card-container d-flex justify-content-center">
-        <div class="row mt-5 d-flex align-items-stretch">
-            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
-                <div class="card h-100"> <!-- Tambahkan h-100 untuk tinggi penuh -->
-                    <img src="../assets/img/ban.jpeg" class="card-img-top" width="100%">
-                    <div class="card-body pt-0 px-0">
-                        <div class="d-flex flex-row justify-content-between mb-0 px-3">
-                            <small class="text-muted mt-1">JENIS</small>
-                            <h6 class="text-primary">1000 – 20 16PR MILLER RFD</h6>
-                        </div>
-                        <hr class="mt-2 mx-3">
-                        <div class="d-flex flex-row justify-content-between px-3 pb-4">
-                            <div class="d-flex flex-column">
-                                <span class="text-muted">Harga</span>
-                                <small class="text-muted"></small>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <h5 class="mb-0 text-primary">Rp3,215,000</h5>
-                                <small class="text-muted text-right"></small>
-                            </div>
-                        </div>
-                        <div class="container-fluid d-flex justify-content-center py-3">
-                            <div class="quantity-control d-flex align-items-center">
-                                <button type="button" class="btn btn-danger btn-sm px-3 fw-medium decrement">-</button>
-                                <input type="text" class="form-control text-center mx-2 quantity" value="1" readonly>
-                                <button type="button" class="btn btn-danger btn-sm px-3 fw-medium increment">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="filter-section mb-3">
+        <h6>Kategori <span class="float-end">+</span></h6>
+        <hr>
+    </div>
+
+    <div class="filter-section mb-4">
+        <h6>Harga</h6>
+        <div class="price-range">
+            <div class="mb-2">
+                <input type="text" class="form-control" placeholder="Rp Harga Minimum">
             </div>
-            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
-                <div class="card h-100"> <!-- Tambahkan h-100 untuk tinggi penuh -->
-                    <img src="../assets/img/ban.jpeg" class="card-img-top" width="100%">
-                    <div class="card-body pt-0 px-0">
-                        <div class="d-flex flex-row justify-content-between mb-0 px-3">
-                            <small class="text-muted mt-1">JENIS</small>
-                            <h6 class="text-primary">1000 – 20 16PR MILLER RFD</h6>
-                        </div>
-                        <hr class="mt-2 mx-3">
-                        <div class="d-flex flex-row justify-content-between px-3 pb-4">
-                            <div class="d-flex flex-column">
-                                <span class="text-muted">Harga</span>
-                                <small class="text-muted"></small>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <h5 class="mb-0 text-primary">Rp3,215,000</h5>
-                                <small class="text-muted text-right"></small>
-                            </div>
-                        </div>
-                        <div class="container-fluid d-flex justify-content-center py-3">
-                            <div class="quantity-control d-flex align-items-center">
-                                <button type="button" class="btn btn-danger btn-sm px-3 fw-medium decrement">-</button>
-                                <input type="text" class="form-control text-center mx-2 quantity" value="1" readonly>
-                                <button type="button" class="btn btn-danger btn-sm px-3 fw-medium increment">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div>
+                <input type="text" class="form-control" placeholder="Rp Harga Maksimum">
             </div>
-            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
-                <div class="card h-100"> <!-- Tambahkan h-100 untuk tinggi penuh -->
-                    <img src="../assets/img/ban.jpeg" class="card-img-top" width="100%">
-                    <div class="card-body pt-0 px-0">
-                        <div class="d-flex flex-row justify-content-between mb-0 px-3">
-                            <small class="text-muted mt-1">JENIS</small>
-                            <h6 class="text-primary">1000 – 20 16PR MILLER RFD</h6>
-                        </div>
-                        <hr class="mt-2 mx-3">
-                        <div class="d-flex flex-row justify-content-between px-3 pb-4">
-                            <div class="d-flex flex-column">
-                                <span class="text-muted">Harga</span>
-                                <small class="text-muted"></small>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <h5 class="mb-0 text-primary">Rp3,215,000</h5>
-                                <small class="text-muted text-right"></small>
-                            </div>
-                        </div>
-                        <div class="container-fluid d-flex justify-content-center py-3">
-                            <div class="quantity-control d-flex align-items-center">
-                                <button type="button" class="btn btn-danger btn-sm px-3 fw-medium decrement">-</button>
-                                <input type="text" class="form-control text-center mx-2 quantity" value="1" readonly>
-                                <button type="button" class="btn btn-danger btn-sm px-3 fw-medium increment">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
-                <div class="card h-100"> <!-- Tambahkan h-100 untuk tinggi penuh -->
-                    <img src="../assets/img/ban.jpeg" class="card-img-top" width="100%">
-                    <div class="card-body pt-0 px-0">
-                        <div class="d-flex flex-row justify-content-between mb-0 px-3">
-                            <small class="text-muted mt-1">JENIS</small>
-                            <h6 class="text-primary">1000 – 20 16PR MILLER RFD</h6>
-                        </div>
-                        <hr class="mt-2 mx-3">
-                        <div class="d-flex flex-row justify-content-between px-3 pb-4">
-                            <div class="d-flex flex-column">
-                                <span class="text-muted">Harga</span>
-                                <small class="text-muted"></small>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <h5 class="mb-0 text-primary">Rp3,215,000</h5>
-                                <small class="text-muted text-right"></small>
-                            </div>
-                        </div>
-                        <div class="container-fluid d-flex justify-content-center py-3">
-                            <div class="quantity-control d-flex align-items-center">
-                                <button type="button" class="btn btn-danger btn-sm px-3 fw-medium decrement">-</button>
-                                <input type="text" class="form-control text-center mx-2 quantity" value="1" readonly>
-                                <button type="button" class="btn btn-danger btn-sm px-3 fw-medium increment">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
-                <div class="card h-100"> <!-- Tambahkan h-100 untuk tinggi penuh -->
-                    <img src="../assets/img/ban.jpeg" class="card-img-top" width="100%">
-                    <div class="card-body pt-0 px-0">
-                        <div class="d-flex flex-row justify-content-between mb-0 px-3">
-                            <small class="text-muted mt-1">JENIS</small>
-                            <h6 class="text-primary">1000 – 20 16PR MILLER RFD</h6>
-                        </div>
-                        <hr class="mt-2 mx-3">
-                        <div class="d-flex flex-row justify-content-between px-3 pb-4">
-                            <div class="d-flex flex-column">
-                                <span class="text-muted">Harga</span>
-                                <small class="text-muted"></small>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <h5 class="mb-0 text-primary">Rp3,215,000</h5>
-                                <small class="text-muted text-right"></small>
-                            </div>
-                        </div>
-                        <div class="container-fluid d-flex justify-content-center py-3">
-                            <div class="quantity-control d-flex align-items-center">
-                                <button type="button" class="btn btn-danger btn-sm px-3 fw-medium decrement">-</button>
-                                <input type="text" class="form-control text-center mx-2 quantity" value="1" readonly>
-                                <button type="button" class="btn btn-danger btn-sm px-3 fw-medium increment">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
-                <div class="card h-100"> <!-- Tambahkan h-100 untuk tinggi penuh -->
-                    <img src="../assets/img/ban.jpeg" class="card-img-top" width="100%">
-                    <div class="card-body pt-0 px-0">
-                        <div class="d-flex flex-row justify-content-between mb-0 px-3">
-                            <small class="text-muted mt-1">JENIS</small>
-                            <h6 class="text-primary">1000 – 20 16PR MILLER RFD</h6>
-                        </div>
-                        <hr class="mt-2 mx-3">
-                        <div class="d-flex flex-row justify-content-between px-3 pb-4">
-                            <div class="d-flex flex-column">
-                                <span class="text-muted">Harga</span>
-                                <small class="text-muted"></small>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <h5 class="mb-0 text-primary">Rp3,215,000</h5>
-                                <small class="text-muted text-right"></small>
-                            </div>
-                        </div>
-                        <div class="container-fluid d-flex justify-content-center py-3">
-                            <div class="quantity-control d-flex align-items-center">
-                                <button type="button" class="btn btn-danger btn-sm px-3 fw-medium decrement">-</button>
-                                <input type="text" class="form-control text-center mx-2 quantity" value="1" readonly>
-                                <button type="button" class="btn btn-danger btn-sm px-3 fw-medium increment">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        </div>
+    </div>
+
+    <button class="btn btn-warning w-100">Cari</button>
+</div>
+        </div>
+
+        <!-- Product and Search Section -->
+        <div class="col-lg-9 col-md-8">
+            <!-- Search Bar -->
+            <div class="search-bar d-flex justify-content-between align-items-center mb-4">
+                <h2 class="m-0 text-primary">
+                    <i class="fas fa-search me-2"></i>
+                    <input type="text" class="form-control d-inline w-75" placeholder="Cari produk..." aria-label="Search">
+                </h2>
             </div>
 
+            <!-- Products Start -->
+            <div class="row d-flex align-items-stretch">
+                <!-- Product Card Example -->
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                    <div class="card h-100">
+                        <img src="../assets/img/ban.jpeg" class="card-img-top" width="100%">
+                        <div class="card-body pt-0 px-0">
+                            <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                                <small class="text-muted mt-1">JENIS</small>
+                                <h6 class="text-primary">1000 – 20 16PR MILLER RFD</h6>
+                            </div>
+                            <hr class="mt-2 mx-3">
+                            <div class="d-flex flex-row justify-content-between px-3 pb-4">
+                                <div class="d-flex flex-column">
+                                    <span class="text-muted">Harga</span>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <h5 class="mb-0 text-primary">Rp3,215,000</h5>
+                                </div>
+                            </div>
+                            <div class="container-fluid d-flex justify-content-center py-3">
+                                <div class="quantity-control d-flex align-items-center">
+                                    <button type="button" class="btn btn-danger btn-sm px-3 fw-medium decrement">-</button>
+                                    <input type="text" class="form-control text-center mx-2 quantity" value="1" readonly>
+                                    <button type="button" class="btn btn-danger btn-sm px-3 fw-medium increment">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                    <div class="card h-100">
+                        <img src="../assets/img/ban.jpeg" class="card-img-top" width="100%">
+                        <div class="card-body pt-0 px-0">
+                            <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                                <small class="text-muted mt-1">JENIS</small>
+                                <h6 class="text-primary">1000 – 20 16PR MILLER RFD</h6>
+                            </div>
+                            <hr class="mt-2 mx-3">
+                            <div class="d-flex flex-row justify-content-between px-3 pb-4">
+                                <div class="d-flex flex-column">
+                                    <span class="text-muted">Harga</span>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <h5 class="mb-0 text-primary">Rp3.215.000</h5>
+                                </div>
+                            </div>
+                            <div class="container-fluid d-flex justify-content-center py-3">
+                                <div class="quantity-control d-flex align-items-center">
+                                    <button type="button" class="btn btn-danger btn-sm px-3 fw-medium decrement">-</button>
+                                    <input type="text" class="form-control text-center mx-2 quantity" value="1" readonly>
+                                    <button type="button" class="btn btn-danger btn-sm px-3 fw-medium increment">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                    <div class="card h-100">
+                        <img src="../assets/img/ban.jpeg" class="card-img-top" width="100%">
+                        <div class="card-body pt-0 px-0">
+                            <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                                <small class="text-muted mt-1">JENIS</small>
+                                <h6 class="text-primary">1000 – 20 16PR MILLER RFD</h6>
+                            </div>
+                            <hr class="mt-2 mx-3">
+                            <div class="d-flex flex-row justify-content-between px-3 pb-4">
+                                <div class="d-flex flex-column">
+                                    <span class="text-muted">Harga</span>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <h5 class="mb-0 text-primary">Rp3.215.000</h5>
+                                </div>
+                            </div>
+                            <div class="container-fluid d-flex justify-content-center py-3">
+                                <div class="quantity-control d-flex align-items-center">
+                                    <button type="button" class="btn btn-danger btn-sm px-3 fw-medium decrement">-</button>
+                                    <input type="text" class="form-control text-center mx-2 quantity" value="1" readonly>
+                                    <button type="button" class="btn btn-danger btn-sm px-3 fw-medium increment">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Products End -->
         </div>
     </div>
 </div>
-
-
-<!-- Products End -->
 
 <!-- Footer Start -->
 <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
@@ -364,9 +297,10 @@
     </div>
 <!-- Footer End -->
 
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+<!-- Tombol Filter Responsif -->
+<a href="#filter-section" class="btn btn-lg btn-primary btn-lg-square filter-toggle d-lg-none">
+    <i class="fa fa-filter me-0"></i>
+</a>
 
 <!-- JavaScript -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -394,6 +328,22 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+
+    document.querySelector('.filter-toggle').addEventListener('click', function () {
+        const filterBar = document.querySelector('.filter-bar');
+        filterBar.classList.toggle('open');
+    });
+
+    // Untuk menutup filter dengan klik di luar sidebar
+    document.addEventListener('click', function (event) {
+        const filterBar = document.querySelector('.filter-bar');
+        const toggleButton = document.querySelector('.filter-toggle');
+
+        if (!filterBar.contains(event.target) && !toggleButton.contains(event.target)) {
+            filterBar.classList.remove('open');
+        }
+    });
+
 </script>
 
 </body>

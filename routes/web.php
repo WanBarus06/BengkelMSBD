@@ -20,7 +20,6 @@ Route::get('/login-register', function () {
     return view('/login-register');
 })->name('/login-register');
 
-
 Route::get('/products', function () {
     return view('products');
 })->name('products');
@@ -28,6 +27,10 @@ Route::get('/products', function () {
 Route::get('/transaction', function () {
     return view('transaction');
 })->name('transaction');
+
+Route::get('/cart', function () {
+    return view('cart');
+})->name('cart');
 
 Route::get('/dashboard', function () {
     return view('home');
