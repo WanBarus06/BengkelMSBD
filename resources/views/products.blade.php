@@ -112,7 +112,7 @@
         <!-- Sidebar Filter -->
         <div class="col-lg-3 col-md-4 mb-4">
         <div class="filter-bar">
-    <h5 class="m-0 text-primary"><i class="fa fa-filter me-3"></i> Filter</h5>
+    <h5 class="m-0 text-primary"><i class="fa fa-filter me-3"></i> Sort By</h5>
     <div class="filter-section mb-4">
         <ul class="list-unstyled bg-light p-2 rounded">
             <li>Popular</li>
@@ -120,7 +120,7 @@
             <li>Nama Z - A</li>
             <li>Harga Rendah - Tinggi</li>
             <li>Harga Tinggi - Rendah</li>
-            <li>Hapus Filter</li>
+            <li>Hapus Sortingan</li>
         </ul>
     </div>
 
@@ -154,95 +154,45 @@
                     <input type="text" class="form-control d-inline w-75" placeholder="Cari produk..." aria-label="Search">
                 </h2>
             </div>
-
-            <!-- Products Start -->
-            <div class="row d-flex align-items-stretch">
-                <!-- Product Card Example -->
-                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                    <div class="card h-100">
-                        <img src="../assets/img/ban.jpeg" class="card-img-top" width="100%">
-                        <div class="card-body pt-0 px-0">
-                            <div class="d-flex flex-row justify-content-between mb-0 px-3">
-                                <small class="text-muted mt-1">JENIS</small>
-                                <h6 class="text-primary">1000 – 20 16PR MILLER RFD</h6>
-                            </div>
-                            <hr class="mt-2 mx-3">
-                            <div class="d-flex flex-row justify-content-between px-3 pb-4">
-                                <div class="d-flex flex-column">
-                                    <span class="text-muted">Harga</span>
-                                </div>
-                                <div class="d-flex flex-column">
-                                    <h5 class="mb-0 text-primary">Rp3,215,000</h5>
-                                </div>
-                            </div>
-                            <div class="container-fluid d-flex justify-content-center py-3">
-                                <div class="quantity-control d-flex align-items-center">
-                                    <button type="button" class="btn btn-danger btn-sm px-3 fw-medium decrement">-</button>
-                                    <input type="text" class="form-control text-center mx-2 quantity" value="1" readonly>
-                                    <button type="button" class="btn btn-danger btn-sm px-3 fw-medium increment">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                    <div class="card h-100">
-                        <img src="../assets/img/ban.jpeg" class="card-img-top" width="100%">
-                        <div class="card-body pt-0 px-0">
-                            <div class="d-flex flex-row justify-content-between mb-0 px-3">
-                                <small class="text-muted mt-1">JENIS</small>
-                                <h6 class="text-primary">1000 – 20 16PR MILLER RFD</h6>
-                            </div>
-                            <hr class="mt-2 mx-3">
-                            <div class="d-flex flex-row justify-content-between px-3 pb-4">
-                                <div class="d-flex flex-column">
-                                    <span class="text-muted">Harga</span>
-                                </div>
-                                <div class="d-flex flex-column">
-                                    <h5 class="mb-0 text-primary">Rp3.215.000</h5>
-                                </div>
-                            </div>
-                            <div class="container-fluid d-flex justify-content-center py-3">
-                                <div class="quantity-control d-flex align-items-center">
-                                    <button type="button" class="btn btn-danger btn-sm px-3 fw-medium decrement">-</button>
-                                    <input type="text" class="form-control text-center mx-2 quantity" value="1" readonly>
-                                    <button type="button" class="btn btn-danger btn-sm px-3 fw-medium increment">+</button>
+            @foreach ($groupedByBrand as $brandName => $products)
+            <div class="brand-section">
+                <h2 class="text-red-600 font-bold text-5xl">{{ $brandName }}</h2>
+                <div class="row d-flex align-items-stretch">
+                    @foreach ($products as $product)
+                        <!-- Products Start -->
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                            <div class="card h-100">
+                                <img src="../assets/img/ban.jpeg" class="card-img-top" width="100%">
+                                <div class="card-body pt-0 px-0">
+                                    <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                                        <small class="text-muted mt-1">NAMA</small>
+                                        <h6 class="text-primary">{{ $product->product_name }}</h6>
+                                    </div>
+                                    <hr class="mt-2 mx-3">
+                                    <div class="d-flex flex-row justify-content-between px-3 pb-4">
+                                        <div class="d-flex flex-column">
+                                            <span class="text-muted">Harga</span>
+                                        </div>
+                                        <div class="d-flex flex-column">
+                                            <h5 class="mb-0 text-primary">{{ $product->productDetail->product_sell_price }}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="container-fluid d-flex justify-content-center py-3">
+                                        <div class="quantity-control d-flex align-items-center">
+                                            <button type="button" class="btn btn-danger btn-sm px-3 fw-medium decrement">-</button>
+                                            <input type="text" class="form-control text-center mx-2 quantity" value="1" readonly>
+                                            <button type="button" class="btn btn-danger btn-sm px-3 fw-medium increment">+</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <!-- Products End -->
+                    @endforeach
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                    <div class="card h-100">
-                        <img src="../assets/img/ban.jpeg" class="card-img-top" width="100%">
-                        <div class="card-body pt-0 px-0">
-                            <div class="d-flex flex-row justify-content-between mb-0 px-3">
-                                <small class="text-muted mt-1">JENIS</small>
-                                <h6 class="text-primary">1000 – 20 16PR MILLER RFD</h6>
-                            </div>
-                            <hr class="mt-2 mx-3">
-                            <div class="d-flex flex-row justify-content-between px-3 pb-4">
-                                <div class="d-flex flex-column">
-                                    <span class="text-muted">Harga</span>
-                                </div>
-                                <div class="d-flex flex-column">
-                                    <h5 class="mb-0 text-primary">Rp3.215.000</h5>
-                                </div>
-                            </div>
-                            <div class="container-fluid d-flex justify-content-center py-3">
-                                <div class="quantity-control d-flex align-items-center">
-                                    <button type="button" class="btn btn-danger btn-sm px-3 fw-medium decrement">-</button>
-                                    <input type="text" class="form-control text-center mx-2 quantity" value="1" readonly>
-                                    <button type="button" class="btn btn-danger btn-sm px-3 fw-medium increment">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-            <!-- Products End -->
-        </div>
+        @endforeach
+        
     </div>
 </div>
 

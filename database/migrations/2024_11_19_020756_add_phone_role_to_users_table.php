@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('phone_number')->nullable();
             $table->enum('role', ['user', 'staff', 'owner'])->default('user');
             $table->text('address')->nullable();
+            $table->boolean('is_active')->default(true);
         });
     }
 

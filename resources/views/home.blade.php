@@ -77,7 +77,7 @@
                 <a href="http://wa.me/6281375506448" class="nav-item nav-link">Contact</a>
                 @if (Route::has('login'))
                     @auth
-                    <div class="nav-item dropdown">
+                <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profile</a>
                         <div class="dropdown-menu fade-up m-0">
                             <a href="{{ route('profile.edit') }}" class="dropdown-item">Settings</a>

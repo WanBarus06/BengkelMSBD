@@ -10,16 +10,21 @@ class ProductDescription extends Model
 
     public function size()
     {
-        return $this->belongsTo(Size::class, 'size_id');
+        return $this->belongsTo(Size::class, 'size_id', 'size_id');
     }
 
     public function brand()
     {
-        return $this->belongsTo(Brand::class, 'brand_id');
+        return $this->belongsTo(Brand::class, 'brand_id', 'brand_id');
     }
 
     public function variant()
     {
-        return $this->belongsTo(Variant::class, 'variant_id');
+        return $this->belongsTo(Variant::class, 'variant_id', 'variant_id');
+    }
+
+    public function products()
+    {
+        return $this->belongsTo(Product::class, 'description_id', 'description_id');
     }
 }
