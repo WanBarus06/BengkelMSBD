@@ -66,7 +66,9 @@
     <table class="table cart-table">
         <thead class="table-success">
             <tr>
+                @if($cart->status == 'Belum Memesan')
                 <th>Hapus</th>
+                @endif
                 <th></th>
                 <th>Produk</th>
                 <th>Harga</th>
@@ -77,6 +79,7 @@
         <tbody id="cart-items">
             @if(isset($cartItems) && $cartItems->isNotEmpty())
             @foreach($cartItems as $item)
+            @if($cart->status == 'Belum Memesan')
             <tr class="cart-item">
                 <td>
                     <form action="{{ route('cart.destroy', $item->product->product_id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
@@ -85,6 +88,7 @@
                         <button class="btn btn-danger btn-sm "><i class="fa fa-trash" type="submit"></i></button>
                     </form>
                 </td>
+            @endif
                 <td>
                     <img src="../assets/img/ban.jpeg" alt="Product Image">
                 </td>
@@ -95,15 +99,19 @@
                 <td class="product-price">{{ number_format($item->price, 2) }}</td>
                 <td>
                     <div class="quantity-control">
+                        @if($cart->status == 'Belum Memesan')
                         <form action="{{ route('cart.decrease', $item->id) }}" method="POST" style="display:inline;">
                             @csrf
                             <button type="submit" class="btn decrement">−</button>
-                        </form>             
+                        </form>      
+                        @endif       
                         <input type="text" class="form-control quantity" value="{{ $item->quantity }}" readonly>
+                        @if($cart->status == 'Belum Memesan')
                         <form action="{{ route('cart.increase', $item->id) }}" method="POST" style="display:inline;">
                             @csrf
                             <button type="submit" class="btn increment">+</button>
                         </form>
+                        @endif
                     </div>
                 </td>
                 <td class="product-total">{{ number_format($item->price * $item->quantity)}}</td>
@@ -120,11 +128,13 @@
     <div class="total-section">
         <h5>Total harga: <span id="total-price">{{ number_format($cartTotal) }}</span></h5>
         <div class="d-flex justify-content-between mt-4">
+            @if($cart->status == 'Belum Memesan')
             <form action="{{ route('cart.deleteAllItems') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua produk dari keranjang?');">
                 @csrf
                 @method('DELETE')
                 <button class="btn btn-danger btn-clear-cart" type="submit">Kosongkan Keranjang</button>
             </form>
+            @endif
            
             @if($cart->status == 'Belum Memesan')
                 <form action="{{ route('cart.booking', $cart->id) }}" method="POST">

@@ -20,12 +20,15 @@ class CartController extends Controller
     
         // Ambil cart yang sedang menunggu berdasarkan user_id dan status 'awaiting'
         $cart = Cart::where('user_id', Auth::id())
-                    ->first();
+        ->where('status', 'Belum Memesan')
+        ->first();
     
         // Jika cart tidak ditemukan, tampilkan halaman kosong atau buat cart baru
         if (!$cart) {
             // Anda bisa menambahkan logika untuk membuat cart baru atau tampilkan halaman kosong
-            return view('cart');
+            $cart = Cart::where('user_id', Auth::id())
+            ->where('status', 'Menunggu Konfirmasi')
+            ->first();
         }
     
         // Ambil semua item dalam cart

@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProfileController;
 // use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ProductsController;
-// use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,9 +23,6 @@ Route::get('/login-register', function () {
 
 Route::get('/products', [ProductsController::class, 'index'])->name('products');
 
-Route::get('/transaction', function () {
-    return view('transaction');
-})->name('transaction');
 
 
 Route::get('/dashboard', function () {
@@ -36,7 +33,7 @@ Route::get('/dashboard', function () {
 
 // Route::get('/products', [ProductsController::class, 'index'])->name('products');
 
-// Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction');
+Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -58,6 +55,7 @@ Route::Delete('/cart', [CartController::class, 'deleteAllItems'])->name('cart.de
 Route::post('/cart/increase/{cartItemId}', [CartController::class, 'increaseQuantity'])->name('cart.increase');
 Route::post('/cart/decrease/{cartItemId}', [CartController::class, 'decreaseQuantity'])->name('cart.decrease');
 Route::post('/cart/booking/{cartId}', [CartController::class, 'booking'])->name('cart.booking');
+
 
 
 require __DIR__.'/auth.php';
