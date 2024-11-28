@@ -101,7 +101,7 @@
                     <a href="" class="dropdown-item">Log Out</a>
                 </div>
                 </div>
-                <a href="{{ route('cart') }}" class="nav-item nav-link"><i class="fas fa-shopping-bag fa-lg"></i></a>
+                <a href="{{ route('cart.index') }}" class="nav-item nav-link"><i class="fas fa-shopping-bag fa-lg"></i></a>
         </div>
 </nav>
 <!-- Navbar End -->
@@ -154,9 +154,9 @@
                     <input type="text" class="form-control d-inline w-75" placeholder="Cari produk..." aria-label="Search">
                 </h2>
             </div>
-            @foreach ($groupedByBrand as $brandName => $products)
+            @foreach ($groupedByVariant as $variantName => $products)
             <div class="brand-section">
-                <h2 class="text-red-600 font-bold text-5xl">{{ $brandName }}</h2>
+                <h2 class="text-red-600 font-bold text-5xl">{{ $variantName }}</h2>
                 <div class="row d-flex align-items-stretch">
                     @foreach ($products as $product)
                         <!-- Products Start -->
@@ -171,22 +171,32 @@
                                     <hr class="mt-2 mx-3">
                                     <div class="d-flex flex-row justify-content-between px-3 pb-4">
                                         <div class="d-flex flex-column">
-                                            <span class="text-muted">Harga</span>
+                                            <small class="text-muted mt-1">HARGA</small>
                                         </div>
                                         <div class="d-flex flex-column">
-                                            <h5 class="mb-0 text-primary">{{ $product->productDetail->product_sell_price }}</h5>
+                                            <h5 class="mb-0 text-primary">{{ number_format($product->productDetail->product_sell_price) }}</h5>
                                         </div>
                                     </div>
-                                    <div class="container-fluid d-flex justify-content-center py-3">
-                                        <div class="quantity-control d-flex align-items-center">
-                                            <button type="button" class="btn btn-danger btn-sm px-3 fw-medium decrement">-</button>
-                                            <input type="text" class="form-control text-center mx-2 quantity" value="1" readonly>
-                                            <button type="button" class="btn btn-danger btn-sm px-3 fw-medium increment">+</button>
+                                    <hr class="mt-2 mx-3">
+                                    <div class="d-flex flex-row justify-content-between px-3 pb-4">
+                                        <div class="d-flex flex-column">
+                                            <small class="text-muted mt-1">STOK</small>
                                         </div>
+                                        <div class="d-flex flex-column">
+                                            <h5 class="mb-0 text-primary">{{ $product->productDetail->stock }}</h5>
+                                        </div>
+                                    </div>
+                                    <!-- Button Container -->
+                                    <div class="d-flex justify-content-center pb-3">
+                                        <form action="{{ route('cart.store', $product->product_id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-primary btn-block">Tambah ke Keranjang</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
                         <!-- Products End -->
                     @endforeach
                 </div>

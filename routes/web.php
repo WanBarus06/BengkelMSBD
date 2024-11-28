@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 // use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ProductsController;
 // use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,9 +27,6 @@ Route::get('/transaction', function () {
     return view('transaction');
 })->name('transaction');
 
-Route::get('/cart', function () {
-    return view('cart');
-})->name('cart');
 
 Route::get('/dashboard', function () {
     return view('home');
@@ -47,7 +45,19 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    
+    // Route::post('/cart/add/{product_id}', [CartController::class, 'store'])->name('cart.store');
+    // Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    // Route::delete('/cart/{cartItemId}', [CartController::class, 'removeItem'])->name('cart.remove');
+
 });
+
+Route::post('/cart/add/{product_id}', [CartController::class, 'store'])->name('cart.store');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::delete('/cart/{cartItemId}', [CartController::class, 'destroy'])->name('cart.destroy');
+Route::Delete('/cart', [CartController::class, 'deleteAllItems'])->name('cart.deleteAllItems');
+Route::post('/cart/increase/{cartItemId}', [CartController::class, 'increaseQuantity'])->name('cart.increase');
+Route::post('/cart/decrease/{cartItemId}', [CartController::class, 'decreaseQuantity'])->name('cart.decrease');
+Route::post('/cart/booking/{cartId}', [CartController::class, 'booking'])->name('cart.booking');
+
 
 require __DIR__.'/auth.php';

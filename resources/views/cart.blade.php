@@ -48,6 +48,17 @@
         </div>
     </div>
 </div>
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('info'))
+    <div class="alert alert-info">
+        {{ session('info') }}
+    </div>
+@endif
 <!-- Topbar End -->
 
 <div class="container my-5">
@@ -64,57 +75,66 @@
             </tr>
         </thead>
         <tbody id="cart-items">
+            @if(isset($cartItems) && $cartItems->isNotEmpty())
+            @foreach($cartItems as $item)
             <tr class="cart-item">
                 <td>
-                    <button class="btn btn-danger btn-sm remove-item"><i class="fa fa-trash"></i></button>
+                    <form action="{{ route('cart.destroy', $item->product->product_id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger btn-sm "><i class="fa fa-trash" type="submit"></i></button>
+                    </form>
                 </td>
                 <td>
                     <img src="../assets/img/ban.jpeg" alt="Product Image">
                 </td>
                 <td class="product-info">
-                    <strong>1000 – 20 16PR MILLER RFD</strong><br>
-                    <small>Jenis: Ban Radial</small><br>
+                    <strong></strong><br>
+                    <small>{{ $item->product->product_name }}</small><br>
                 </td>
-                <td class="product-price">Rp3.215.000</td>
+                <td class="product-price">{{ number_format($item->price, 2) }}</td>
                 <td>
                     <div class="quantity-control">
-                        <button type="button" class="btn decrement">−</button>
-                        <input type="text" class="form-control quantity" value="1" readonly>
-                        <button type="button" class="btn increment">+</button>
+                        <form action="{{ route('cart.decrease', $item->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit" class="btn decrement">−</button>
+                        </form>             
+                        <input type="text" class="form-control quantity" value="{{ $item->quantity }}" readonly>
+                        <form action="{{ route('cart.increase', $item->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit" class="btn increment">+</button>
+                        </form>
                     </div>
                 </td>
-                <td class="product-total">Rp3.215.000</td>
+                <td class="product-total">{{ number_format($item->price * $item->quantity)}}</td>
             </tr>
-            <tr class="cart-item">
-                <td>
-                    <button class="btn btn-danger btn-sm remove-item"><i class="fa fa-trash"></i></button>
-                </td>
-                <td>
-                    <img src="../assets/img/ban.jpeg" alt="Product Image">
-                </td>
-                <td class="product-info">
-                    <strong>1000 – 20 16PR MILLER RFD</strong><br>
-                    <small>Jenis: Ban Radial</small><br>
-                </td>
-                <td class="product-price">Rp3.215.000</td>
-                <td>
-                    <div class="quantity-control">
-                        <button type="button" class="btn decrement">−</button>
-                        <input type="text" class="form-control quantity" value="1" readonly>
-                        <button type="button" class="btn increment">+</button>
-                    </div>
-                </td>
-                <td class="product-total">Rp3.215.000</td>
+            @endforeach
+        @else
+            <tr>
+                <td colspan="6" class="text-center">Keranjang Anda kosong</td>
             </tr>
-            <!-- Additional items here... -->
+        @endif    
         </tbody>
     </table>
     <br><br>
     <div class="total-section">
-        <h5>Total harga: <span id="total-price">Rp3.215.000</span></h5>
+        <h5>Total harga: <span id="total-price">{{ number_format($cartTotal) }}</span></h5>
         <div class="d-flex justify-content-between mt-4">
-            <button class="btn btn-danger btn-clear-cart" onclick="clearCart()">Kosongkan Keranjang</button>
-            <button class="btn btn-primary btn-booking">Booking</button>
+            <form action="{{ route('cart.deleteAllItems') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua produk dari keranjang?');">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-danger btn-clear-cart" type="submit">Kosongkan Keranjang</button>
+            </form>
+           
+            @if($cart->status == 'Belum Memesan')
+                <form action="{{ route('cart.booking', $cart->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-primary">Booking</button>
+                </form>
+            @else
+                <span>Booked</span>
+            @endif
+
         </div>
     </div>
 </div>

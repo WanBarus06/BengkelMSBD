@@ -14,11 +14,11 @@ class ProductsController extends Controller
         $products = Product::with(['productDescription.brand', 'productDetail'])->get();
         
         // Mengelompokkan produk berdasarkan brand_name
-        $groupedByBrand = $products->groupBy(function ($product) {
+        $groupedByVariant = $products->groupBy(function ($product) {
             return $product->productDescription->variant->variant_name;
         });
 
         // Mengirimkan data produk yang sudah dikelompokkan ke view
-        return view('products', compact('groupedByBrand'));
+        return view('products', compact('groupedByVariant'));
     }
 }
