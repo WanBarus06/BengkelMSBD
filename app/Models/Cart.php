@@ -39,4 +39,10 @@ class Cart extends Model
     {
         return $this->hasMany(CartItem::class);
     } 
+    
+    public function getTotalPriceAttribute()
+    {
+        return DB::selectOne('SELECT purchase_invoice_detail_total(?) as total', [$this->id])->total;
+    }
+
 }

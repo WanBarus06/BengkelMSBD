@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Transaction History</title>
+  <title>Riwayat Transaksi</title>
 
   <!-- Favicon -->
   <link href="../assets/img/favicon.ico" rel="icon">

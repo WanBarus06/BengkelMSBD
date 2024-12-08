@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Cart</title>
+    <title>Keranjang</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -39,11 +39,19 @@
         <div class="col-lg-7 px-5 text-start">
             <div class="h-100 d-inline-flex align-items-center py-3 me-4">
                 <small class="fa fa-home text-primary me-2"></small>
-                <small><a href="{{ route('home') }}" class="">Home</a></small>
+                <small><a href="{{ route('home') }}" class="">Beranda</a></small>
             </div>
-            <div class="h-100 d-inline-flex align-items-center py-3">
+            @if (Route::has('login'))
+                    @auth
+                    <div class="h-100 d-inline-flex align-items-center py-3">
+                        <small class="far fa-user text-primary me-2"></small>
+                        <small> {{ Auth::user()->name }} </small>
+                    </div>
+                    @endauth
+                @endif
+            &nbsp; &nbsp;<div class="h-100 d-inline-flex align-items-center py-3">
                 <small class="fas fa-shopping-bag text-primary me-2"></small>
-                <small>My Cart</small>
+                <small><a href="{{ route('cart.index') }}" class="">Keranjang Saya</a></small>
             </div>
         </div>
     </div>
@@ -139,7 +147,7 @@
             @if($cart->status == 'Belum Memesan')
                 <form action="{{ route('cart.booking', $cart->id) }}" method="POST">
                     @csrf
-                    <button type="submit" class="btn btn-primary">Booking</button>
+                    <button type="submit" class="btn btn-primary">Pesan</button>
                 </form>
             @else
                 <span>Booked</span>

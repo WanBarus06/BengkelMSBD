@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Products</title>
+    <title>Produk</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <link href="../assets/img/favicon.ico" rel="icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -60,51 +60,70 @@
 </style>
 </head>
 <body>
-
-<!-- Topbar Start -->
-<div class="container-fluid bg-light p-0">
-    <div class="row gx-0 d-none d-lg-flex align-items-center">
-        <div class="col-lg-7 px-5 text-start">
-            <div class="h-100 d-inline-flex align-items-center py-3 me-4">
-                <small class="fa fa-home text-primary me-2"></small>
-                <small>Home</small>
-            </div>
-            <div class="h-100 d-inline-flex align-items-center py-3">
+    <!-- Topbar Start -->
+    <div class="container-fluid bg-light p-0">
+        <div class="row gx-0 d-none d-lg-flex">
+            <div class="col-lg-7 px-5 text-start">
+                <div class="h-100 d-inline-flex align-items-center py-3 me-4">
                 <small class="fas fa-shopping-cart text-primary me-2"></small>
-                <small>Products</small>
+                <small><a href="{{ route('products') }}" class="">Produk</a></small>
+                </div>
+                @if (Route::has('login'))
+                    @auth
+                    <div class="h-100 d-inline-flex align-items-center py-3">
+                        <small class="far fa-user text-primary me-2"></small>
+                        <small> {{ Auth::user()->name }} </small>
+                    </div>
+                    @endauth
+                @endif
+                <div class="h-100 d-inline-flex align-items-center py-3">
+                <small></small>
+                <small></small>
+            </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Topbar End -->
+    <!-- Topbar End -->
 
-<!-- Navbar Start -->
-<nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
-    <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-        <h2 class="m-0 text-primary"><i class="fa fa-car me-3"></i>Bengkel Panbres</h2>
-    </a>
-    <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+        <a href="" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h2 class="m-0 text-primary"><i class="fa fa-car me-3"></i>Bengkel Panbres</h2>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-        <div class="navbar-nav ms-auto p-4 p-lg-0">
-            <a href="{{ route('home') }}" class="nav-item nav-link active">Home</a>
-            <a href="#about" class="nav-item nav-link">About</a>
-            <a href="{{ route('products') }}" class="nav-item nav-link">Products</a>
-            <a href="http://wa.me/6281375506448" class="nav-item nav-link">Contact</a>
-            <a href="contact.html" class="nav-item nav-link">Notifications</a>
-            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profile</a>
-                <div class="dropdown-menu fade-up m-0">
-                    <a href="{{ route('profile.edit') }}" class="dropdown-item">Settings</a>
-                    <a href="{{ route('transaction') }}" class="dropdown-item">Transaction History</a>
-                    <a href="" class="dropdown-item">Log Out</a>
-                </div>
-                </div>
-                <a href="{{ route('cart.index') }}" class="nav-item nav-link"><i class="fas fa-shopping-bag fa-lg"></i></a>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="{{ route('home') }}" class="nav-item nav-link">Beranda</a>
+                <a href="{{ route('about') }}" class="nav-item nav-link">Tentang</a>
+                <a href="{{ route('products') }}" class="nav-item nav-link active">Produk</a>
+                <a href="http://wa.me/6281375506448" class="nav-item nav-link">Kontak</a>
+                @if (Route::has('login'))
+                    @auth
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profil</a>
+                        <div class="dropdown-menu fade-up m-0">
+                            <a href="{{ route('profile.edit') }}" class="dropdown-item">Pengaturan</a>
+                            <a href="{{ route('transaction') }}" class="dropdown-item">Riwayat Transaksi</a>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item">Keluar</button>
+                            </form>
+                        </div>
+                    </div>
+                    <a href="{{ route('cart.index') }}" class="nav-item nav-link"><i class="fas fa-shopping-bag fa-lg"></i></a>
+
+                @else
+                <a href="{{ route('login') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Daftar / Masuk<i class="fa fa-arrow-right ms-3"></i></a>
+                    @endauth
+                @endif
+                
+            </div>
+
         </div>
-</nav>
-<!-- Navbar End -->
+    </nav>
+    <!-- Navbar End -->
 
 <!-- Filter and Search Section Start -->
 <div class="container-fluid mt-5">
@@ -112,7 +131,7 @@
         <!-- Sidebar Filter -->
         <div class="col-lg-3 col-md-4 mb-4">
         <div class="filter-bar">
-    <h5 class="m-0 text-primary"><i class="fa fa-filter me-3"></i> Sort By</h5>
+    <h5 class="m-0 text-primary"><i class="fa fa-filter me-3"></i>Filter</h5>
     <div class="filter-section mb-4">
         <ul class="list-unstyled bg-light p-2 rounded">
             <li>Popular</li>
@@ -209,7 +228,7 @@
 <!-- Footer Start -->
 <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
         <div class="container py-5">
-            <div class="row g-5">
+            <div class="row g-5 justify-content-center">
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Alamat</h4>
                     <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Jalan H. Anif No.361 Rt 02 Jati Asri Susun XXIV Desa Sampali, Kec. Percut Sei Tuan, Kab. Deli Serdang</p>
@@ -222,33 +241,25 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Kategori</h4>
+                    <a class="btn btn-link" href="">Ban Radial</a>
+                    <a class="btn btn-link" href="">Ban Nilon</a>
+                    <a class="btn btn-link" href="">Ban Semi Radial</a>
+                    <a class="btn btn-link" href="">Ban Mati (Solid Tire)</a>
                     <a class="btn btn-link" href="">Ban Vulkanisir</a>
-                    <a class="btn btn-link" href="">Ban Biasa</a>
-                    <a class="btn btn-link" href="">Karet Ban</a>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h4 class="text-light mb-4">Kirim Pendapat Anda</h4>
-                    <p>Kepuasan pelanggan adalah kepuasan kami!</p>
-                    <div class="position-relative mx-auto" style="max-width: 400px;">
-                        <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-                        <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">Kirim</button>
-                    </div>
+                    <a class="btn btn-link" href="">Karet ban (Tube Flap)</a>
                 </div>
             </div>
         </div>
         <div class="container">
             <div class="copyright">
                 <div class="row">
-                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                        &copy; <a class="border-bottom" href="#">Ban Panbres (Panjaitan Bersaudara)</a>, All Right Reserved.
-
+                    <div class="col-md-6 text-center text-md-center mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" href="">Ban Panbres (Panjaitan Bersaudara)</a>
                     </div>
-                    <div class="col-md-6 text-center text-md-end">
+                    <div class="col-md-6 text-center text-md-center">
                         <div class="footer-menu">
-                            <a href="">Home</a>
-                            <a href="">Cookies</a>
-                            <a href="">Help</a>
-                            <a href="">FAQs</a>
+                            <a href="http://wa.me/6281375506448">Bantuan</a>
+                            <a href="">SSD</a>
                         </div>
                     </div>
                 </div>
@@ -261,50 +272,6 @@
 <a href="#filter-section" class="btn btn-lg btn-primary btn-lg-square filter-toggle d-lg-none">
     <i class="fa fa-filter me-0"></i>
 </a>
-
-<!-- JavaScript -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Select all quantity-control divs
-    document.querySelectorAll('.quantity-control').forEach((control) => {
-        // Get the quantity input within the current control
-        const quantityInput = control.querySelector('.quantity');
-
-        // Add click event to decrement button
-        control.querySelector('.decrement').addEventListener('click', () => {
-            let currentValue = parseInt(quantityInput.value);
-            if (currentValue > 1) {
-                quantityInput.value = currentValue - 1;
-            }
-        });
-
-        // Add click event to increment button
-        control.querySelector('.increment').addEventListener('click', () => {
-            let currentValue = parseInt(quantityInput.value);
-            quantityInput.value = currentValue + 1;
-        });
-    });
-});
-
-    document.querySelector('.filter-toggle').addEventListener('click', function () {
-        const filterBar = document.querySelector('.filter-bar');
-        filterBar.classList.toggle('open');
-    });
-
-    // Untuk menutup filter dengan klik di luar sidebar
-    document.addEventListener('click', function (event) {
-        const filterBar = document.querySelector('.filter-bar');
-        const toggleButton = document.querySelector('.filter-toggle');
-
-        if (!filterBar.contains(event.target) && !toggleButton.contains(event.target)) {
-            filterBar.classList.remove('open');
-        }
-    });
-
-</script>
 
 </body>
 </html>

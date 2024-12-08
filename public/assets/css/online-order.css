@@ -18,17 +18,6 @@
     z-index: 99;
 }
 
-.logo-navbar {
-    height: 30px; /* Sesuaikan tinggi logo */
-    width: auto; /* Pertahankan rasio aspek */
-    margin-left: 10px; /* Opsional: Memberikan sedikit jarak */
-}
-
-.navbar-nav .nav-link {
-    display: flex;
-    align-items: center; /* Untuk menyelaraskan logo secara vertikal */
-}
-
 /*** Button ***/
 .btn {
     font-weight: 500;
@@ -199,55 +188,44 @@
     }
 }
 
-
-/*** Header ***/
-.carousel-caption {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, .7);
-    z-index: 1;
+.table thead th {
+    padding: 12px 8px;
+    text-align: center;
+    vertical-align: middle;
 }
 
-.carousel-control-prev,
-.carousel-control-next {
-    width: 10%;
+.table tbody td, 
+.table thead th {
+    text-align: center;
+    vertical-align: middle;
 }
 
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-    width: 3rem;
-    height: 3rem;
+.table td:nth-child(1) { /* Kolom NO */
+    width: 5%;
+}
+.table td:nth-child(2) { /* Kolom NOMOR INVOICE */
+    width: 20%;
+}
+.table td:nth-child(6) { /* Kolom DETAIL PESANAN */
+    width: 15%;
 }
 
-@media (max-width: 768px) {
-    #header-carousel .carousel-item {
-        position: relative;
-        min-height: 450px;
-    }
-    
-    #header-carousel .carousel-item img {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
+.dataTables_wrapper .dataTables_paginate {
+    margin-top: 15px;
+}
+.dataTables_wrapper .dataTables_info {
+    margin-top: 10px;
+    color: #6c757d; /* Warna teks info */
 }
 
-.page-header {
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.dataTables_wrapper .dataTables_filter input {
+    margin-left: 0.5rem;
+    padding: 5px;
+}
+.dataTables_wrapper .dataTables_length select {
+    padding: 5px;
 }
 
-.page-header-inner {
-    background: rgba(0, 0, 0, .7);
-}
-
-.breadcrumb-item + .breadcrumb-item::before {
-    color: var(--light);
-}
 
 /*** Footer ***/
 .footer {

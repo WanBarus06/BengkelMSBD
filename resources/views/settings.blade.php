@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Settings</title>
+  <title>Pengaturan</title>
   
   <!-- Favicon -->
   <link href="../assets/img/favicon.ico" rel="icon">
@@ -101,9 +101,9 @@
   <div class="container">
     <div class="link-container">
       <span class="tab"><a href="{{ route('home') }}" class="fa fa-home me-3"></a></span>
-      <span class="tab" onclick="showSection('edit-profile')">Edit Profile</span>
-      <span class="tab" onclick="showSection('change-password')">Change Password</span>
-      <span class="tab" onclick="showSection('delete-account')">Delete Account</span>
+      <span class="tab" onclick="showSection('edit-profile')">Edit Profil</span>
+      <span class="tab" onclick="showSection('change-password')">Ubah Sandi</span>
+      <span class="tab" onclick="showSection('delete-account')">Hapus Akun</span>
     </div>
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
       @csrf
@@ -148,7 +148,7 @@
         <x-input-error class="mt-2" :messages="$errors->get('address')" />
 
         <div class="buttons">
-          <button type="submit" class="save-btn">Save Changes</button>
+          <button type="submit" class="save-btn">Simpan Perubahan</button>
         </div>
       </form>
       @if (session('status') === 'profile-updated')
@@ -189,7 +189,7 @@
         <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2 text-red-600" />
 
         <div class="buttons">
-          <button type="submit" class="save-btn">Save Changes</button>
+          <button type="submit" class="save-btn">Simpan Perubahan</button>
         </div>
       </form>
       @if (session('status') === 'password-updated')
@@ -237,7 +237,7 @@
         </div> --}}
 
         <div class="buttons">
-          <button type="submit" class="save-btn">Delete Account</button>
+          <button type="submit" class="save-btn">Hapus Akun</button>
         </div>
       </form>
     </div>

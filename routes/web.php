@@ -11,11 +11,14 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
+Route::get('/about', function () {
+    return view('about');
+})->name('about'); 
+
 // Tidak diperlukan, kita pakai satu file saja
 // Route::get('/user', function () {
 //     return view('user');
 // })->name('user');
-
 
 Route::get('/login-register', function () {
     return view('/login-register');
@@ -23,7 +26,25 @@ Route::get('/login-register', function () {
 
 Route::get('/products', [ProductsController::class, 'index'])->name('products');
 
+Route::get('/staff-products', function () {
+    return view('staff-products');
+})->name('staff-products'); 
 
+Route::get('/online-order', function () {
+    return view('online-order');
+})->name('online-order'); 
+
+Route::get('/pending-order', function () {
+    return view('pending-order');
+})->name('pending-order'); 
+
+Route::get('/transaction-history-staff', function () {
+    return view('transaction-history-staff');
+})->name('transaction-history-staff'); 
+
+Route::get('/dashboard-owner', function () {
+    return view('dashboard-owner');
+})->name('dashboard-owner'); 
 
 Route::get('/dashboard', function () {
     return view('home');
@@ -55,7 +76,5 @@ Route::Delete('/cart', [CartController::class, 'deleteAllItems'])->name('cart.de
 Route::post('/cart/increase/{cartItemId}', [CartController::class, 'increaseQuantity'])->name('cart.increase');
 Route::post('/cart/decrease/{cartItemId}', [CartController::class, 'decreaseQuantity'])->name('cart.decrease');
 Route::post('/cart/booking/{cartId}', [CartController::class, 'booking'])->name('cart.booking');
-
-
 
 require __DIR__.'/auth.php';

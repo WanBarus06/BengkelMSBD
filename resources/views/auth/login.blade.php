@@ -1,60 +1,62 @@
 <x-guest-layout>
   <!-- Session Status -->
   <x-auth-session-status class="mb-4" :status="session('status')" />
+  <link rel="stylesheet" href="../assets/css/login-register.css">
 
-  <div class="bg-sky-100 flex justify-center items-center h-screen">
-      <div class="w-1/2 h-screen hidden lg:block relative">
-          <img src="../assets/img/login.png" alt="Gambar" class="object-cover w-full h-full">
-  </div>
-  <div class= "lg:p-32 md:p-52 sm:20 p-6 w-full lg:w-1/2 bg-white">
-    <h1 class="text-4xl font-semibold mb-8">Selamat datang</h1>
-    <form action="{{ route('login') }}" method="POST">
-      @csrf
-
-      <div class="mb-4" "bg-sky-100">
-        <label for="email" class="block text-gray-600">Email</label>
-        <input 
-        type="email" 
-        id="email" 
-        name="email" 
-        class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" 
-        autocomplete="off"
-        :value="old('email')">
-      </div>
-      <x-input-error :messages="$errors->get('email')" class="mt-2" />
-  
-      <div class="mb-5">
-        <label for="password" class="block text-gray-800">Password</label>
-        <input 
-        type="password" 
-        id="password" 
-        name="password" 
-        class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" 
-        autocomplete="off"
-        :value="old('password')">
-      </div>
-      <x-input-error :messages="$errors->get('password')" class="mt-2" />
-  
-      <div class="mb-5 flex items-center">
-        <input type="checkbox" id="remember" name="remember" class="text-red-500">
-        <label for="remember" class="text-green-900 ml-2">{{ __('Remember me') }}</label>
-      </div>
-  
-      <div class="mb-6 text-blue-500">
-        @if (Route::has('password.request'))
-          <a class="hover:underline" href="{{ route('password.request') }}">
-              {{ __('Forgot your password?') }}
-          </a>
-        @endif
-      </div>
-  
-      <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold rounded-md py-2 px-4 w-full">{{ __('Log in') }}</button>
-    </form>
-    <div class="mt-6 ">
-      <p >Belum mempunyai akun? Silahkan <a href="/register" class="hover:underline text-red-500">daftar </a>terlebih dahulu.</p>
+  <div class="wrapper">
+    <div class="title-text">
+      <div class="title login">Selamat Datang</div>
     </div>
-  </div>
-  </div>
+    <div class="form-container">
+      <div class="form-inner">
+      <form action="{{ route('login') }}" method="POST">
+      @csrf
+          <div class="field">
+          <label for="name" class="block text-gray-600">Email</label>
+            <input
+            type="email" 
+            id="email" 
+            name="email" 
+            class="w-full border border-gray-300 " 
+            autocomplete="off"
+            :value="old('email')"
+            required>
+          </div>
+          <br><x-input-error :messages="$errors->get('email')" class="mt-2" />
+          
+          <br><div class="field">
+          <label for="name" class="block text-gray-600">Password</label>
+            <input
+            type="password" 
+            id="password" 
+            name="password" 
+            class="w-full border border-gray-300" 
+            autocomplete="off"
+            :value="old('password')"
+            required>
+          </div>
+          <br><x-input-error :messages="$errors->get('password')" class="mt-2" />
+          
+          <br><br><div class="mb-5 flex items-center">
+            <input type="checkbox" id="remember" name="remember" class="text-red-500">
+            <label for="remember" class="text-green-900 ml-2">{{ __('Ingat Saya') }}</label>
+          </div>
+
+          <div class="mb-6 text-blue-500">
+            @if (Route::has('password.request'))
+              <a class="hover:underline" href="{{ route('password.request') }}">
+                  {{ __('Lupa Sandi?') }}
+              </a>
+            @endif
+          </div>
+
+          <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold rounded-md py-2 px-4 w-full">{{ __('Masuk') }}</button>
+          <div class="signup-link">
+            <p >Belum mempunyai akun? Silakan <a href="/register" class="hover:underline text-red-500">daftar </a>terlebih dahulu.</p>
+          </div>
+          </form>
+        </div>
+        </div>
 
   {{-- Default Breeze do not Remove --}}
   {{-- <form method="POST" action="{{ route('login') }}">
@@ -63,7 +65,7 @@
       <div>
           <x-input-label for="email" :value="__('Email')" />
           <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-          <x-input-error :messages="$errors->get('email')" class="mt-2" />
+          <br><x-input-error :messages="$errors->get('email')" class="mt-2" />
       </div>
 
       <div class="mt-4">
@@ -74,7 +76,7 @@
                           name="password"
                           required autocomplete="current-password" />
 
-          <x-input-error :messages="$errors->get('password')" class="mt-2" />
+          <br><x-input-error :messages="$errors->get('password')" class="mt-2" />
       </div>
 
 

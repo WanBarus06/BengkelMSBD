@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Homepage</title>
+    <title>Beranda</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -39,7 +39,7 @@
             <div class="col-lg-7 px-5 text-start">
                 <div class="h-100 d-inline-flex align-items-center py-3 me-4">
                     <small class="fa fa-home text-primary me-2"></small>
-                    <small>Home</small>
+                    <small><a href="{{ route('home') }}" class="">Beranda</a></small>
                 </div>
                 @if (Route::has('login'))
                     @auth
@@ -50,12 +50,6 @@
                     @endauth
                 @endif
             </div>
-            <div class="col-lg-5 px-5 text-end">
-                <div class="h-100 d-inline-flex align-items-center py-3 me-4">
-                    <small class="text-primary me-2"></small>
-                    <small></small>
-                </div>
-            </div>
         </div>
     </div>
     <!-- Topbar End -->
@@ -63,7 +57,7 @@
 
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
-        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+        <a href="" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
             <h2 class="m-0 text-primary"><i class="fa fa-car me-3"></i>Bengkel Panbres</h2>
         </a>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -71,26 +65,27 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="{{ route('home') }}" class="nav-item nav-link active">Home</a>
-                <a href="#about" class="nav-item nav-link">About</a>
-                <a href="{{ route('products') }}" class="nav-item nav-link">Products</a>
-                <a href="http://wa.me/6281375506448" class="nav-item nav-link">Contact</a>
+                <a href="{{ route('home') }}" class="nav-item nav-link active">Beranda</a>
+                <a href="{{ route('about') }}" class="nav-item nav-link">Tentang</a>
+                <a href="{{ route('products') }}" class="nav-item nav-link">Produk</a>
+                <a href="http://wa.me/6281375506448" class="nav-item nav-link">Kontak</a>
                 @if (Route::has('login'))
                     @auth
-                <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profile</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profil</a>
                         <div class="dropdown-menu fade-up m-0">
-                            <a href="{{ route('profile.edit') }}" class="dropdown-item">Settings</a>
-                            <a href="{{ route('transaction') }}" class="dropdown-item">Transaction History</a>
+                            <a href="{{ route('profile.edit') }}" class="dropdown-item">Pengaturan</a>
+                            <a href="{{ route('transaction') }}" class="dropdown-item">Riwayat Transaksi</a>
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
-                                <button type="submit" class="dropdown-item">Log Out</button>
+                                <button type="submit" class="dropdown-item">Keluar</button>
                             </form>
                         </div>
                     </div>
-                        <a href="contact.html" class="nav-item nav-link">Logo</a>
+                    <img class="img-fluid logo-navbar" src="../assets/img/logo.jpeg" alt="">
+                    
                 @else
-                <a href="{{ route('login') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Register / Login<i class="fa fa-arrow-right ms-3"></i></a>
+                <a href="{{ route('login') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Daftar / Masuk<i class="fa fa-arrow-right ms-3"></i></a>
                     @endauth
                 @endif
                 
@@ -113,7 +108,7 @@
                                 <div class="col-10 col-lg-7 text-center text-lg-start">
                                     <h6 class="text-white text-uppercase mb-3 animated slideInDown">Ban Panbres</h6>
                                     <h1 class="display-3 text-white mb-4 pb-3 animated slideInDown">Performa Kendaraan Anda, Prioritas Kami</h1>
-                                    <a href="" class="btn btn-primary py-3 px-5 animated slideInDown">Products<i class="fa fa-arrow-right ms-3"></i></a>
+                                    <a href="{{ route('products') }}" class="btn btn-primary py-3 px-5 animated slideInDown">Produk<i class="fa fa-arrow-right ms-3"></i></a>
                                 </div>
                                 <div class="col-lg-5 d-none d-lg-flex animated zoomIn">
                                     <img class="img-fluid" src="../assets/img/bengkel-1.png" alt="">
@@ -130,7 +125,7 @@
                                 <div class="col-10 col-lg-7 text-center text-lg-start">
                                     <h6 class="text-white text-uppercase mb-3 animated slideInDown">Ban Panbres</h6>
                                     <h1 class="display-3 text-white mb-4 pb-3 animated slideInDown">Dapatkan Layanan Ban Terpercaya di Sini!</h1>
-                                    <a href="" class="btn btn-primary py-3 px-5 animated slideInDown">Products<i class="fa fa-arrow-right ms-3"></i></a>
+                                    <a href="{{ route('products') }}" class="btn btn-primary py-3 px-5 animated slideInDown">Produk<i class="fa fa-arrow-right ms-3"></i></a>
                                 </div>
                                 <div class="col-lg-5 d-none d-lg-flex animated zoomIn">
                                     <img class="img-fluid" src="../assets/img/bengkel-2.png" alt="">
@@ -173,7 +168,7 @@
                                     Dengan pilihan ban dari merek-merek terpercaya, kami siap memberikan saran yang tepat sesuai kebutuhan dan anggaran Anda
                                 </span>
                             </p>
-                            <a class="read-more-link border-bottom" href="javascript:void(0);" onclick="toggleText(this)">Read More</a>
+                            <a class="read-more-link border-bottom" href="javascript:void(0);" onclick="toggleText(this)">Baca Selengkapnya</a>
                     </div>
                     </div>
                 </div>
@@ -190,7 +185,7 @@
                                     Kami percaya bahwa keahlian mereka adalah aset berharga yang menjamin kualitas layanan dan kepuasan pelanggan di setiap kunjungan
                                 </span>
                             </p>
-                            <a class="read-more-link border-bottom" href="javascript:void(0);" onclick="toggleText(this)">Read More</a>
+                            <a class="read-more-link border-bottom" href="javascript:void(0);" onclick="toggleText(this)">Baca Selengkapnya</a>
                         </div>
                     </div>
                 </div>
@@ -207,7 +202,7 @@
                                     Dengan peralatan yang selalu terawat dan terbaru, kami siap memberikan pelayanan optimal untuk setiap jenis kendaraan
                                 </span>
                             </p>
-                            <a class="read-more-link border-bottom" href="javascript:void(0);" onclick="toggleText(this)">Read More</a>
+                            <a class="read-more-link border-bottom" href="javascript:void(0);" onclick="toggleText(this)">Baca Selengkapnya</a>
                         </div>
                     </div>
                 </div>
@@ -225,14 +220,14 @@
                     <div class="position-relative h-100 wow fadeIn" data-wow-delay="0.1s">
                         <img class="position-absolute img-fluid w-100 h-100" src="../assets/img/about.jpeg" style="object-fit: cover;" alt="">
                         <div class="position-absolute top-0 end-0 mt-n4 me-n4 py-4 px-5" style="background: rgba(0, 0, 0, .08);">
-                            <h1 class="text-primary display-4 mb-0">15 <span class="text-primary fs-4">Years</span></h1>
-                            <h4 class="text-primary">Experience</h4>
+                            <h1 class="text-primary display-4 mb-0">10+ <span class="text-primary fs-4">Tahun</span></h1>
+                            <h4 class="text-primary">Pengalaman</h4>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <h6 class="text-primary text-uppercase">About Us</h6>
-                    <h1 class="mb-4"><span class="text-primary">Panbres</span>, Layanan Terbaik untuk Ban Anda</h1>
+                    <h6 class="text-primary text-uppercase">Tentang Kami</h6>
+                    <h1 class="mb-4"><span class="text-primary">Panbres,</span> Layanan Terbaik untuk Ban Anda</h1>
                     <p class="mb-4">Panbres adalah solusi tepat untuk semua kebutuhan ban kendaraan Anda, menawarkan layanan berkualitas tinggi yang didukung oleh teknisi berpengalaman dan peralatan modern.
                                     Kami berkomitmen untuk memberikan pelayanan yang cepat, efisien, dan ramah, menjamin keselamatan serta kenyamanan setiap pelanggan yang datang ke bengkel kami</p>
                     <div class="row g-4 mb-3 pb-3">
@@ -270,94 +265,17 @@
                             </div>
                         </div>
                     </div>
-                    <a href="" class="btn btn-primary py-3 px-5">Read More<i class="fa fa-arrow-right ms-3"></i></a>
+                    <a href="{{ route('about') }}" class="btn btn-primary py-3 px-5">Baca Selengkapnya<i class="fa fa-arrow-right ms-3"></i></a>
                 </div>
             </div>
         </div>
     </div>
     <!-- About End -->
 
-
-    <!-- Fact Start -->
-
-    <!-- Fact End -->
-
-
-    <!-- Service Start -->
-    
-    <!-- Service End -->
-
-
-    <!-- Booking Start -->
-    <div class="container-fluid bg-secondary booking my-5 wow fadeInUp" data-wow-delay="0.1s">
-        <div class="container">
-            <div class="row gx-5">
-                <div class="col-lg-6 py-5">
-                    <div class="py-5">
-                        <h1 class="text-white mb-4">Bengkel Ban Pilihan Anda</h1>
-                        <p class="text-white mb-0">
-                            Bengkel ban kami adalah penyedia layanan perawatan dan perbaikan ban yang terpercaya merupakan pilihan banyak orang atas kualitas layanan yang kami berikan.
-                            Dengan tim teknisi berpengalaman dan peralatan modern, kami berkomitmen untuk memastikan keselamatan dan kenyamanan kendaraan Anda.
-                            Pelayanan kami yang cepat dan efisien, serta fokus pada kebutuhan pelanggan, menjadikan kami pilihan utama bagi pemilik kendaraan yang mengutamakan kualitas dan keandalan
-                        </p>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="bg-primary h-100 d-flex flex-column justify-content-center text-center p-5 wow zoomIn" data-wow-delay="0.6s">
-                        <h1 class="text-white mb-4">FORM PEMESANAN</h1>
-                        <form>
-                            <div class="row g-3">
-                                <div class="col-12 col-sm-6">
-                                    <input type="text" class="form-control border-0" placeholder="Nama Anda" style="height: 55px;">
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <input type="email" class="form-control border-0" placeholder="No HP/WA Anda" style="height: 55px;">
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <select class="form-select border-0" style="height: 55px;">
-                                        <option selected>Pilih Kategori</option>
-                                        <option value="1">Ban Vulkanisir</option>
-                                        <option value="2">Ban Biasa</option>
-                                        <option value="3">Karet Ban</option>
-                                    </select>
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <div class="date" id="date1" data-target-input="nearest">
-                                        <input type="text"
-                                            class="form-control border-0 datetimepicker-input"
-                                            placeholder="Tanggal Pemesanan" data-target="#date1" data-toggle="datetimepicker" style="height: 55px;">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <textarea class="form-control border-0" placeholder="Pesan Tambahan"></textarea>
-                                </div>
-                                <div class="col-12">
-                                    <button class="btn btn-secondary w-100 py-3" type="submit">Pesan Sekarang</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Booking End -->
-
-
-    <!-- Team Start -->
-    
-    <!-- Team End -->
-
-
-    <!-- Testimonial Start -->
-    
-    <!-- Testimonial End -->
-
-
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
         <div class="container py-5">
-            <div class="row g-5">
+            <div class="row g-5 justify-content-center">
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Alamat</h4>
                     <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Jalan H. Anif No.361 Rt 02 Jati Asri Susun XXIV Desa Sampali, Kec. Percut Sei Tuan, Kab. Deli Serdang</p>
@@ -370,40 +288,33 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Kategori</h4>
+                    <a class="btn btn-link" href="">Ban Radial</a>
+                    <a class="btn btn-link" href="">Ban Nilon</a>
+                    <a class="btn btn-link" href="">Ban Semi Radial</a>
+                    <a class="btn btn-link" href="">Ban Mati (Solid Tire)</a>
                     <a class="btn btn-link" href="">Ban Vulkanisir</a>
-                    <a class="btn btn-link" href="">Ban Biasa</a>
-                    <a class="btn btn-link" href="">Karet Ban</a>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h4 class="text-light mb-4">Kirim Pendapat Anda</h4>
-                    <p>Kepuasan pelanggan adalah kepuasan kami!</p>
-                    <div class="position-relative mx-auto" style="max-width: 400px;">
-                        <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-                        <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">Kirim</button>
-                    </div>
+                    <a class="btn btn-link" href="">Karet ban (Tube Flap)</a>
                 </div>
             </div>
         </div>
         <div class="container">
             <div class="copyright">
                 <div class="row">
-                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                        &copy; <a class="border-bottom" href="#">Ban Panbres (Panjaitan Bersaudara)</a>, All Right Reserved.
-
+                    <div class="col-md-6 text-center text-md-center mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" href="">Ban Panbres (Panjaitan Bersaudara)</a>
                     </div>
-                    <div class="col-md-6 text-center text-md-end">
+                    <div class="col-md-6 text-center text-md-center">
                         <div class="footer-menu">
-                            <a href="">Home</a>
-                            <a href="">Cookies</a>
-                            <a href="">Help</a>
-                            <a href="">FAQs</a>
+                            <a href="http://wa.me/6281375506448">Bantuan</a>
+                            <a href="">SSD</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Footer End -->
+<!-- Footer End -->
+
 
 
     <!-- Back to Top -->
@@ -430,10 +341,10 @@
             const extraText = link.previousElementSibling.querySelector(".extraText");
             if (extraText.style.display === "none") {
                 extraText.style.display = "inline";
-                link.textContent = "Read Less";
+                link.textContent = "Baca Lebih Sedikit";
             } else {
                 extraText.style.display = "none";
-                link.textContent = "Read More";
+                link.textContent = "Baca Selengkapnya";
             }
         }
     </script>

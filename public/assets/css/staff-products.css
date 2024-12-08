@@ -57,6 +57,68 @@
 }
 
 /*** Navbar ***/
+/* Perbaikan untuk logo-navbar */
+.logo-navbar {
+    display: inline-block; /* Pastikan logo tampil sejajar */
+    height: 50px; /* Tinggi logo diperbesar */
+    width: auto; /* Pertahankan proporsi logo */
+    vertical-align: middle; /* Posisi logo sejajar vertikal */
+    margin: 0 5px; /* Tambahkan margin horizontal */
+    position: relative; /* Aktifkan positioning relatif */
+    top: 10px;
+    margin-left: -20px; /* Kurangi jarak ke elemen di sebelah kiri */
+}
+
+/* Pastikan elemen navbar sejajar */
+.navbar-nav .nav-link {
+    display: flex;
+    align-items: center; /* Selaraskan elemen secara vertikal */
+    height: 75px; /* Tinggi navbar */
+}
+
+/* Brand logo di navbar */
+.navbar-brand {
+    display: flex;
+    align-items: center; /* Selaraskan elemen logo dengan teks brand */
+    height: 75px; /* Pastikan tinggi brand konsisten */
+}
+
+/* Tambahkan padding pada dropdown untuk logo */
+.nav-item .logo-navbar {
+    margin-top: auto;
+    margin-bottom: auto; /* Pastikan logo berada di tengah */
+}
+
+/* Pastikan keseluruhan navbar tidak memiliki konflik margin/padding */
+.navbar {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav .nav-item.dropdown {
+    position: static; /* Pastikan dropdown tidak menggunakan posisi absolut */
+}
+
+.navbar-nav .dropdown-menu {
+    top: 100%; /* Pastikan dropdown muncul di bawah tombol */
+    transform: translateY(0); /* Hilangkan efek naik */
+    margin-top: 0; /* Pastikan tidak ada margin yang mengganggu */
+}
+
+.navbar-nav .nav-link {
+    display: flex;
+    align-items: center; /* Pastikan semua item di navbar sejajar secara vertikal */
+}
+
+.navbar-nav .nav-item {
+    margin: 0;
+    padding: 0 10px; /* Tambahkan padding horizontal untuk spasi antar item */
+}
+
+.navbar-nav .nav-item.dropdown .nav-link {
+    padding-right: 10px; /* Sesuaikan jika ada icon dropdown */
+}
+
 .navbar .dropdown-toggle::after {
     border: none;
     content: "\f107";
