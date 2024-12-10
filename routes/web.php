@@ -63,12 +63,16 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    // Route::post('/cart/add/{product_id}', [CartController::class, 'store'])->name('cart.store');
-    // Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    // Route::delete('/cart/{cartItemId}', [CartController::class, 'removeItem'])->name('cart.remove');
-
+    Route::post('/cart/add/{product_id}', [CartController::class, 'store'])->name('cart.store');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::delete('/cart/{cartItemId}', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::Delete('/cart', [CartController::class, 'deleteAllItems'])->name('cart.deleteAllItems');
+    Route::post('/cart/increase/{cartItemId}', [CartController::class, 'increaseQuantity'])->name('cart.increase');
+    Route::post('/cart/decrease/{cartItemId}', [CartController::class, 'decreaseQuantity'])->name('cart.decrease');
+    Route::post('/cart/booking/{cartId}', [CartController::class, 'booking'])->name('cart.booking');
 });
 
+<<<<<<< Updated upstream
 Route::post('/cart/add/{product_id}', [CartController::class, 'store'])->name('cart.store');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::delete('/cart/{cartItemId}', [CartController::class, 'destroy'])->name('cart.destroy');
@@ -76,5 +80,7 @@ Route::Delete('/cart', [CartController::class, 'deleteAllItems'])->name('cart.de
 Route::post('/cart/increase/{cartItemId}', [CartController::class, 'increaseQuantity'])->name('cart.increase');
 Route::post('/cart/decrease/{cartItemId}', [CartController::class, 'decreaseQuantity'])->name('cart.decrease');
 Route::post('/cart/booking/{cartId}', [CartController::class, 'booking'])->name('cart.booking');
+=======
+>>>>>>> Stashed changes
 
 require __DIR__.'/auth.php';

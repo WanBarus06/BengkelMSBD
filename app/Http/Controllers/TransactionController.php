@@ -16,9 +16,9 @@ class TransactionController extends Controller
             ->whereIn('status', ['Menunggu Konfirmasi', 'Transaksi Selesai', 'Transaksi Gagal', 'Menunggu Pengambilan']) // Atau status lainnya
             ->get();
 
-        // Ambil total menggunakan stored procedure
+        // Ambil total menggunakan stored function
         foreach ($transactions as $transaction) {
-            // Panggil stored procedure untuk menghitung total transaksi berdasarkan cart_id
+            // Panggil stored function untuk menghitung total transaksi berdasarkan cart_id
             $transactionTotal = DB::select("SELECT cartTotal(?) AS total", [$transaction->id]);
             $transaction->total = $transactionTotal[0]->total; // Set total ke property transaction
         }
