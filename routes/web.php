@@ -5,7 +5,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Middleware\StaffMiddleware;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', function () {
     return view('home');
@@ -25,22 +29,6 @@ Route::get('/login-register', function () {
 })->name('/login-register');
 
 Route::get('/products', [ProductsController::class, 'index'])->name('products');
-
-Route::get('/staff-products', function () {
-    return view('staff-products');
-})->name('staff-products'); 
-
-Route::get('/online-order', function () {
-    return view('online-order');
-})->name('online-order'); 
-
-Route::get('/pending-order', function () {
-    return view('pending-order');
-})->name('pending-order'); 
-
-Route::get('/transaction-history-staff', function () {
-    return view('transaction-history-staff');
-})->name('transaction-history-staff'); 
 
 Route::get('/dashboard-owner', function () {
     return view('dashboard-owner');
@@ -66,21 +54,23 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/add/{product_id}', [CartController::class, 'store'])->name('cart.store');
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::delete('/cart/{cartItemId}', [CartController::class, 'destroy'])->name('cart.destroy');
-    Route::Delete('/cart', [CartController::class, 'deleteAllItems'])->name('cart.deleteAllItems');
+    Route::delete('/cart', [CartController::class, 'deleteAllItems'])->name('cart.deleteAllItems');
     Route::post('/cart/increase/{cartItemId}', [CartController::class, 'increaseQuantity'])->name('cart.increase');
     Route::post('/cart/decrease/{cartItemId}', [CartController::class, 'decreaseQuantity'])->name('cart.decrease');
-    Route::post('/cart/booking/{cartId}', [CartController::class, 'booking'])->name('cart.booking');
+    Route::post('/cart  /booking/{cartId}', [CartController::class, 'booking'])->name('cart.booking');
 });
 
-<<<<<<< Updated upstream
-Route::post('/cart/add/{product_id}', [CartController::class, 'store'])->name('cart.store');
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::delete('/cart/{cartItemId}', [CartController::class, 'destroy'])->name('cart.destroy');
-Route::Delete('/cart', [CartController::class, 'deleteAllItems'])->name('cart.deleteAllItems');
-Route::post('/cart/increase/{cartItemId}', [CartController::class, 'increaseQuantity'])->name('cart.increase');
-Route::post('/cart/decrease/{cartItemId}', [CartController::class, 'decreaseQuantity'])->name('cart.decrease');
-Route::post('/cart/booking/{cartId}', [CartController::class, 'booking'])->name('cart.booking');
-=======
->>>>>>> Stashed changes
-
+Route::middleware(['auth', StaffMiddleware::class])->group(function () {
+    // Rute yang hanya dapat diakses oleh pengguna dengan peran 'staff'
+    Route::resource('suppliers', SupplierController::class);
+    Route::resource('orders', OrderController::class);
+    Route::get('/onsite-order', function () {
+        return view('staff.onsite-order');
+    })->name('onsite-order'); 
+    
+    Route::get('/transaction-history-staff', function () {
+        return view('staff.transaction-history-staff');
+    })->name('transaction-history-staff'); 
+    
+});
 require __DIR__.'/auth.php';

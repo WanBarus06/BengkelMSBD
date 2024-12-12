@@ -12,12 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sales_record_details', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('sales_record_id')->constrained();
-            $table->foreignId('product_id')->constrained('products', 'product_id');
-            $table->integer('quantity'); 
-            $table->decimal('price', 10, 2); 
+            $table->id('detail_id');
+            $table->unsignedBigInteger('sales_id');
+            $table->unsignedBigInteger('product_id');
+            $table->integer('quantity')->default(1);
+            $table->decimal('price_per_unit', 12, 2); // Harga satuan disimpan
             $table->timestamps();
+
+            $table->foreign('sales_id')->references('sales_id')->on('sales_records')->onDelete('cascade');
+            $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
         });
     }
 

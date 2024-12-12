@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\CartItem;
+use Illuminate\Support\Facades\DB;
+
 class Cart extends Model
 {
     protected $fillable = [
@@ -45,4 +47,5 @@ class Cart extends Model
         return DB::selectOne('SELECT purchase_invoice_detail_total(?) as total', [$this->id])->total;
     }
 
+    
 }

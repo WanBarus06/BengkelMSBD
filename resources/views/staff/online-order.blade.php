@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Pesanan Tertunda</title>
+    <title>Pesanan Online</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -28,7 +28,7 @@
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="../assets/css/pending-order.css" rel="stylesheet">
+    <link href="../assets/css/online-order.css" rel="stylesheet">
 
     <!-- Tambahkan link CSS DataTables -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
@@ -52,8 +52,8 @@
                 <small><a href="" class="">Staff</a></small>
             </div>
             <div class="h-100 d-inline-flex align-items-center py-3">
-            <small class="fas fa-cart-arrow-down text-primary me-2"></small>
-<small><a href="{{ route('pending-order') }}" class="">Pesanan Tertunda</a></small>
+                <small class="fas fa-cart-arrow-down text-primary me-2"></small>
+                <small><a href="{{ route('orders.index') }}" class="">Pesanan Online</a></small>
             </div>
         </div>
     </div>
@@ -70,10 +70,11 @@
         </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto p-4 p-lg-0">
-            <a href="{{ route('staff-products') }}" class="nav-item nav-link">Produk</a>
-            <a href="{{ route('online-order') }}" class="nav-item nav-link">Pesanan Online</a>
-            <a href="{{ route('pending-order') }}" class="nav-item nav-link active">Pesanan Tertunda</a>
+            <a href="{{ route('suppliers.index') }}" class="nav-item nav-link">Supplier</a>
+            <a href="{{ route('orders.index') }}" class="nav-item nav-link active">Pesanan Online</a>
+            <a href="{{ route('onsite-order') }}" class="nav-item nav-link">Pesanan Offline</a>
             <a href="{{ route('transaction-history-staff') }}" class="nav-item nav-link">Riwayat Transaksi</a>
+            <a href="" class="nav-item nav-link">Faktur Pembelian</a>
             &nbsp; &nbsp;<img class="img-fluid logo-navbar" src="../assets/img/logo.jpeg" alt="">
         </div>
 </nav>
@@ -83,57 +84,61 @@
 
     <!-- Tabel Data -->
     <br><br><div class="table-responsive">
-    <h1>Pesanan Tertunda</h1>
-    <table id="example" class="table table-striped">
-        <thead>
-            <tr>
-                <th class="text-center">NO.</th>
-                <th class="text-center">NOMOR INVOICE</th>
-                <th class="text-center">NAMA</th>
-                <th class="text-center">NOMOR HP</th>
-                <th class="text-center">TOTAL</th>
-                <th class="text-center">KETERANGAN</th>          
-                <th class="text-center">DETAIL PESANAN</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>INV-000001</td>
-                <td>Gaby</td>
-                <td>082273583361</td>
-                <td>Rp 1.375.902</td>
-                <td>Pending</td>
-                <td class="text-center">
-                    <button class="btn btn-danger">LIHAT</button>
-                </td>
-            </tr>
-            <!-- Tambahkan data lain di sini -->
-        </tbody>
-    </table>
-</div>
+    <h1>Pesanan Online</h1>
+   <!-- Form Pencarian dan Pilihan Jumlah Baris per Halaman -->
+<!-- Form Pencarian dan Pilihan Jumlah Baris per Halaman -->
+<form action="{{ route('orders.index') }}" method="GET">
+    <div class="row mb-3">
+        <div class="col">
+            <input type="text" name="search" class="form-control" placeholder="Cari nama atau status..." value="{{ request('search') }}">
+        </div>
+        <div class="col">
+            <select name="rows_per_page" class="form-control" onchange="this.form.submit()">
+                <option value="10" {{ request('rows_per_page') == 10 ? 'selected' : '' }}>10</option>
+                <option value="25" {{ request('rows_per_page') == 25 ? 'selected' : '' }}>25</option>
+                <option value="50" {{ request('rows_per_page') == 50 ? 'selected' : '' }}>50</option>
+                <option value="100" {{ request('rows_per_page') == 100 ? 'selected' : '' }}>100</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+<table id="example" class="table table-striped">
+    <thead>
+        <tr>
+            <th class="text-center">No</th>
+            <th class="text-center">Nama Pembeli</th>
+            <th class="text-center">No Hp</th>
+            <th class="text-center">Total</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Waktu</th>
+            <th class="text-center">Detail Pesanan</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($orders as $order)
+        <tr>
+            <td>{{ $order->id }}</td>
+            <td>{{ $order->user->name }}</td>
+            <td>{{ $order->user->phone_number }}</td>
+            <td>{{ number_format($order->total_amount, 2) }}</td>
+            <td>{{ $order->status }}</td>
+            <td>{{ $order->updated_at }}</td>
+            <td class="text-center">
+                <a href="{{ route('orders.show', $order->id) }}" class="btn btn-danger">LIHAT</a>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
+
+<!-- Pagination Links -->
+<div class="pagination justify-content-center">
+    {{ $orders->appends(request()->input())->links() }}
 </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $(document).ready(function () {
-    $('#example').DataTable({
-        paging: true, // Mengaktifkan pagination
-        searching: true, // Mengaktifkan search box
-        info: true, // Menampilkan informasi jumlah data
-        lengthMenu: [10, 25, 50, 100], // Opsi jumlah entri per halaman
-        language: {
-            lengthMenu: "Tampilkan &nbsp _MENU_ &nbsp data per halaman",
-            info: "Menampilkan _START_ data sampai _END_ dari _TOTAL_ data",
-            paginate: {
-                next: "Selanjutnya",
-                previous: "Sebelumnya",
-            },
-            search: "Search: &nbsp",
-        },
-    });
-});
-    </script>
 
+</div>
+</div>
 </body>
 </html>

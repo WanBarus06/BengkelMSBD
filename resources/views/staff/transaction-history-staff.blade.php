@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Pesanan Online</title>
+    <title>Riwayat Transaksi</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -28,7 +28,7 @@
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="../assets/css/online-order.css" rel="stylesheet">
+    <link href="../assets/css/transaction-history-staff.css" rel="stylesheet">
 
     <!-- Tambahkan link CSS DataTables -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
@@ -39,10 +39,26 @@
 <!-- Tambahkan script DataTables -->
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 
+<style>
+        /* Membuat lingkaran merah */
+        .status-failed {
+            width: 10px; /* Ukuran lingkaran */
+            height: 10px;
+            background-color: red; /* Warna lingkaran */
+            border-radius: 50%; /* Membuat bentuk lingkaran */
+            display: inline-block; /* Agar sejajar dengan teks */
+            margin-right: 5px; /* Jarak antara lingkaran dan teks */
+        }
 
+        /* Teks di sebelah lingkaran */
+        .status-text {
+            font-size: 14px; /* Ukuran font */
+            color: black; /* Warna teks */
+            display: inline-block; /* Agar sejajar */
+        }
+    </style>
 </head>
 <body>
-
      <!-- Topbar Start -->
      <div class="container-fluid bg-light p-0">
     <div class="row gx-0 d-none d-lg-flex">
@@ -52,8 +68,8 @@
                 <small><a href="" class="">Staff</a></small>
             </div>
             <div class="h-100 d-inline-flex align-items-center py-3">
-                <small class="fas fa-cart-arrow-down text-primary me-2"></small>
-                <small><a href="{{ route('online-order') }}" class="">Pesanan Online</a></small>
+            <small class="fas fa-file-alt text-primary me-2"></small>
+<small><a href="{{ route('transaction-history-staff') }}" class="">Riwayat Transaksi</a></small>
             </div>
         </div>
     </div>
@@ -70,10 +86,11 @@
         </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto p-4 p-lg-0">
-            <a href="{{ route('staff-products') }}" class="nav-item nav-link">Produk</a>
-            <a href="{{ route('online-order') }}" class="nav-item nav-link active">Pesanan Online</a>
-            <a href="{{ route('pending-order') }}" class="nav-item nav-link">Pesanan Tertunda</a>
-            <a href="{{ route('transaction-history-staff') }}" class="nav-item nav-link">Riwayat Transaksi</a>
+            <a href="{{ route('suppliers.index') }}" class="nav-item nav-link">Supplier</a>
+            <a href="{{ route('orders.index') }}" class="nav-item nav-link">Pesanan Online</a>
+            <a href="{{ route('onsite-order') }}" class="nav-item nav-link">Pesanan Offline</a>
+            <a href="{{ route('transaction-history-staff') }}" class="nav-item nav-link active">Riwayat Transaksi</a>
+            <a href="" class="nav-item nav-link">Faktur Pembelian</a>
             &nbsp; &nbsp;<img class="img-fluid logo-navbar" src="../assets/img/logo.jpeg" alt="">
         </div>
 </nav>
@@ -83,17 +100,17 @@
 
     <!-- Tabel Data -->
     <br><br><div class="table-responsive">
-    <h1>Pesanan Online</h1>
+    <h1>Riwayat Transaksi</h1>
     <table id="example" class="table table-striped">
         <thead>
             <tr>
-                <th class="text-center">NO.</th>
-                <th class="text-center">NOMOR INVOICE</th>
-                <th class="text-center">NAMA</th>
-                <th class="text-center">NOMOR HP</th>
-                <th class="text-center">TOTAL</th>
-                <th class="text-center">DETAIL PESANAN</th>
-                <th class="text-center">AKSI</th>
+                <th class="text-center">No.</th>
+                <th class="text-center">Nomor Invoice</th>
+                <th class="text-center">Nama</th>
+                <th class="text-center">Nomor HP</th>
+                <th class="text-center">Total</th>
+                <th class="text-center">Status </th>          
+                <th class="text-center">Detail Pesanan</th>
             </tr>
         </thead>
         <tbody>
@@ -103,8 +120,9 @@
                 <td>Gaby</td>
                 <td>082273583361</td>
                 <td>Rp 1.375.902</td>
-                <td class="text-center">
-                    <button class="btn btn-danger">LIHAT</button>
+                <td>
+                    <span class="status-failed"></span>
+                    <span class="status-text"><strong>Gagal</strong></span>
                 </td>
                 <td class="text-center">
                     <button class="btn btn-danger">LIHAT</button>

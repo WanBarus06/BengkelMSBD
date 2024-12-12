@@ -25,12 +25,13 @@ class CartController extends Controller
     
         // Jika cart tidak ditemukan, tampilkan halaman kosong atau buat cart baru
         if (!$cart) {
-            // Anda bisa menambahkan logika untuk membuat cart baru atau tampilkan halaman kosong
-            $cart = Cart::where('user_id', Auth::id())
-            ->where('status', 'Menunggu Konfirmasi')
-            ->first();
+            $cart = Cart::create([
+                'user_id' => Auth::id(),
+                'status' => 'Belum Memesan',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         }
-    
         // Ambil semua item dalam cart
         $cartItems = CartItem::with('product')->where('cart_id', $cart->id)->get();
 

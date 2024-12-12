@@ -12,11 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sales_records', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('cart_id')->constrained('carts', 'id');
-            $table->foreignId('user_id')->constrained('users', 'id');
-            $table->timestamp('completed_at')->nullable();
+            $table->id('sales_id');
+            $table->unsignedBigInteger('customer_id')->nullable(); // Untuk pelanggan online
+            $table->string('offline_customer_name')->nullable();  // Untuk pelanggan offline
+            $table->string('offline_customer_phone_number')->nullable();  // Untuk pelanggan offline
+            $table->string('offline_customer_address')->nullable();  // Untuk pelanggan offline
+            $table->boolean('is_fully_paid')->default(true);
             $table->timestamps();
+
+            $table->foreign('customer_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 
