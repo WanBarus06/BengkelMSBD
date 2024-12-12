@@ -92,4 +92,28 @@ class OrderController extends Controller
     {
         //
     }
+
+    public function confirmOrder(Cart $cart)
+    {
+        $cart->status = 'Menunggu Pengambilan';
+        $cart->save();
+
+        return redirect()->route('orders.index')->with('success', 'Pesanan berhasil dikonfirmasi.');
+    }
+
+    public function rejectOrder(Request $request, Cart $cart)
+    {
+        $request->validate([
+            'reason' => 'required|string|max:255',
+        ]);
+        $cart->update([
+            'status' => 'Transaksi Gagal',
+            'cancelled_reason' => $request->reason,
+            'cancelled_by' => auth()->user()->id, // Ambil nama user yang membatalkan
+            'rejected_at' => now()
+        ]);
+
+        return redirect()->route('orders.index')->with('success', 'Pesanan telah berhasil ditolak');
+    }
+
 }

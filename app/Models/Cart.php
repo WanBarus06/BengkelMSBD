@@ -14,7 +14,7 @@ class Cart extends Model
         'status',
         'cancelled_by',
         'cancelled_reason',
-        'failed_at',
+        'rejected_at',
         'remarks',
     ];
 

@@ -71,6 +71,12 @@ Route::middleware(['auth', StaffMiddleware::class])->group(function () {
     Route::get('/transaction-history-staff', function () {
         return view('staff.transaction-history-staff');
     })->name('transaction-history-staff'); 
+
+    Route::post('/orders/{cart}/confirm', [OrderController::class, 'confirmOrder'])->name('orders.confirm');
+    Route::post('/orders/{cart}/reject', [OrderController::class, 'rejectOrder'])->name('orders.reject');
+
+    Route::post('/suppliers/{supplier}/activate', [SupplierController::class, 'activate'])->name('suppliers.activate');
+    
     
 });
 require __DIR__.'/auth.php';

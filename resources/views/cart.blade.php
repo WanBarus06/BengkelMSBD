@@ -67,6 +67,12 @@
         {{ session('info') }}
     </div>
 @endif
+
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
 <!-- Topbar End -->
 
 <div class="container my-5">

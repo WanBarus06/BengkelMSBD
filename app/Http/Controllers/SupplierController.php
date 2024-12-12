@@ -43,7 +43,7 @@ class SupplierController extends Controller
     
 
         Supplier::create($request->all());
-        return redirect()->route('suppliers.index')->with('success', 'Supplier added successfully.');
+        return redirect()->route('suppliers.index')->with('success', 'Pemasok telah berhasil ditambahkan.');
     
     }
 
@@ -76,7 +76,16 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
-        $supplier->delete();
-        return redirect()->route('suppliers.index')->with('success', 'Supplier removed successfully.');
+        $supplier->is_active = false;
+        $supplier->save();
+        return redirect()->route('suppliers.index')->with('success', 'Pemasok akan ditandai tidak aktif.');
+    }
+
+        public function activate(Supplier $supplier)
+    {
+        $supplier->is_active = 1;
+        $supplier->save();
+
+        return redirect()->route('suppliers.index')->with('success', 'Pemasok akan ditandai aktif kembali.');
     }
 }

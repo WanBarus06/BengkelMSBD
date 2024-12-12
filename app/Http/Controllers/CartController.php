@@ -70,9 +70,13 @@ class CartController extends Controller
 
         if ($cartDetail) {
                // Jika produk sudah ada, update quantity dan harga
+            if ($cartDetail->quantity >= $product->productDetail->stock) {
+                return redirect()->route('cart.index')->with('error', 'Jumlah produk melebihi stok yang tersedia.');
+            } else {
             $cartDetail->quantity += $request->input('quantity', 1); // Tambah kuantitas
             $cartDetail->price = $product->productDetail->product_sell_price; // Update harga terbaru
             $cartDetail->save();
+            }
         } else {
             // Jika produk belum ada, buat item baru di cart
             CartItem::create([

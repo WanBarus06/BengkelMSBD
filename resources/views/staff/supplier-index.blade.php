@@ -134,6 +134,7 @@
                     <th>Supplier Name</th>
                     <th>Phone Number</th>
                     <th>Address</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -144,12 +145,20 @@
                     <td>{{ $supplier->supplier_name }}</td>
                     <td>{{ $supplier->phone_number }}</td>
                     <td>{{ $supplier->address }}</td>
+                    <td>{{ $supplier->is_active ? 'Aktif' : 'Tidak Aktif' }}</td>
                     <td>
+                        @if ($supplier->is_active)
                         <form action="{{ route('suppliers.destroy', $supplier) }}" method="POST" id="deleteForm{{ $supplier->supplier_id }}">
                             @csrf
                             @method('DELETE')
-                            <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ $supplier->supplier_id }})">Remove</button>
-                        </form>                        
+                            <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ $supplier->supplier_id }})">Nonaktifkan</button>
+                        </form>
+                        @else
+                        <form action="{{ route('suppliers.activate', $supplier) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-success btn-sm">Aktifkan</button>
+                        </form>
+                        @endif                     
                     </td>
                 </tr>
                 @endforeach

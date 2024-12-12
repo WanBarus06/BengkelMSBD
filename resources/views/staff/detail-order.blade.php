@@ -39,6 +39,8 @@
     <!-- Tambahkan script DataTables -->
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 <body>
 
@@ -129,16 +131,17 @@
 
         <!-- Tombol aksi berdasarkan status pesanan -->
         @if ($cart->status == 'Menunggu Konfirmasi')
-            <div class="mt-4">
-                <form action="" method="POST" class="d-inline">
-                    @csrf
-                    <button type="submit" class="btn btn-success">Konfirmasi</button>
-                </form>
-                <form action="" method="POST" class="d-inline">
-                    @csrf
-                    <button type="submit" class="btn btn-danger">Tolak</button>
-                </form>
-            </div>
+       <!-- Tombol Konfirmasi -->
+            <form id="confirm-order-form" action="{{ route('orders.confirm', $cart->id) }}" method="POST" class="d-inline">
+                @csrf
+                <button type="button" id="confirm-order-button" class="btn btn-success">Konfirmasi</button>
+            </form>
+
+            <!-- Tombol Tolak -->
+            <form id="reject-order-form" action="{{ route('orders.reject', $cart->id) }}" method="POST" class="d-inline">
+                @csrf
+                <button type="button" id="reject-order-button" class="btn btn-danger">Tolak</button>
+            </form>
         @elseif ($cart->status == 'Menunggu Pengambilan')
             <div class="mt-4">
                 <form action="" method="POST" class="d-inline">
@@ -148,6 +151,81 @@
             </div>
         @endif
     </div>
+    <script> 
+    // SweetAlert untuk Konfirmasi Pesanan
+    $('#confirm-order-button').on('click', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Konfirmasi Pesanan?',
+            text: "Pastikan semua data sudah benar.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Konfirmasi!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#confirm-order-form').submit(); // Kirim form konfirmasi
+            }
+        });
+    });
+    
 
+        $('#confirm-order-button').on('click', function (e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Konfirmasi Pesanan?',
+                text: "Pastikan semua data sudah benar.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Konfirmasi!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#confirm-order-form').submit(); // Kirim form konfirmasi
+                }
+            });
+        });
+
+        // SweetAlert untuk Penolakan Pesanan
+       // SweetAlert untuk Penolakan Pesanan
+$('#reject-order-button').on('click', function (e) {
+    e.preventDefault();
+    Swal.fire({
+        title: 'Tolak Pesanan?',
+        input: 'textarea',
+        inputLabel: 'Berikan alasan penolakan',
+        inputPlaceholder: 'Masukkan alasan...',
+        inputAttributes: {
+            'aria-label': 'Masukkan alasan'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Tolak Pesanan',
+        cancelButtonText: 'Batal',
+        inputValidator: (value) => {
+            if (!value) {
+                return 'Alasan penolakan tidak boleh kosong!';
+            }
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Tambahkan alasan penolakan ke form sebelum submit
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'reason',  // Ganti 'remarks' dengan 'reason' agar masuk ke cancelled_reason
+                value: result.value
+            }).appendTo('#reject-order-form');
+
+            $('#reject-order-form').submit(); // Kirim form penolakan
+        }
+    });
+});
+
+
+    </script>
+    
 </body>
 </html>
