@@ -29,19 +29,30 @@
 
     <!-- Template Stylesheet -->
     <link href="../assets/css/user-list.css" rel="stylesheet">
+
+    <!-- Tambahkan link CSS DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+
+<!-- Tambahkan jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- Tambahkan script DataTables -->
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+ 
 </head>
 <body>
-<!-- Topbar Start -->
-<div class="container-fluid bg-light p-0">
+
+    <!-- Topbar Start -->
+    <div class="container-fluid bg-light p-0">
     <div class="row gx-0 d-none d-lg-flex">
         <div class="col-lg-7 px-5 text-start">
             <div class="h-100 d-inline-flex align-items-center py-3 me-4">
-                <small class="fa fa-home text-primary me-2"></small>
-                <small><a href="{{ route('dashboard-owner') }}" class="">Beranda</a></small>
+                <small class="fa fa-users text-primary me-2"></small>
+                <small><a href="{{ route('user-list') }}" class="">Daftar Pengguna</a></small>
             </div>
             <div class="h-100 d-inline-flex align-items-center py-3">
                 <small class="fas fa-user-cog text-primary me-2"></small>
-                <small><a href="{{ route('dashboard-owner') }}" class="">Owner</a></small>
+                <small><a href="" class="">Owner</a></small>
             </div>
         </div>
     </div>
@@ -58,13 +69,93 @@
         </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto p-4 p-lg-0">
-            <a href="{{ route('dashboard-owner') }}" class="nav-item nav-link active">Beranda</a>
-            <a href="" class="nav-item nav-link">Daftar Pengguna</a>
-            <a href="" class="nav-item nav-link">Daftar Pegawai</a>
-            <a href="" class="nav-item nav-link">Daftar Pemasok</a>
-            <a href="" class="nav-item nav-link">Daftar Produk</a>
+            <a href="{{ route('dashboard-owner') }}" class="nav-item nav-link">Beranda</a>
+            <a href="{{ route('user-list') }}" class="nav-item nav-link active">Daftar Pengguna</a>
+            <a href="{{ route('staff-list') }}" class="nav-item nav-link">Daftar Pegawai</a>
+            <a href="{{ route('product-list') }}" class="nav-item nav-link">Daftar Produk</a>
+            &nbsp; &nbsp;<img class="img-fluid logo-navbar" src="../assets/img/logo.jpeg" alt="">
         </div>
 </nav>
 <!-- Navbar End -->
+
+<div class="container">
+
+    <!-- Tabel Data -->
+    <br><br><div class="table-responsive">
+    <h1>Daftar Pengguna</h1>
+    <table id="example" class="table table-striped">
+    <thead>
+    <tr>
+        <th>No</th>
+        <th>Nama</th>
+        <th>Email</th>
+        <th>No HP</th>
+        <th>Dibuat Pada</th>
+        <th>Status</th>
+        <th>Aksi</th>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach ($users as $key => $user)
+            <tr>
+                <td>{{ $key + 1 }}</td>
+                <td>{{ $user->name }}</td>
+                <td>{{ $user->email }}</td>
+                <td>{{ $user->phone_number }}</td>
+                <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d M Y H:i') }}</td>
+                <td>
+                    @if($user->is_active)
+                        <span class="badge bg-success">Aktif</span>
+                    @else
+                        <span class="badge bg-danger">Tidak Aktif</span>
+                    @endif
+                </td>
+                <td>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-cogs"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li>
+                        <a class="dropdown-item" href="{{ route('users.toggleStatus', $user->id) }}">
+                            @if($user->is_active)
+                                <i class="fas fa-user-slash text-danger"></i>&nbsp; Set Tidak Aktif
+                            @else
+                                <i class="fas fa-user-check text-success"></i>&nbsp; Set Aktif
+                            @endif
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+    </table>
+</div>
+</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+    $('#example').DataTable({
+        paging: true, // Mengaktifkan pagination
+        searching: true, // Mengaktifkan search box
+        info: true, // Menampilkan informasi jumlah data
+        lengthMenu: [10, 25, 50, 100], // Opsi jumlah entri per halaman
+        language: {
+            lengthMenu: "Tampilkan &nbsp _MENU_ &nbsp data per halaman",
+            info: "Menampilkan _START_ data sampai _END_ dari _TOTAL_ data",
+            paginate: {
+                next: "Selanjutnya",
+                previous: "Sebelumnya",
+            },
+            search: "Cari : &nbsp",
+        },
+    });
+});
+    </script>
+
 </body>
 </html>

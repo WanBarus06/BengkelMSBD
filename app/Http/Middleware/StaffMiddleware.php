@@ -21,6 +21,6 @@ class StaffMiddleware
         }
 
         // Arahkan pengguna yang bukan staff ke halaman lain
-        return redirect()->route('home'); // Ganti sesuai kebutuhan
+        return redirect()->route('orders.index'); // Ganti sesuai kebutuhan
     }
 }

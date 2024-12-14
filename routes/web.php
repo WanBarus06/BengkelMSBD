@@ -5,12 +5,24 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OfflineOrderController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Middleware\StaffMiddleware;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\productListController;
+use App\Http\Controllers\dashboardOwnerController;
+use Illuminate\Support\Facades\DB; 
 
+use App\Models\User;
+use App\Models\Product;
+use App\Models\Brand;
+use App\Models\Size;
+use App\Models\Variant;
+use App\Models\ProductDescription;
+use App\Models\ProductDetail;
 
 Route::get('/', function () {
     return view('home');
@@ -31,13 +43,17 @@ Route::get('/login-register', function () {
 
 Route::get('/products', [ProductsController::class, 'index'])->name('products');
 
-Route::get('/dashboard-owner', function () {
-    return view('dashboard-owner');
-})->name('dashboard-owner'); 
+// Rute ke dashboard owner
+Route::get('/dashboard-owner', [dashboardOwnerController::class, 'dashboardOwner'])->name('dashboard-owner');
 
-Route::get('/dashboard', function () {
-    return view('home');
-})->name('dashboard');
+Route::get('/api/dashboard-data', function () {
+    return response()->json([
+        'jumlahPengguna' => User::where('role', 'user')->where('is_active', '1')->count(),
+        'jumlahPegawai' => User::where('role', 'staff')->where('is_active', '1')->count(),
+        'jumlahProduk' => Product::where('is_active', '1')->count(),
+    ]);
+});
+
 // Engga semua view butuh controller untuk nampilin filenya
 // Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
 
@@ -83,7 +99,19 @@ Route::middleware(['auth', StaffMiddleware::class])->group(function () {
     Route::post('/offline-orders/paid/{saleId}', [OfflineOrderController::class, 'paid'])->name('offline-orders.paid');
     Route::post('/suppliers/{supplier}/activate', [SupplierController::class, 'activate'])->name('suppliers.activate');
     Route::get('/onsite-order', [OrderController::class, 'indexOnsite'])->name('orders.onsite');   
-    
-    
 });
+
+Route::get('/user-list', [UserController::class, 'index'])->name('user-list');
+Route::get('/users/toggle-status/{id}', [UserController::class, 'toggleStatus'])->name('users.toggleStatus');
+
+Route::get('/staff-list', function () {
+    $users = User::where('role', 'staff')->get(); // Mengambil semua data pengguna dari model User
+    return view('staff-list', compact('users')); // Mengirimkan data ke view
+})->name('staff-list');
+Route::get('/staff/toggle-status/{id}', [StaffController::class, 'toggleStatus'])->name('staff.toggleStatus');
+Route::put('/staff/update/{id}', [StaffController::class, 'update'])->name('staff.update');
+Route::post('/staff/add', [StaffController::class, 'addStaff'])->name('staff.add');
+
+Route::get('/product-list', [productListController::class, 'getProductList'])->name('product-list');
+
 require __DIR__.'/auth.php';

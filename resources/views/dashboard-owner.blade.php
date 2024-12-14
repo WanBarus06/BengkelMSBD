@@ -7,7 +7,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
-
+ 
     <!-- Favicon -->
     <link href="../assets/img/favicon.ico" rel="icon">
 
@@ -31,53 +31,87 @@
     <!-- Template Stylesheet -->
     <link href="../assets/css/dashboard-owner.css" rel="stylesheet">
 
-    <!-- Tambahkan link CSS DataTables -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <!-- Tambahkan jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-<!-- Tambahkan jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Tambahkan script DataTables -->
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 
-<!-- Tambahkan script DataTables -->
-<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <!-- DataTables Buttons -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
 
-<style>
-    /* Responsiveness */
-    @media (max-width: 768px) {
-        .summary {
-            flex-direction: column;
-        }
-
-        .content,
-        .orders {
-            flex-direction: column;
-        }
-
-        .card,
-        .recent-orders,
-        .product-container {
-            margin-bottom: 15px;
-        }
-
-        .navbar-brand h2 {
-            font-size: 20px;
-        }
+    <style>
+    .dataTables_wrapper .top {
+        align-items: center; /* Pastikan tombol dan search sejajar */
+        gap: 50px; /* Memberikan jarak antar elemen */
     }
 
-    @media (max-width: 576px) {
-        .navbar {
-            padding: 10px;
-        }
-
-        .summary .card {
-            text-align: center;
-            font-size: 14px;
-        }
-
-        .product-item img {
-            width: 100px;
-        }
+    .dataTables_wrapper .dataTables_filter {
+        margin-left: auto; /* Posisikan search box ke kanan */
     }
-</style>
+
+    .dataTables_wrapper .dt-buttons {
+        margin-right: auto; /* Posisikan tombol ke kiri */
+    }
+
+    .dataTables_wrapper .bottom {
+    display: flex; /* Aktifkan Flexbox */
+    justify-content: space-between; /* Elemen berjauhan ujung ke ujung */
+    align-items: center; /* Elemen sejajar vertikal */
+    padding: 10px 0; /* Tambahkan jarak atas/bawah */
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-bottom: 0; /* Hilangkan margin bawah bawaan */
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    margin-bottom: 0; /* Hilangkan margin bawah bawaan */
+}
+
+.dataTables_paginate {
+    display: flex; /* Membuat tombol tampil sejajar */
+    justify-content: center; /* Menempatkan di tengah */
+    gap: 10px; /* Jarak antar tombol */
+}
+
+.dataTables_paginate .paginate_button {
+    margin: 0 5px; /* Tambahkan margin horizontal antar tombol */
+    padding: 5px 10px; /* Sesuaikan padding untuk tampilan yang lebih rapi */
+    border: 1px solid #ccc; /* Tambahkan border jika diperlukan */
+    border-radius: 5px; /* Membuat sudut tombol lebih halus */
+    color: #333; /* Warna teks */
+    background-color: #fff; /* Warna latar belakang */
+    cursor: pointer;
+    text-decoration: none; /* Hilangkan garis bawah */
+}
+
+.dataTables_paginate .paginate_button:hover {
+    background-color: #f0f0f0; /* Efek hover */
+    border-color: #aaa;
+}
+
+.dataTables_paginate .paginate_button.current {
+    background-color: #007bff; /* Warna tombol aktif */
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Responsif untuk layar kecil */
+@media (max-width: 768px) {
+    .dataTables_wrapper .bottom {
+        flex-direction: column; /* Elemen vertikal pada layar kecil */
+        gap: 10px; /* Tambahkan jarak antar elemen */
+    }
+}
+    </style>
+
 </head>
 <body>
 
@@ -91,7 +125,7 @@
             </div>
             <div class="h-100 d-inline-flex align-items-center py-3">
                 <small class="fas fa-user-cog text-primary me-2"></small>
-                <small><a href="{{ route('dashboard-owner') }}" class="">Owner</a></small>
+                <small><a href="" class="">Owner</a></small>
             </div>
         </div>
     </div>
@@ -109,10 +143,9 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto p-4 p-lg-0">
             <a href="{{ route('dashboard-owner') }}" class="nav-item nav-link active">Beranda</a>
-            <a href="" class="nav-item nav-link">Daftar Pengguna</a>
-            <a href="" class="nav-item nav-link">Daftar Pegawai</a>
-            <a href="" class="nav-item nav-link">Daftar Pemasok</a>
-            <a href="" class="nav-item nav-link">Daftar Produk</a>
+            <a href="{{ route('user-list') }}" class="nav-item nav-link">Daftar Pengguna</a>
+            <a href="{{ route('staff-list') }}" class="nav-item nav-link">Daftar Pegawai</a>
+            <a href="{{ route('product-list') }}" class="nav-item nav-link">Daftar Produk</a>
             &nbsp; &nbsp;<img class="img-fluid logo-navbar" src="../assets/img/logo.jpeg" alt="">
         </div>
 </nav>
@@ -121,81 +154,105 @@
     <div class="container">
         <!-- Header -->
         <!-- Summary Cards -->
-        <section class="summary">
-            <div class="card"><strong>10</strong>Pesanan Menunggu Pengembalian</div>
-            <div class="card"><strong>20</strong>Stok Produk</div>
-            <div class="card"><strong>10</strong>Pengguna</div>
-            <div class="card"><strong>20</strong>Pemasok</div>
-        </section>
+<section class="summary">
+<div class="card">
+    <strong class="pengguna">Loading...</strong>
+</div>
+<div class="card">
+    <strong class="pegawai">Loading...</strong>
+</div>
+<div class="card">
+    <strong class="produk">Loading...</strong>
+</div>
+</section>
         <!-- Main Content -->
-        <section class="content">
-            <div class="reports">
-            <section class="reports">
-            <div class="reports-header">
-        <h2>Grafik Penjualan</h2>
-    </div>
-    <div class="chart-container">
-        <canvas id="reportChart"></canvas>
-        <div class="menu">
-        </div>
-    </div>
+
+        <!-- Grafik Penjualan -->
+        <section class="reports mb-5">
+            <h2 class="text-center">Grafik Penjualan</h2>
+            <canvas id="reportChart"></canvas>
         </section>
-            </div>
-            <div class="analytics">
-                <h2>Analisis</h2>
-            </div>
-        </section>
-        <!-- Recent Orders & Top Products -->
-        <section class="orders">
-            <div class="recent-orders">
-                <h2>Pesanan Terbaru</h2>
-                <table id="example" class="table table-striped">
-                    <br><thead>
+
+        <!-- Laporan Penjualan -->
+        <section class="analytics mb-5">
+            <h2 class="text-center">Laporan Penjualan</h2>
+            <!-- Tabel Data -->
+            <table id="laporanPenjualan" class="table table-striped">
+                <thead>
                     <tr>
                         <th>Nomor Invoice</th>
                         <th>Nama Produk</th>
                         <th>Harga</th>
-                        <th>Stok</th>
+                        <th>Total Qty</th>
                         <th>Total Pesanan</th>
                     </tr>
-                    </thead>
-                    <tbody>
+                </thead>
+                <tbody>
+                    @foreach($dataPenjualan as $penjualan)
                     <tr>
-                        <td>#1005</td>
-                        <td>iPhone 12</td>
-                        <td>$987</td>
-                        <td>850</td>
-                        <td>450</td>
+                        <td>{{ $penjualan->invoice }}</td>
+                        <td>{{ $penjualan->nama_produk }}</td>
+                        <td>{{ number_format($penjualan->harga, 2) }}</td>
+                        <td>{{ $penjualan->total_qty }}</td>
+                        <td>{{ number_format($penjualan->total_pesanan, 2) }}</td>
                     </tr>
-                    </tbody>
-                    <!-- Add more rows as needed -->
-                </table>
-            </div>
-            <div class="product-container">
-    <h2>Top Produk</h2>
-    <div class="product-item">
-      <img src="../assets/img/ban.jpeg" alt="NIKE Shoes Black Pattern">
-      <div class="product-details">
-        <h3>NIKE Shoes Black Pattern</h3>
-        <div class="rating">
-          <span></span>
-        </div>
-        <p class="price">$87</p>
-      </div>
-    </div>
-    <div class="product-item">
-      <img src="../assets/img/ban.jpeg" alt="iPhone 12">
-      <div class="product-details">
-        <h3>iPhone 12</h3>
-        <div class="rating">
-          <span></span>
-        </div>
-        <p class="price">$987</p>
-      </div>
-    </div>
-  </div>
+                    @endforeach
+                </tbody>
+            </table>
         </section>
+
+        <section class="analytics mb-5">
+            <h2 class="text-center">Pesanan Terbaru</h2>
+            <!-- Tabel Data -->
+            <table id="pesananTerbaru" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nomor Invoice</th>
+                        <th>Nama Produk</th>
+                        <th>Harga</th>
+                        <th>Total Qty</th>
+                        <th>Total Pesanan</th>
+                        <th>Detail Pesanan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($dataPenjualan as $penjualan)
+                    <tr>
+                        <td>{{ $penjualan->invoice }}</td>
+                        <td>{{ $penjualan->nama_produk }}</td>
+                        <td>{{ number_format($penjualan->harga, 2) }}</td>
+                        <td>{{ $penjualan->total_qty }}</td>
+                        <td>{{ number_format($penjualan->total_pesanan, 2) }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </section>
+
+<section class="top-products mb-5">
+    <!-- Top Produk -->
+    <div class="col-lg-6 mb-4">
+        <h2 class="text-center">Top Produk</h2>
+        <div class="product-container">
+            <div class="product-item">
+                <img src="../assets/img/ban.jpeg" alt="NIKE Shoes" style="width: 80px; margin-right: 15px;">
+                <div>
+                    <h5>NIKE Shoes Black Pattern</h5>
+                    <p class="price mb-0">$87</p>
+                </div>
+            </div>
+            <div class="product-item">
+                <img src="../assets/img/ban.jpeg" alt="iPhone 12" style="width: 80px; margin-right: 15px;">
+                <div>
+                    <h5>iPhone 12</h5>
+                    <p class="price mb-0">$987</p>
+                </div>
+            </div>
+        </div>
     </div>
+</section>
+
+</div>
 
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
@@ -205,42 +262,79 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
     <script>
-         // Initialize Chart.js
-const ctx = document.getElementById('reportChart').getContext('2d');
-const reportChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ['10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'],
-        datasets: [{
-            label: 'Sales Data',
-            data: [40, 60, 80, 70, 90, 50, 30, 60, 80, 100],
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 2,
-            fill: true,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                display: false
-            }
+    // Ambil data penjualan dari server-side Laravel
+    const penjualanData = @json($penjualanHarian);
+
+    // Ubah data menjadi array untuk grafik
+    const labels = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+    const dataValues = labels.map(day => penjualanData[day] || 0);
+
+    // Inisialisasi Chart.js
+    const ctx = document.getElementById('reportChart').getContext('2d');
+    const reportChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Penjualan Harian',
+                data: dataValues,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2,
+                fill: true,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            }]
         },
-        scales: {
-            y: {
-                beginAtZero: true
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
             }
         }
+    });
+
+    $(document).ready(function() {
+        $.ajax({
+            url: '/api/dashboard-data',
+            method: 'GET',
+            success: function(data) {
+                $('.pengguna').text(data.jumlahPengguna + ' Pengguna Aktif');
+                $('.pegawai').text(data.jumlahPegawai + ' Pegawai Aktif');
+                $('.produk').text(data.jumlahProduk + ' Produk Tersedia');                
+            },
+            error: function(err) {
+                console.error("Gagal memuat data", err);
+            }
+        });
+    });
+
+    $('#laporanPenjualan').DataTable({
+    dom: '<"top d-flex justify-content-between"Bfr>t<"bottom d-flex justify-content-between"lp><"clear">',
+    buttons: ['copy', 'excel', 'print'],
+    searching: true,
+    info: true,
+    language: {
+        lengthMenu: "Tampilkan &nbsp _MENU_ &nbsp data per halaman",
+        info: "Menampilkan _START_ data sampai _END_ dari _TOTAL_ data",
+        paginate: {
+            next: "Selanjutnya",
+            previous: "Sebelumnya",
+        },
+        search: "Cari : &nbsp",
     }
 });
 
-        $(document).ready(function () {
-    $('#example').DataTable({
-        paging: true, // Mengaktifkan pagination
+    $('#pesananTerbaru').DataTable({
+        dom: '<"top"Bfr>t<"bottom d-flex justify-content-between align-items-center"lp><"clear">',
+        buttons: [],
         searching: true, // Mengaktifkan search box
-        info: true, // Menampilkan informasi jumlah data
-        lengthMenu: [10, 25, 50, 100], // Opsi jumlah entri per halaman
+        info: true,
         language: {
             lengthMenu: "Tampilkan &nbsp _MENU_ &nbsp data per halaman",
             info: "Menampilkan _START_ data sampai _END_ dari _TOTAL_ data",
@@ -248,13 +342,10 @@ const reportChart = new Chart(ctx, {
                 next: "Selanjutnya",
                 previous: "Sebelumnya",
             },
-            search: "Search: &nbsp",
-        },
-    });
-});
-    </script>
-    <script>
+            search: "Cari : &nbsp",
+        }
 
+});
     </script>
 </body>
 </html>
