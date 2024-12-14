@@ -45,10 +45,9 @@ class CartController extends Controller
             'cartTotal' => $cartTotal[0]->total, // Ambil nilai total dari hasil query
         ]);
     }
-    public function store(Request $request,  $product_id)
+    public function store(Request $request, $product_id)
     {
-        // 1. Ambil produk berdasarkan ID
-
+        // 1. Ambil produk berdasarkan ID dan relasi dengan productDetail
         $product = Product::with('productDetail')->findOrFail($product_id);
 
         // 2. Periksa apakah user sudah memiliki cart yang aktif
@@ -57,46 +56,40 @@ class CartController extends Controller
                     ->first();
 
         if (!$cart) {
-            // Jika cart belum ada, buat cart baru
+            // Jika tidak ada cart aktif, buat cart baru
             $cart = Cart::create([
                 'user_id' => Auth::id(),
+                'status' => 'Belum Memesan', // status sesuai dengan yang digunakan
             ]);
         }
 
         // 3. Periksa apakah produk sudah ada di cart
         $cartDetail = CartItem::where('cart_id', $cart->id)
-                               ->where('product_id', $product->product_id)
-                               ->first();
+                            ->where('product_id', $product->product_id)
+                            ->first();
 
         if ($cartDetail) {
-               // Jika produk sudah ada, update quantity dan harga
+            // Jika produk sudah ada di cart, update kuantitas dan harga
             if ($cartDetail->quantity >= $product->productDetail->stock) {
                 return redirect()->route('cart.index')->with('error', 'Jumlah produk melebihi stok yang tersedia.');
-            } else {
-            $cartDetail->quantity += $request->input('quantity', 1); // Tambah kuantitas
-            $cartDetail->price = $product->productDetail->product_sell_price; // Update harga terbaru
-            $cartDetail->save();
             }
+            $cartDetail->quantity += $request->input('quantity', 1); // tambah kuantitas, default 1 jika tidak ada input quantity
+            $cartDetail->price = $product->productDetail->product_sell_price; // update harga terbaru
+            $cartDetail->save();
         } else {
             // Jika produk belum ada, buat item baru di cart
             CartItem::create([
                 'cart_id' => $cart->id,
                 'product_id' => $product->product_id,
                 'price' => $product->productDetail->product_sell_price,
-                'quantity' => 1,
+                'quantity' => $request->input('quantity', 1), // Ambil quantity dari input atau default ke 1
             ]);
         }
 
-         // 4. Pastikan semua item di keranjang memiliki harga terbaru
-        CartItem::where('cart_id', $cart->id)
-        ->where('product_id', $product->id)
-        ->update([
-        'price' => $product->productDetail->product_sell_price,
-        ]);
-
-        // 4. Redirect atau kembali ke halaman cart untuk melihat isi keranjang
+        // 4. Redirect atau kembali ke halaman produk atau cart untuk melihat isi keranjang
         return redirect()->route('products')->with('success', 'Produk berhasil ditambahkan ke keranjang.');
     }
+
 
     public function destroy($product_id)
     {

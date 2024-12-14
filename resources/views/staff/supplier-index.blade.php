@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Pesanan Online</title>
+    <title>Manajemen Pemasok</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -57,7 +57,7 @@
             </div>
             <div class="h-100 d-inline-flex align-items-center py-3">
                 <small class="fas fa-cart-arrow-down text-primary me-2"></small>
-                <small><a href="{{ route('orders.index') }}" class="">Pesanan Online</a></small>
+                <small><a href="{{ route('suppliers.index') }}" class="">Manajemen Pemasok</a></small>
             </div>
         </div>
     </div>
@@ -98,7 +98,7 @@
     <form method="POST" action="{{ route('suppliers.store') }}">
         @csrf
         <div class="mb-3">
-            <label for="supplier_name" class="form-label">Supplier Name</label>
+            <label for="supplier_name" class="form-label">Nama Pemasok</label>
             <input type="text" class="form-control" id="supplier_name" name="supplier_name" required>
             @error('supplier_name')
             <div class="alert alert-danger mt-2">{{ $message }}</div>
@@ -106,14 +106,14 @@
         </div>
         
         <div class="mb-3">
-            <label for="phone_number" class="form-label">Phone Number</label>
+            <label for="phone_number" class="form-label">Nomor Telepon</label>
             <input type="number" class="form-control" id="phone_number" name="phone_number" required>
             @error('phone_number')
                 <div class="alert alert-danger mt-2">{{ $message }}</div>
             @enderror
         </div>
         <div class="mb-3">
-            <label for="address" class="form-label">Address</label>
+            <label for="address" class="form-label">Alamat</label>
             <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
             @error('address')
             <div class="alert alert-danger mt-2">{{ $message }}</div>
@@ -131,11 +131,11 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Supplier Name</th>
-                    <th>Phone Number</th>
-                    <th>Address</th>
+                    <th>Nama Pemasok</th>
+                    <th>Nomor Telepon</th>
+                    <th>Alamat</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -170,10 +170,10 @@
     function confirmDelete(supplierId) {
         Swal.fire({
             title: 'Apakah Anda yakin?',
-            text: "Supplier ini akan dihapus!",
+            text: "Supplier ini akan dinonaktifkan!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus!',
+            confirmButtonText: 'Ya, nonaktifkan !',
             cancelButtonText: 'Batal',
             reverseButtons: true
         }).then((result) => {

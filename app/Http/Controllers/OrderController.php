@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\SalesRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -11,35 +12,40 @@ class OrderController extends Controller
 {
 
     public function index(Request $request)
-    {
-        // Ambil input pencarian dari query string
-        $search = $request->input('search');
-        $rowsPerPage = $request->input('rows_per_page', 10); // Default 10 rows per page
+{
+    // Ambil input pencarian dan filter sort dari query string
+    $search = $request->input('search');
+    $rowsPerPage = $request->input('rows_per_page', 10); // Default 10 rows per page
+    $sortBy = $request->input('sort_by', 'created_at'); // Default sorting berdasarkan waktu (updated_at)
+    $sortOrder = $request->input('sort_order', 'desc'); // Default sorting DESC (terbaru)
 
-        // Query untuk mengambil data dengan filter status dan pencarian
-        $orders = Cart::whereIn('status', ['Menunggu Pengambilan', 'Menunggu Konfirmasi'])
-                    ->when($search, function ($query, $search) {
-                        return $query->whereHas('user', function ($query) use ($search) {
-                            $query->where('name', 'like', "%{$search}%")
-                                    ->orWhere('phone_number', 'like', "%{$search}%");
-                        })
-                        ->orWhere('status', 'like', "%{$search}%");
+    // Query untuk mengambil data dengan filter status dan pencarian
+    $orders = Cart::whereIn('status', ['Menunggu Pengambilan', 'Menunggu Konfirmasi'])
+                ->when($search, function ($query, $search) {
+                    return $query->whereHas('user', function ($query) use ($search) {
+                        $query->where('name', 'like', "%{$search}%")
+                                ->orWhere('phone_number', 'like', "%{$search}%");
                     })
-                    ->paginate($rowsPerPage); // Tambahkan pagination dengan rows per page
+                    ->orWhere('status', 'like', "%{$search}%");
+                })
+                // Sorting berdasarkan parameter yang diterima
+                ->orderBy($sortBy, $sortOrder) // Sorting berdasarkan kolom dan arah
+                ->paginate($rowsPerPage); // Tambahkan pagination dengan rows per page
 
-        // Tambahkan total_amount ke setiap order
-        foreach ($orders as $order) {
-            $orderTotal = DB::selectOne('SELECT cartTotal(?) as total', [$order->id]);
-            $order->total_amount = $orderTotal ? $orderTotal->total : 0; // Assign total_amount ke objek cart
-        }
-
-        // Kirim data ke view
-        return view('staff.online-order', compact('orders'));
+    // Tambahkan total_amount ke setiap order
+    foreach ($orders as $order) {
+        $orderTotal = DB::selectOne('SELECT cartTotal(?) as total', [$order->id]);
+        $order->total_amount = $orderTotal ? $orderTotal->total : 0; // Assign total_amount ke objek cart
     }
+
+    // Kirim data ke view
+    return view('staff.online-order', compact('orders', 'sortBy', 'sortOrder'));
+}
+
 
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -115,5 +121,62 @@ class OrderController extends Controller
 
         return redirect()->route('orders.index')->with('success', 'Pesanan telah berhasil ditolak');
     }
+
+    public function indexOnsite(Request $request)
+    {
+        // Ambil input pencarian dan filter sort dari query string
+        $search = $request->input('search');
+        $rowsPerPage = $request->input('rows_per_page', 10);
+        $sortBy = $request->input('sort_by', 'sales_id'); // Default sorting berdasarkan ID
+        $sortOrder = $request->input('sort_order', 'desc');
+
+        // Query untuk data Onsite Orders
+        $onsiteOrders = SalesRecord::whereNull('customer_id') // Hanya untuk customer_id kosong
+        ->when($search, function ($query, $search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('offline_customer_name', 'like', "%{$search}%")
+                    ->orWhere('offline_customer_phone_number', 'like', "%{$search}%")
+                    ->orWhereHas('customer', function ($query) use ($search) {
+                        $query->where('name', 'like', "%{$search}%")
+                            ->orWhere('phone_number', 'like', "%{$search}%");
+                    });
+            });
+        })
+        ->orderBy($sortBy, $sortOrder)
+        ->paginate($rowsPerPage);
+    
+
+
+
+        return view('staff.onsite-order', compact('onsiteOrders', 'sortBy', 'sortOrder'));
+    }
+
+    public function createOrGetCart(Request $request)
+    {
+        // Get the current authenticated user
+        $user = auth()->user();
+
+        // Periksa apakah ada cart dengan status "Menunggu Pemesanan" untuk user ini
+        $existingCart = Cart::where('user_id', $user->id)
+                            ->where('status', 'Belum Memesan')
+                            ->first();
+    
+        if (!$existingCart) {
+            // Buat cart baru jika belum ada
+            $existingCart = Cart::create([
+                'user_id' => $user->id,
+                'status' => 'Belum Memesan',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+    
+        // Redirect ke halaman pembuatan pesanan offline
+        return redirect()->route('offline-orders.index', ['cartId' => $existingCart->id])
+                         ->with('info', 'Silakan tambahkan item ke dalam cart.');
+    }
+
+
+    
 
 }

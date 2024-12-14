@@ -29,15 +29,16 @@
 
     <!-- Template Stylesheet -->
     <link href="../assets/css/online-order.css" rel="stylesheet">
+    
 
     <!-- Tambahkan link CSS DataTables -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
 
-<!-- Tambahkan jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Tambahkan jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-<!-- Tambahkan script DataTables -->
-<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <!-- Tambahkan script DataTables -->
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 
 
 </head>
@@ -45,7 +46,7 @@
 
      <!-- Topbar Start -->
      <div class="container-fluid bg-light p-0">
-    <div class="row gx-0 d-none d-lg-flex">
+        <div class="row gx-0 d-none d-lg-flex">
         <div class="col-lg-7 px-5 text-start">
             <div class="h-100 d-inline-flex align-items-center py-3 me-4">
                 <small class="fas fa-user-tie text-primary me-2"></small>
@@ -72,7 +73,7 @@
         <div class="navbar-nav ms-auto p-4 p-lg-0">
             <a href="{{ route('suppliers.index') }}" class="nav-item nav-link">Supplier</a>
             <a href="{{ route('orders.index') }}" class="nav-item nav-link active">Pesanan Online</a>
-            <a href="{{ route('onsite-order') }}" class="nav-item nav-link">Pesanan Offline</a>
+            <a href="{{ route('orders.onsite') }}" class="nav-item nav-link">Pesanan Offline</a>
             <a href="{{ route('transaction-history-staff') }}" class="nav-item nav-link">Riwayat Transaksi</a>
             <a href="" class="nav-item nav-link">Faktur Pembelian</a>
             &nbsp; &nbsp;<img class="img-fluid logo-navbar" src="../assets/img/logo.jpeg" alt="">
@@ -106,15 +107,43 @@
 <table id="example" class="table table-striped">
     <thead>
         <tr>
-            <th class="text-center">No</th>
-            <th class="text-center">Nama Pembeli</th>
-            <th class="text-center">No Hp</th>
-            <th class="text-center">Total</th>
-            <th class="text-center">Status</th>
-            <th class="text-center">Waktu</th>
-            <th class="text-center">Detail Pesanan</th>
+            <th class="text-center">
+                <a href="{{ route('orders.index', ['search' => request('search'), 'sort_by' => 'id', 'sort_order' => request('sort_order') == 'asc' ? 'desc' : 'asc', 'rows_per_page' => request('rows_per_page')]) }}">
+                    No
+                </a>
+            </th>
+            <th class="text-center">
+                <a href="{{ route('orders.index', ['search' => request('search'), 'sort_by' => 'user.name', 'sort_order' => request('sort_order') == 'asc' ? 'desc' : 'asc', 'rows_per_page' => request('rows_per_page')]) }}">
+                    Nama Pembeli
+                </a>
+            </th>
+            <th class="text-center">
+                <a href="">
+                    No Hp
+                </a>
+            </th>
+            <th class="text-center">
+                <a href="">
+                    Total
+                </a>
+            </th>
+            <th class="text-center">
+                <a href="{{ route('orders.index', ['search' => request('search'), 'sort_by' => 'status', 'sort_order' => request('sort_order') == 'asc' ? 'desc' : 'asc', 'rows_per_page' => request('rows_per_page')]) }}">
+                    Status
+                </a>
+            </th>
+            <th class="text-center">
+                <a href="{{ route('orders.index', ['search' => request('search'), 'sort_by' => 'updated_at', 'sort_order' => request('sort_order') == 'asc' ? 'desc' : 'asc', 'rows_per_page' => request('rows_per_page')]) }}">
+                    Waktu
+                </a>
+            </th>
+            <th class="text-center">
+                <a href="">
+                    Detail Pesanan
+                </a>
+            </th>
         </tr>
-    </thead>
+    </thead>    
     <tbody>
         @foreach($orders as $order)
         <tr>
@@ -134,8 +163,9 @@
 
 <!-- Pagination Links -->
 <div class="pagination justify-content-center">
-    {{ $orders->appends(request()->input())->links() }}
+    {{ $orders->appends(request()->input())->links('pagination::bootstrap-4') }}
 </div>
+
 
 
 </div>

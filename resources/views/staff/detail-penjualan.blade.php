@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Pesanan Online</title>
+    <title>Pesanan Offline</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -54,7 +54,7 @@
                 </div>
                 <div class="h-100 d-inline-flex align-items-center py-3">
                     <small class="fas fa-cart-arrow-down text-primary me-2"></small>
-                    <small><a href="{{ route('orders.index') }}" class="">Pesanan Online</a></small>
+                    <small><a href="{{ route('orders.index') }}" class="">Pesanan Offline</a></small>
                 </div>
             </div>
         </div>
@@ -72,8 +72,8 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="{{ route('suppliers.index') }}" class="nav-item nav-link">Supplier</a>
-                <a href="{{ route('orders.index') }}" class="nav-item nav-link active">Pesanan Online</a>
-                <a href="{{ route('orders.onsite') }}" class="nav-item nav-link">Pesanan Offline</a>
+                <a href="{{ route('orders.index') }}" class="nav-item nav-link ">Pesanan Online</a>
+                <a href="{{ route('orders.onsite') }}" class="nav-item nav-link active">Pesanan Offline</a>
                 <a href="{{ route('transaction-history-staff') }}" class="nav-item nav-link">Riwayat Transaksi</a>
                 <a href="" class="nav-item nav-link">Faktur Pembelian</a>
                 &nbsp; &nbsp;<img class="img-fluid logo-navbar" src="../assets/img/logo.jpeg" alt="">
@@ -87,23 +87,36 @@
         <table class="table table-bordered">
             <tr>
                 <th>Nama Pembeli</th>
-                <td>{{ $cart->user->name }}</td>
+                <td>
+                @if($sale->customer_id)
+                    {{ $sale->user->name }} <!-- Jika ada user_id, ambil nama dari relasi user -->
+                @else
+                    {{ $sale->offline_customer_name }} <!-- Jika tidak ada user_id, ambil dari kolom offline_customer_name -->
+                @endif
+                </td>
             </tr>
             <tr>
                 <th>No Hp</th>
-                <td>{{ $cart->user->phone_number }}</td>
+                <td>
+                @if($sale->customerr_id)
+                    {{ $sale->user->phone_number }} <!-- Jika ada user_id, ambil no hp dari relasi user -->
+                @else
+                    {{ $sale->offline_customer_phone_number }} <!-- Jika tidak ada user_id, ambil dari kolom offline_customer_phone_number -->
+                @endif
+                </td>
             </tr>
             <tr>
-                <th>Status Pesanan</th>
-                <td>{{ $cart->status }}</td>
+                <th>Alamat</th>
+                <td>{{ $sale->offline_customer_address }}</td>
             </tr>
+
             <tr>
                 <th>Total Pembayaran</th>
                 <td>{{ number_format($totalAmount, 2) }}</td>
             </tr>
             <tr>
                 <th>Waktu Pesanan</th>
-                <td>{{ $cart->updated_at }}</td>
+                <td>{{ $sale->created_at }}</td>
             </tr>
         </table>
 
@@ -121,34 +134,21 @@
                 @foreach ($cartItems as $item)
                 <tr>
                     <td>{{ $item->product->product_name }}</td>
-                    <td>{{ number_format($item->price, 2) }}</td>
+                    <td>{{ number_format($item->price_per_unit, 2) }}</td>
                     <td>{{ $item->quantity }}</td>
-                    <td>{{ number_format($item->price * $item->quantity) }}</td>
+                    <td>{{ number_format($item->price_per_unit * $item->quantity) }}</td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
 
         <!-- Tombol aksi berdasarkan status pesanan -->
-        @if ($cart->status == 'Menunggu Konfirmasi')
-       <!-- Tombol Konfirmasi -->
-            <form id="confirm-order-form" action="{{ route('orders.confirm', $cart->id) }}" method="POST" class="d-inline">
+        @if ($sale->is_fully_paid == FALSE)
+       <!-- Tombol Lunas Hutang -->
+            <form id="confirm-order-form" action="{{ route('offline-orders.paid', $sale->sales_id) }}" method="POST" class="d-inline">
                 @csrf
-                <button type="button" id="confirm-order-button" class="btn btn-success">Konfirmasi</button>
+                <button type="button" id="confirm-order-button" class="btn btn-success">Lunas</button>
             </form>
-
-            <!-- Tombol Tolak -->
-            <form id="reject-order-form" action="{{ route('orders.reject', $cart->id) }}" method="POST" class="d-inline">
-                @csrf
-                <button type="button" id="reject-order-button" class="btn btn-danger">Tolak</button>
-            </form>
-        @elseif ($cart->status == 'Menunggu Pengambilan')
-            <div class="mt-4">
-                <form action="" method="POST" class="d-inline">
-                    @csrf
-                    <button type="submit" class="btn btn-primary">Selesai</button>
-                </form>
-            </div>
         @endif
     </div>
     <script> 
@@ -156,8 +156,8 @@
     $('#confirm-order-button').on('click', function (e) {
         e.preventDefault();
         Swal.fire({
-            title: 'Konfirmasi Pesanan?',
-            text: "Pastikan semua data sudah benar.",
+            title: 'Aksi ini tidak akan bisa diulang?',
+            text: "Pastikan anda yakin!.",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -175,8 +175,8 @@
         $('#confirm-order-button').on('click', function (e) {
             e.preventDefault();
             Swal.fire({
-                title: 'Konfirmasi Pesanan?',
-                text: "Pastikan semua data sudah benar.",
+                title: 'Lunaskan pesanan?',
+                text: "Aksi ini tidak akan bisa diulang.",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

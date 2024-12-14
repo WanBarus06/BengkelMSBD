@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OfflineOrderController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Middleware\StaffMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +65,7 @@ Route::middleware(['auth', StaffMiddleware::class])->group(function () {
     // Rute yang hanya dapat diakses oleh pengguna dengan peran 'staff'
     Route::resource('suppliers', SupplierController::class);
     Route::resource('orders', OrderController::class);
+    Route::resource('offline-orders', OfflineOrderController::class);
     Route::get('/onsite-order', function () {
         return view('staff.onsite-order');
     })->name('onsite-order'); 
@@ -74,8 +76,13 @@ Route::middleware(['auth', StaffMiddleware::class])->group(function () {
 
     Route::post('/orders/{cart}/confirm', [OrderController::class, 'confirmOrder'])->name('orders.confirm');
     Route::post('/orders/{cart}/reject', [OrderController::class, 'rejectOrder'])->name('orders.reject');
-
+    Route::get('/offline-orders/create/', [OrderController::class, 'createOrGetCart'])->name('orders.createOrGetCart');
+    Route::post('/offline-orders/complete/{cartId}', [OfflineOrderController::class, 'completeOrder'])->name('offline-orders.completeOrder');
+    Route::delete('/offline-orders/cart/{cartId}', [OfflineOrderController::class, 'destroy'])->name('offline-orders.deleteOrder');
+    Route::post('/offline-orders/{cart_id}', [OfflineOrderController::class, 'store'])->name('offline-orders.store');
+    Route::post('/offline-orders/paid/{saleId}', [OfflineOrderController::class, 'paid'])->name('offline-orders.paid');
     Route::post('/suppliers/{supplier}/activate', [SupplierController::class, 'activate'])->name('suppliers.activate');
+    Route::get('/onsite-order', [OrderController::class, 'indexOnsite'])->name('orders.onsite');   
     
     
 });

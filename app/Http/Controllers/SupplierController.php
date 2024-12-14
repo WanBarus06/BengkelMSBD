@@ -78,7 +78,7 @@ class SupplierController extends Controller
     {
         $supplier->is_active = false;
         $supplier->save();
-        return redirect()->route('suppliers.index')->with('success', 'Pemasok akan ditandai tidak aktif.');
+        return redirect()->route('suppliers.index')->with('success', 'Pemasok berhasil ditandai tidak aktif.');
     }
 
         public function activate(Supplier $supplier)
@@ -86,6 +86,6 @@ class SupplierController extends Controller
         $supplier->is_active = 1;
         $supplier->save();
 
-        return redirect()->route('suppliers.index')->with('success', 'Pemasok akan ditandai aktif kembali.');
+        return redirect()->route('suppliers.index')->with('success', 'Pemasok berhasil ditandai aktif kembali.');
     }
 }

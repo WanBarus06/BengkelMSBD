@@ -31,20 +31,55 @@
     <link href="../assets/css/pending-order.css" rel="stylesheet">
 
     <!-- Tambahkan link CSS DataTables -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
 
-<!-- Tambahkan jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Tambahkan jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-<!-- Tambahkan script DataTables -->
-<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <!-- Tambahkan script DataTables -->
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 
+    <style>
+        .add-btn-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
 
+        .add-btn {
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .add-btn:hover {
+            background-color: #218838;
+        }
+
+        .add-order-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        .add-order-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
 
-     <!-- Topbar Start -->
-     <div class="container-fluid bg-light p-0">
+<!-- Topbar Start -->
+<div class="container-fluid bg-light p-0">
     <div class="row gx-0 d-none d-lg-flex">
         <div class="col-lg-7 px-5 text-start">
             <div class="h-100 d-inline-flex align-items-center py-3 me-4">
@@ -52,8 +87,8 @@
                 <small><a href="" class="">Staff</a></small>
             </div>
             <div class="h-100 d-inline-flex align-items-center py-3">
-            <small class="fas fa-cart-arrow-down text-primary me-2"></small>
-<small><a href="{{ route('onsite-order') }}" class="">Pesanan Ditempat</a></small>
+                <small class="fas fa-cart-arrow-down text-primary me-2"></small>
+                <small><a href="{{ route('orders.onsite') }}" class="">Pesanan Ditempat</a></small>
             </div>
         </div>
     </div>
@@ -66,75 +101,128 @@
         <h2 class="m-0 text-primary"><i class="fa fa-car me-3"></i>Bengkel Panbres</h2>
     </a>
     <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <span class="navbar-toggler-icon"></span>
+    </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto p-4 p-lg-0">
             <a href="{{ route('suppliers.index') }}" class="nav-item nav-link">Supplier</a>
             <a href="{{ route('orders.index') }}" class="nav-item nav-link">Pesanan Online</a>
-            <a href="{{ route('onsite-order') }}" class="nav-item nav-link active">Pesanan Offline</a>
+            <a href="{{ route('orders.onsite') }}" class="nav-item nav-link active">Pesanan Offline</a>
             <a href="{{ route('transaction-history-staff') }}" class="nav-item nav-link">Riwayat Transaksi</a>
             <a href="" class="nav-item nav-link">Faktur Pembelian</a>
             &nbsp; &nbsp;<img class="img-fluid logo-navbar" src="../assets/img/logo.jpeg" alt="">
         </div>
+    </div>
 </nav>
 <!-- Navbar End -->
 
 <div class="container">
-
-    <!-- Tabel Data -->
-    <br><br><div class="table-responsive">
-    <h1>Pesanan Ditempat</h1>
+    <h1>Pesanan Offline</h1>
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @elseif(session('error'))   
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+    @endif
+    <!-- Form Pencarian dan Pilihan Jumlah Baris per Halaman -->
+    <form action="{{ route('orders.onsite') }}" method="GET">
+        <div class="row mb-3">
+            <div class="col">
+                <input type="text" name="search" class="form-control" placeholder="Cari nama atau status..." value="{{ request('search') }}">
+            </div>
+            <div class="col">
+                <select name="rows_per_page" class="form-control" onchange="this.form.submit()">
+                    <option value="10" {{ request('rows_per_page') == 10 ? 'selected' : '' }}>10</option>
+                    <option value="25" {{ request('rows_per_page') == 25 ? 'selected' : '' }}>25</option>
+                    <option value="50" {{ request('rows_per_page') == 50 ? 'selected' : '' }}>50</option>
+                    <option value="100" {{ request('rows_per_page') == 100 ? 'selected' : '' }}>100</option>
+                </select>
+            </div>
+        </div>
+    </form>
+    
+    <!-- Tabel Pesanan Offline -->
     <table id="example" class="table table-striped">
         <thead>
             <tr>
-                <th class="text-center">NO.</th>
-                <th class="text-center">NOMOR INVOICE</th>
-                <th class="text-center">NAMA</th>
-                <th class="text-center">NOMOR HP</th>
-                <th class="text-center">TOTAL</th>
-                <th class="text-center">KETERANGAN</th>          
-                <th class="text-center">DETAIL PESANAN</th>
+                <th class="text-center">
+                    <a href="{{ route('orders.onsite', ['search' => request('search'), 'sort_by' => 'sales_id', 'sort_order' => request('sort_order') == 'asc' ? 'desc' : 'asc', 'rows_per_page' => request('rows_per_page')]) }}">
+                        ID
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a href="{{ route('orders.onsite', ['search' => request('search'), 'sort_by' => 'offline_customer_name', 'sort_order' => request('sort_order') == 'asc' ? 'desc' : 'asc', 'rows_per_page' => request('rows_per_page')]) }}">
+                        Nama
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a href="{{ route('orders.onsite', ['search' => request('search'), 'sort_by' => 'offline_customer_phone_number', 'sort_order' => request('sort_order') == 'asc' ? 'desc' : 'asc', 'rows_per_page' => request('rows_per_page')]) }}">
+                        No. HP
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a href="{{ route('orders.onsite', ['search' => request('search'), 'sort_by' => 'created_at', 'sort_order' => request('sort_order') == 'asc' ? 'desc' : 'asc', 'rows_per_page' => request('rows_per_page')]) }}">
+                        Alamat
+                    </a>
+                </th>            
+                <th class="text-center">
+                    <a href="{{ route('orders.onsite', ['search' => request('search'), 'sort_by' => 'is_fully_paid', 'sort_order' => request('sort_order') == 'asc' ? 'desc' : 'asc', 'rows_per_page' => request('rows_per_page')]) }}">
+                        Lunas
+                    </a>
+                </th>  
+                <th class="text-center">
+                    <a href="">
+                        Detail
+                    </a>
+                </th>  
             </tr>
-        </thead>
+
+        </thead>    
         <tbody>
+            @foreach($onsiteOrders as $order)
             <tr>
-                <td>1</td>
-                <td>INV-000001</td>
-                <td>Gaby</td>
-                <td>082273583361</td>
-                <td>Rp 1.375.902</td>
-                <td>Pending</td>
+                <td>{{ $order->sales_id }}</td>
+                <td>
+                    @if ($order->customer_id)
+                        {{ $order->customer->name }}
+                    @else
+                        {{ $order->offline_customer_name }}
+                    @endif
+                </td>
+                <td>
+                    @if ($order->customer_id)
+                        {{ $order->customer->phone_number }}
+                    @else
+                        {{ $order->offline_customer_phone_number }}
+                    @endif
+                </td>
+                <td>
+                    @if ($order->customer_id)
+                        {{ $order->customer->address }}
+                    @else
+                        {{ $order->offline_customer_address }}
+                    @endif
+                </td>
+                <td>{{ $order->is_fully_paid ? 'Lunas' : 'Belum Lunas' }}</td>
                 <td class="text-center">
-                    <button class="btn btn-danger">LIHAT</button>
+                    <a href="{{ route('offline-orders.show', $order->sales_id) }}" class="btn btn-danger">LIHAT</a>
                 </td>
             </tr>
-            <!-- Tambahkan data lain di sini -->
+            @endforeach
         </tbody>
     </table>
-</div>
+    <div class="pagination justify-content-center">
+        {{ $onsiteOrders->appends(request()->input())->links('pagination::bootstrap-4') }}
+    </div>
+    
+    <!-- Add Order Button -->
+    <a href="{{ route('orders.createOrGetCart') }}" class="add-order-btn">Tambah Pesanan</a>
 </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $(document).ready(function () {
-    $('#example').DataTable({
-        paging: true, // Mengaktifkan pagination
-        searching: true, // Mengaktifkan search box
-        info: true, // Menampilkan informasi jumlah data
-        lengthMenu: [10, 25, 50, 100], // Opsi jumlah entri per halaman
-        language: {
-            lengthMenu: "Tampilkan &nbsp _MENU_ &nbsp data per halaman",
-            info: "Menampilkan _START_ data sampai _END_ dari _TOTAL_ data",
-            paginate: {
-                next: "Selanjutnya",
-                previous: "Sebelumnya",
-            },
-            search: "Search: &nbsp",
-        },
-    });
-});
-    </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
