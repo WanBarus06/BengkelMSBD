@@ -76,9 +76,8 @@
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="{{ 'suppliers.index' }}" class="nav-item nav-link active">Supplier</a>
                 <a href="{{ route('orders.index') }}" class="nav-item nav-link">Pesanan Online</a>
-                <a href="{{ route('onsite-order') }}" class="nav-item nav-link">Pesanan Offline</a>
-                <a href="{{ route('transaction-history-staff') }}" class="nav-item nav-link">Riwayat Transaksi</a>
-                <a href="" class="nav-item nav-link">Faktur Pembelian</a>
+                <a href="{{ route('orders.onsite') }}" class="nav-item nav-link">Pesanan Offline</a>
+                <a href="{{ route('purchase-invoice.index') }}" class="nav-item nav-link">Faktur Pembelian</a>
                 &nbsp; &nbsp;<img class="img-fluid logo-navbar" src="../assets/img/logo.jpeg" alt="">
             </div>
     </nav>

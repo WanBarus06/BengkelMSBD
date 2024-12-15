@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('detail_id');
             $table->foreignId('invoice_id')->constrained('purchase_invoices', 'invoice_id');
             $table->foreignId('product_id')->constrained('products', 'product_id');
-            $table->integer('quantity');
+            $table->integer('quantity')->nullable();
             $table->integer('unit_price');
             $table->timestamps();
         });

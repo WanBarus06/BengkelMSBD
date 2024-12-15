@@ -99,10 +99,22 @@ class OrderController extends Controller
         //
     }
 
+    public function completeOrder(Request $request, $cartId)
+    {
+        try {
+            // Memanggil stored procedure
+            DB::statement('CALL CompleteOrder(:cartId)', ['cartId' => $cartId]);
+            return redirect()->route('orders.index')->with('success', 'Pesanan telah selesai.');
+        } catch (\Exception $e) {
+            // Tangani kesalahan
+            \Log::error('Error while calling stored procedure: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
     public function confirmOrder(Cart $cart)
     {
-        $cart->status = 'Menunggu Pengambilan';
-        $cart->save();
+        DB::statement('CALL ConfirmOrder(:cartId)', ['cartId' => $cart->id]);
 
         return redirect()->route('orders.index')->with('success', 'Pesanan berhasil dikonfirmasi.');
     }

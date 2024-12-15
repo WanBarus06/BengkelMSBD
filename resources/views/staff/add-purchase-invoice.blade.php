@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Pesanan Ditempat</title>
+    <title>Faktur Pembelian</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -70,8 +70,8 @@
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="{{ route('suppliers.index') }}" class="nav-item nav-link">Supplier</a>
                 <a href="{{ route('orders.index') }}" class="nav-item nav-link">Pesanan Online</a>
-                <a href="{{ route('orders.onsite') }}" class="nav-item nav-link active">Pesanan Offline</a>
-                <a href="" class="nav-item nav-link">Faktur Pembelian</a>
+                <a href="{{ route('orders.onsite') }}" class="nav-item nav-link">Pesanan Offline</a>
+                <a href="{{ route('purchase-invoice.index') }}" class="nav-item nav-link active">Faktur Pembelian</a>
                 &nbsp; &nbsp;<img class="img-fluid logo-navbar" src="../assets/img/logo.jpeg" alt="">
             </div>
         </div>
@@ -94,9 +94,9 @@
     </div>
 
     <div class="container mt-4">
-        <h1>Buat Pesanan Offline</h1>
+        <h1>Masukkan Faktur Pembelian</h1>
         <!-- Input Produk ke Keranjang -->
-        <form action="{{ route('offline-orders.store', $cart->id) }}" method="POST">
+        <form action="{{ route('purchase-invoice.store', $cart->id) }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="product_id" class="form-label">Pilih Produk</label>
@@ -113,13 +113,13 @@
                 <label for="quantity" class="form-label">Kuantitas</label>
                 <input type="number" name="quantity" id="quantity" class="form-control" min="1" required>
             </div>
-            <button type="submit" class="btn btn-primary">Tambah ke Keranjang</button>
+            <button type="submit" class="btn btn-primary">Tambah</button>
         </form>
 
         <!-- List Produk di Keranjang -->
-        <h3 class="mt-4">Produk di Keranjang</h3>
+        <h3 class="mt-4">Produk</h3>
         @if($cartItems->isEmpty())
-        <p>Belum ada produk di keranjang.</p>
+        <p>Belum ada produk</p>
         @else
         <table class="table table-striped">
             <thead>
@@ -145,39 +145,26 @@
 
         <!-- Selesaikan Pesanan -->
        <!-- Selesaikan Pesanan -->
-    <form action="{{ route('offline-orders.completeOrder', $cart->id) }}" method="POST" class="mt-4">
+    <form action="{{ route('purchase-invoice.confirm', $cart->id) }}" method="POST" class="mt-4">
         @csrf
         <div class="mb-3">
-            <label for="customer_name" class="form-label">Nama Customer</label>
-            <input type="text" name="offline_customer_name" id="customer_name" class="form-control" required>
+            <label for="product_id" class="form-label">Pilih Supplier</label>
+                <select name="supplier_id" id="product_id" class="form-control" required>
+                    @foreach($suppliers as $supplier)
+                        <option value="{{ $supplier->supplier_id }}">
+                            {{ $supplier->supplier_name }}
+                        </option>
+                    @endforeach
+                </select>
         </div>
-        <div class="mb-3">
-            <label for="phone_number" class="form-label">Nomor HP</label>
-            <input type="number" name="offline_customer_phone_number" id="phone_number" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label for="address" class="form-label">Alamat</label>
-            <input type="text" name="offline_customer_address" id="address" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label for="is_fully_paid" class="form-label">Pembayaran</label><br>
-            <label>
-                <input type="radio" name="is_fully_paid" value="1" required> Lunas  
-            </label>
-            <label class="ms-3">
-                <input type="radio" name="is_fully_paid" value="0" required> Hutang
-            </label>
-        </div>
-        <button type="submit" class="btn btn-success">Selesaikan Pesanan</button>
+        <button type="submit" class="btn btn-success">Selesaikan Faktur</button>
     </form>
-
+{{-- 
     <form id="delete-form" action="{{ route('offline-orders.destroy', $cart->id) }}" method="POST" ">
         @csrf
         @method('DELETE')
         <button type="submit" class="btn btn-danger" onclick="confirmReject()">Batalkan Pesanan</button>
-    </form>
-    
-    
+    </form>  --}}
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

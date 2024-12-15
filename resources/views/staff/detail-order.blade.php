@@ -74,7 +74,6 @@
                 <a href="{{ route('suppliers.index') }}" class="nav-item nav-link">Supplier</a>
                 <a href="{{ route('orders.index') }}" class="nav-item nav-link active">Pesanan Online</a>
                 <a href="{{ route('orders.onsite') }}" class="nav-item nav-link">Pesanan Offline</a>
-                <a href="{{ route('transaction-history-staff') }}" class="nav-item nav-link">Riwayat Transaksi</a>
                 <a href="" class="nav-item nav-link">Faktur Pembelian</a>
                 &nbsp; &nbsp;<img class="img-fluid logo-navbar" src="../assets/img/logo.jpeg" alt="">
             </div>
@@ -144,7 +143,7 @@
             </form>
         @elseif ($cart->status == 'Menunggu Pengambilan')
             <div class="mt-4">
-                <form action="" method="POST" class="d-inline">
+                <form action="{{ route('orders.complete', $cart->id) }}" method="POST" class="d-inline">
                     @csrf
                     <button type="submit" class="btn btn-primary">Selesai</button>
                 </form>

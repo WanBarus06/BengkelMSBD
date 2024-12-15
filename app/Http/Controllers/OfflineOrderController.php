@@ -82,7 +82,9 @@ class OfflineOrderController extends Controller
         $cartDetail->price = $product->productDetail->product_sell_price; // update harga terbaru
         $cartDetail->save();
     } else {
-        // Jika produk belum ada di cart, tambahkan sebagai item baru
+        if ($request->quantity > $product->productDetail->stock) {
+            return redirect()->route('offline-orders.index')->with('error', 'Jumlah produk melebihi stok yang tersedia.');
+            }
         CartItem::create([
         'cart_id' => $cart->id,
         'product_id' => $product->product_id,
@@ -154,62 +156,34 @@ class OfflineOrderController extends Controller
 
     public function completeOrder(Request $request, $cartId)
     {
-        // Validasi input
         $request->validate([
             'offline_customer_name' => 'required|string|max:255',
             'offline_customer_phone_number' => 'required|string|max:15',
             'offline_customer_address' => 'required|string',
             'is_fully_paid' => 'required|boolean',
         ]);
-
-        // Ambil data cart
-        $cart = Cart::with('cartItems.product')->findOrFail($cartId);
-
-        // Mulai transaksi database
-        DB::beginTransaction();
+    
         try {
-            // Buat data baru di tabel sales_records
-            $salesRecord = SalesRecord::create([
-                'offline_customer_name' => $request->offline_customer_name,
-                'offline_customer_phone_number' => $request->offline_customer_phone_number,
-                'offline_customer_address' => $request->offline_customer_address,
-                'is_fully_paid' => $request->is_fully_paid,
-                'created_at' => now(),
+            // Panggil stored procedure dengan DB::unprepared
+            DB::statement("CALL CompleteOfflineOrder(:cartId, :offlineCustomerName, :offlineCustomerPhoneNumber, :offlineCustomerAddress, :isFullyPaid)", [
+                'cartId' => $cartId,
+                'offlineCustomerName' => $request->offline_customer_name,
+                'offlineCustomerPhoneNumber' => $request->offline_customer_phone_number,
+                'offlineCustomerAddress' => $request->offline_customer_address,
+                'isFullyPaid' => $request->is_fully_paid,
             ]);
-
-            // Pindahkan detail produk dari cart ke sales_record_details
-            foreach ($cart->cartItems as $item) {
-                SalesRecordDetail::create([
-                    'sales_id' => $salesRecord->sales_id,
-                    'product_id' => $item->product_id,
-                    'quantity' => $item->quantity,
-                    'price_per_unit' => $item->price,
-                ]);
-            }
-
-            // Hapus data keranjang dan isinya
-            $cart->cartItems()->delete();
-            $cart->delete();
-
-            // Commit transaksi
-            DB::commit();
-
+    
             return redirect()->route('orders.onsite')->with('success', 'Pesanan offline berhasil diselesaikan.');
         } catch (\Exception $e) {
-            // Rollback transaksi jika terjadi kesalahan
-            DB::rollBack();
-            // return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
             return redirect()->route('orders.onsite')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
     public function paid($saleId)
     {
-        $sale = SalesRecord::findOrFail($saleId);
-        $sale->is_fully_paid = TRUE;
-        $sale->save();
-
-        return redirect()->route('orders.onsite')->with('success', 'Pesanan berhasil dilunaskan.');
+        DB::statement('CALL MarkSaleAsPaid(?)', [$saleId]);
+        return redirect()->route('orders.onsite')->with('success', 'Pesanan berhasil dibayar.');
     }
+
 
 }

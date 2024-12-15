@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\StaffMiddleware;
+use App\Http\Middleware\OwnerMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\MiddlewarePriority;
@@ -13,8 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function ($middleware) {
-        // Menambahkan StaffMiddleware ke grup 'web'
+        // Menambahkan StaffMiddleware dan OwnerMiddleware ke grup 'web'
         $middleware->middlewareGroups['web'][] = StaffMiddleware::class;
+        $middleware->middlewareGroups['web'][] = OwnerMiddleware::class; // Menambahkan OwnerMiddleware
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
