@@ -75,32 +75,32 @@
       <table class="table table-striped table-hover">
         <thead class="table-primary">
           <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Amount</th>
+            <th scope="col">Tanggal</th>
+            <th scope="col">Total</th>
             <th scope="col">Status</th>
+            <th scope="col">Aksi</th>
           </tr>
         </thead>
         <tbody>
           @foreach($transactions as $transaction)
-            @if($transaction->status == "Menunggu Konfirmasi" || $transaction->status == "Menunggu Pengambilan")
             <tr>
               <td>{{ $transaction->created_at->format('d-m-Y H:i:s') }}</td>
               <td>{{ number_format($transaction->total, 2) }}</td>
-              <td><span class="badge bg-warning">{{ $transaction->status }}</span></td>
+              <td>
+                @if($transaction->status == "Menunggu Konfirmasi" || $transaction->status == "Menunggu Pengambilan")
+                <span class="badge bg-warning">{{ $transaction->status }}</span>
+                @elseif($transaction->status == "Transaksi Selesai")
+                <span class="badge bg-success">{{ $transaction->status }}</span>
+                @else
+                <span class="badge bg-danger">{{ $transaction->status }}</span>
+                @endif
+              </td>
+              <td>
+                <a href="{{ route('transaction.show', ['cartId' => $transaction->id]) }}" class="btn btn-info btn-sm">
+                  <i class="fa fa-shopping-cart"></i> Lihat Cart
+                </a>
+              </td>
             </tr>
-            @elseif($transaction->status == "Transaksi Selesai")
-            <tr>
-              <td>{{ $transaction->created_at->format('d-m-Y H:i:s') }}</td>
-              <td>{{ number_format($transaction->total, 2) }}</td>
-              <td><span class="badge bg-success">{{ $transaction->status }}</span></td>
-            </tr>
-            @else
-            <tr>
-              <td>{{ $transaction->created_at->format('d-m-Y H:i:s') }}</td>
-              <td>{{ number_format($transaction->total, 2) }}</td>
-              <td><span class="badge bg-danger">{{ $transaction->status }}</span></td>
-            </tr>
-            @endif
           @endforeach
         </tbody>
       </table>

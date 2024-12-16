@@ -126,104 +126,90 @@
     <!-- Navbar End -->
 
 <!-- Filter and Search Section Start -->
+<!-- Main Container -->
 <div class="container-fluid mt-5">
     <div class="row">
         <!-- Sidebar Filter -->
         <div class="col-lg-3 col-md-4 mb-4">
-        <div class="filter-bar">
-    <h5 class="m-0 text-primary"><i class="fa fa-filter me-3"></i>Filter</h5>
-    <div class="filter-section mb-4">
-        <ul class="list-unstyled bg-light p-2 rounded">
-            <li>Popular</li>
-            <li>Nama A - Z</li>
-            <li>Nama Z - A</li>
-            <li>Harga Rendah - Tinggi</li>
-            <li>Harga Tinggi - Rendah</li>
-            <li>Hapus Sortingan</li>
-        </ul>
-    </div>
-
-    <div class="filter-section mb-3">
-        <h6>Kategori <span class="float-end">+</span></h6>
-        <hr>
-    </div>
-
-    <div class="filter-section mb-4">
-        <h6>Harga</h6>
-        <div class="price-range">
-            <div class="mb-2">
-                <input type="text" class="form-control" placeholder="Rp Harga Minimum">
-            </div>
-            <div>
-                <input type="text" class="form-control" placeholder="Rp Harga Maksimum">
+            <div class="filter-bar">
+                <h5 class="m-0 text-primary"><i class="fa fa-filter me-3"></i>Filter</h5>
+                <!-- Sort Options -->
+                <div class="filter-section mb-4">
+                    <ul class="list-unstyled bg-light p-2 rounded">
+                        <li><a href="?sort=popular">Popular</a></li>
+                        <li><a href="?sort=name_asc">Nama A - Z</a></li>
+                        <li><a href="?sort=name_desc">Nama Z - A</a></li>
+                        <li><a href="?sort=price_low_high">Harga Rendah - Tinggi</a></li>
+                        <li><a href="?sort=price_high_low">Harga Tinggi - Rendah</a></li>
+                        <li><a href="?sort=clear">Hapus Sortiran</a></li>
+                    </ul>
+                </div>
+                <!-- Category Filter -->
+                <div class="filter-section mb-3">
+                    <h6>Kategori <span class="float-end">+</span></h6>
+                    <ul class="list-unstyled">
+                        @foreach ($variants as $variant)
+                            <li>
+                                <a href="?category={{ $variant->variant_id }}">{{ $variant->variant_name }}</a>
+                            </li>
+                        @endforeach
+                    </ul>
+                    <hr>
+                </div>
+                <!-- Price Filter -->
+                <div class="filter-section mb-4">
+                    <h6>Harga</h6>
+                    <form action="{{ route('products') }}" method="GET">
+                        <div class="mb-2">
+                            <input type="number" name="price_min" class="form-control" placeholder="Harga Minimum">
+                        </div>
+                        <div class="mb-2">
+                            <input type="number" name="price_max" class="form-control" placeholder="Harga Maksimum">
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100">Cari</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
 
-    <button class="btn btn-warning w-100">Cari</button>
-</div>
-        </div>
-
-        <!-- Product and Search Section -->
+        <!-- Product Listing -->
         <div class="col-lg-9 col-md-8">
             <!-- Search Bar -->
             <div class="search-bar d-flex justify-content-between align-items-center mb-4">
-                <h2 class="m-0 text-primary">
-                    <i class="fas fa-search me-2"></i>
-                    <input type="text" class="form-control d-inline w-75" placeholder="Cari produk..." aria-label="Search">
-                </h2>
+                <form action="{{ route('products') }}" method="GET" class="d-flex w-100">
+                    <input type="text" name="search" class="form-control" placeholder="Cari produk...">
+                    <button type="submit" class="btn btn-primary ms-2">Cari</button>
+                </form>
             </div>
+
+            <!-- Product Variants -->
             @foreach ($groupedByVariant as $variantName => $products)
-            <div class="brand-section">
-                <h2 class="text-red-600 font-bold text-5xl">{{ $variantName }}</h2>
-                <div class="row d-flex align-items-stretch">
-                    @foreach ($products as $product)
-                        <!-- Products Start -->
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                            <div class="card h-100">
-                                <img src="../assets/img/ban.jpeg" class="card-img-top" width="100%">
-                                <div class="card-body pt-0 px-0">
-                                    <div class="d-flex flex-row justify-content-between mb-0 px-3">
-                                        <small class="text-muted mt-1">NAMA</small>
-                                        <h6 class="text-primary">{{ $product->product_name }}</h6>
-                                    </div>
-                                    <hr class="mt-2 mx-3">
-                                    <div class="d-flex flex-row justify-content-between px-3 pb-4">
-                                        <div class="d-flex flex-column">
-                                            <small class="text-muted mt-1">HARGA</small>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <h5 class="mb-0 text-primary">{{ number_format($product->productDetail->product_sell_price) }}</h5>
-                                        </div>
-                                    </div>
-                                    <hr class="mt-2 mx-3">
-                                    <div class="d-flex flex-row justify-content-between px-3 pb-4">
-                                        <div class="d-flex flex-column">
-                                            <small class="text-muted mt-1">STOK</small>
-                                        </div>
-                                        <div class="d-flex flex-column">
-                                            <h5 class="mb-0 text-primary">{{ $product->productDetail->stock }}</h5>
-                                        </div>
-                                    </div>
-                                    <!-- Button Container -->
-                                    <div class="d-flex justify-content-center pb-3">
+                <div class="variant-section mb-5">
+                    <h2 class="text-primary">{{ $variantName }}</h2>
+                    <div class="row">
+                        @foreach ($products as $product)
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                                <div class="card h-100">
+                                    <img src="../assets/img/ban.jpeg" class="card-img-top" alt="Product Image">
+                                    <div class="card-body">
+                                        <h6 class="card-title">{{ $product->product_name }}</h6>
+                                        <p class="card-text">Harga: Rp {{ number_format($product->productDetail->product_sell_price) }}</p>
+                                        <p class="card-text">Stok: {{ $product->productDetail->stock }}</p>
                                         <form action="{{ route('cart.store', $product->product_id) }}" method="POST">
                                             @csrf
-                                            <button type="submit" class="btn btn-primary btn-block">Tambah ke Keranjang</button>
+                                            <button type="submit" class="btn btn-primary w-100">Tambah ke Keranjang</button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <!-- Products End -->
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
-            </div>
-        @endforeach
-        
+            @endforeach
+        </div>
     </div>
 </div>
+
 
 <!-- Footer Start -->
 <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">

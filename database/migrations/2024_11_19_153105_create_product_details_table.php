@@ -19,7 +19,28 @@ return new class extends Migration
             $table->integer('product_sell_price');
             $table->timestamps();
         });
+
+        DB::statement("
+        ALTER TABLE product_details 
+        ADD CONSTRAINT check_stock_non_negative 
+        CHECK (stock >= 0);
+        ");
+
+        
+        DB::statement("
+        ALTER TABLE product_details 
+        ADD CONSTRAINT check_warning_stock_valid 
+        CHECK (warning_stock >= 0 AND warning_stock <= stock);
+        ");
+
+        DB::statement("
+        ALTER TABLE product_details 
+        ADD CONSTRAINT check_product_sell_price 
+        CHECK (product_sell_price >= 0);
+        ");
     }
+
+    
 
     /**
      * Reverse the migrations.

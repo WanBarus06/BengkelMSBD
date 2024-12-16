@@ -18,6 +18,7 @@ return new class extends Migration
             DECLARE customerId INT;
             DECLARE approved_at TIMESTAMP;
             DECLARE salesRecordId INT;
+            DECLARE insufficient_stock BOOLEAN DEFAULT FALSE;
 
             -- Mulai transaksi
             START TRANSACTION;
@@ -29,47 +30,58 @@ return new class extends Migration
             IF customerId IS NULL THEN
                 ROLLBACK;  -- Jika cart tidak ditemukan, rollback transaksi
             ELSE
-                -- 2. Buat sales record baru
-                INSERT INTO sales_records (customer_id, is_fully_paid, created_at, updated_at)
-                VALUES (customerId, TRUE, NOW(), NOW());
-
-                -- Ambil ID dari sales record yang baru dibuat
-                SET salesRecordId = LAST_INSERT_ID();
-
-                -- 3. Proses setiap item dalam cart_items dan insert ke sales_record_details
-                INSERT INTO sales_record_details (sales_id, product_id, quantity, price_per_unit, created_at, updated_at)
+                -- 2. Validasi stok produk
+                -- Jika stok kurang dari kuantitas item di cart, set insufficient_stock menjadi TRUE
                 SELECT 
-                    salesRecordId, 
-                    ci.product_id, 
-                    ci.quantity, 
-                    ci.price, 
-                    NOW(), 
-                    NOW()
+                    COUNT(*) 
+                INTO insufficient_stock
                 FROM cart_items ci
-                WHERE ci.cart_id = cartId;
+                JOIN products p ON ci.product_id = p.id
+                WHERE ci.cart_id = cartId
+                AND p.stock < ci.quantity;
 
-                -- Cek apakah ada item yang gagal diproses
-                IF ROW_COUNT() = 0 THEN
-                    ROLLBACK;  -- Jika tidak ada item yang berhasil diproses, rollback transaksi
+                -- Jika ada produk dengan stok tidak cukup, rollback
+                IF insufficient_stock > 0 THEN
+                    ROLLBACK;
                 ELSE
-                    -- 4. Ubah status cart menjadi "Transaksi Selesai" dan update approved_at serta expired_at
+                    -- 3. Buat sales record baru
+                    INSERT INTO sales_records (customer_id, is_fully_paid, created_at, updated_at)
+                    VALUES (customerId, TRUE, NOW(), NOW());
+
+                    -- Ambil ID dari sales record yang baru dibuat
+                    SET salesRecordId = LAST_INSERT_ID();
+
+                    -- 4. Proses setiap item dalam cart_items dan insert ke sales_record_details
+                    INSERT INTO sales_record_details (sales_id, product_id, quantity, price_per_unit, created_at, updated_at)
+                    SELECT 
+                        salesRecordId, 
+                        ci.product_id, 
+                        ci.quantity, 
+                        ci.price, 
+                        NOW(), 
+                        NOW()
+                    FROM cart_items ci
+                    WHERE ci.cart_id = cartId;
+
+                    -- 5. Update stok produk
+                    UPDATE products p
+                    JOIN cart_items ci ON p.id = ci.product_id
+                    SET p.stock = p.stock - ci.quantity
+                    WHERE ci.cart_id = cartId;
+
+                    -- 6. Ubah status cart menjadi "Transaksi Selesai" dan update approved_at
                     UPDATE carts 
                     SET 
                         status = "Transaksi Selesai", 
                         approved_at = approved_at
                     WHERE id = cartId;
 
-                    -- Cek apakah update status cart berhasil
-                    IF ROW_COUNT() = 0 THEN
-                        ROLLBACK;  -- Jika status cart tidak berhasil diubah, rollback transaksi
-                    ELSE
-                        -- 5. Commit transaksi jika semua langkah berhasil
-                        COMMIT;
-                    END IF;
+                    -- Commit transaksi
+                    COMMIT;
                 END IF;
             END IF;
         END
-    ');
+        ');
     }
 
     /**

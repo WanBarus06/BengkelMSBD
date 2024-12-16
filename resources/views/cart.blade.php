@@ -155,8 +155,10 @@
                     @csrf
                     <button type="submit" class="btn btn-primary">Pesan</button>
                 </form>
-            @else
+            @elseif($cart->status == 'Menunggu Konfirmasi')
                 <span>Booked</span>
+            @elseif($cart->status == 'Menunggu Pengambilan')
+                <span>{{ $cart->pickup_code }}</span>
             @endif
 
         </div>

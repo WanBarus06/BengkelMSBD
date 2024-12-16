@@ -63,11 +63,12 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/cart/add/{product_id}', [CartController::class, 'store'])->name('cart.store');
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::get('/cart/{cartId}', [TransactionController::class, 'show'])->name('transaction.show');
     Route::delete('/cart/{cartItemId}', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::delete('/cart', [CartController::class, 'deleteAllItems'])->name('cart.deleteAllItems');
     Route::post('/cart/increase/{cartItemId}', [CartController::class, 'increaseQuantity'])->name('cart.increase');
     Route::post('/cart/decrease/{cartItemId}', [CartController::class, 'decreaseQuantity'])->name('cart.decrease');
-    Route::post('/cart  /booking/{cartId}', [CartController::class, 'booking'])->name('cart.booking');
+    Route::post('/cart/booking/{cartId}', [CartController::class, 'booking'])->name('cart.booking');
 });
 
 Route::middleware(['auth', StaffMiddleware::class])->group(function () {

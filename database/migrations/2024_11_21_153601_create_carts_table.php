@@ -20,7 +20,6 @@ return new class extends Migration
             $table->timestamp('approved_at')->nullable(); // Waktu ketika disetujui
             $table->timestamp('rejected_at')->nullable(); // Waktu ketika ditolak
             $table->timestamp('expired_at')->nullable(); // Batas waktu pesanan
-            $table->text('remarks')->nullable();
             $table->string('pickup_code')->nullable()->unique();
             $table->timestamps();
         });

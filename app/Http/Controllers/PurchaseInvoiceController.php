@@ -24,8 +24,8 @@ class PurchaseInvoiceController extends Controller
         $cartItems = $cart->cartItems()->with('product')->get();
 
         // 3. Ambil data supplier dan produk
-        $suppliers = Supplier::all();
-        $products = Product::all();
+        $suppliers = Supplier::where('is_active', 1)->get();
+        $products = Product::where('is_active', 1)->get();
 
         return view('staff.add-purchase-invoice', compact('cart', 'cartItems', 'suppliers', 'products'));
     }

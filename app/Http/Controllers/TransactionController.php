@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\CartItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -25,5 +26,25 @@ class TransactionController extends Controller
 
         // Kirimkan data transaksi ke view
         return view('transaction', compact('transactions'));
+    }
+
+    public function show($cartId)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login'); // redirect ke halaman login jika user belum login
+        }
+
+        $cart = Cart::where('id', $cartId)->first();
+        $cartItems = CartItem::with('product')->where('cart_id', $cart->id)->get();
+
+        //Pakai Stored Function
+        $cartTotal = DB::select("SELECT cartTotal(?) AS total", [$cart->id]);
+
+        // Kirimkan data cart dan cartItems ke view
+        return view('cart', [
+            'cart' => $cart,
+            'cartItems' => $cartItems,
+            'cartTotal' => $cartTotal[0]->total, // Ambil nilai total dari hasil query
+        ]);
     }
 }
