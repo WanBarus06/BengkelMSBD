@@ -159,6 +159,11 @@
                 <span>Booked</span>
             @elseif($cart->status == 'Menunggu Pengambilan')
                 <span>{{ $cart->pickup_code }}</span>
+            @elseif($cart->status == 'Transaksi Selesai')
+                <span>Transaksi Selesai pada {{ $cart->approved_at }}</span>
+            @elseif($cart->status == 'Transaksi Gagal')
+                <span>Dibatalkan oleh {{ $cart->cancelledBy->name }} pada waktu {{ $cart->rejected_at }} dengan alasan {{ $cart->cancelled_reason }}</span>
+
             @endif
 
         </div>

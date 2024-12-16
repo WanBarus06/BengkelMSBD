@@ -26,7 +26,9 @@ class OrderController extends Controller
                         $query->where('name', 'like', "%{$search}%")
                                 ->orWhere('phone_number', 'like', "%{$search}%");
                     })
-                    ->orWhere('status', 'like', "%{$search}%");
+                    ->orWhere('status', 'like', "%{$search}%")
+                    ->orWhere('pickup_code', 'like', "%{$search}%")
+                    ;
                 })
                 // Sorting berdasarkan parameter yang diterima
                 ->orderBy($sortBy, $sortOrder) // Sorting berdasarkan kolom dan arah

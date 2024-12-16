@@ -36,7 +36,7 @@ return new class extends Migration
                     COUNT(*) 
                 INTO insufficient_stock
                 FROM cart_items ci
-                JOIN products p ON ci.product_id = p.id
+                JOIN product_details p ON ci.product_id = p.product_id
                 WHERE ci.cart_id = cartId
                 AND p.stock < ci.quantity;
 
@@ -64,8 +64,8 @@ return new class extends Migration
                     WHERE ci.cart_id = cartId;
 
                     -- 5. Update stok produk
-                    UPDATE products p
-                    JOIN cart_items ci ON p.id = ci.product_id
+                    UPDATE product_details p
+                    JOIN cart_items ci ON p.product_id = ci.product_id
                     SET p.stock = p.stock - ci.quantity
                     WHERE ci.cart_id = cartId;
 

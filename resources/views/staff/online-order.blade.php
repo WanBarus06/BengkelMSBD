@@ -137,6 +137,11 @@
                 </a>
             </th>
             <th class="text-center">
+                <a href="{{ route('orders.index', ['search' => request('search'), 'sort_by' => 'updated_at', 'sort_order' => request('sort_order') == 'asc' ? 'desc' : 'asc', 'rows_per_page' => request('rows_per_page')]) }}">
+                    Kode
+                </a>
+            </th>
+            <th class="text-center">
                 <a href="">
                     Detail Pesanan
                 </a>
@@ -152,6 +157,7 @@
             <td>{{ number_format($order->total_amount, 2) }}</td>
             <td>{{ $order->status }}</td>
             <td>{{ $order->updated_at }}</td>
+            <td>{{ $order->pickup_code }}</td>
             <td class="text-center">
                 <a href="{{ route('orders.show', $order->id) }}" class="btn btn-danger">LIHAT</a>
             </td>
