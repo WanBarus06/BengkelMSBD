@@ -110,6 +110,44 @@
         gap: 10px; /* Tambahkan jarak antar elemen */
     }
 }
+
+@media pdf {
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    table th, table td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+
+    tfoot th[colspan="5"] {
+        text-align: right; /* Agar tulisan total kesemua penjualan rata kanan */
+        font-weight: bold;
+    }
+
+    table thead th {
+        background-color: #f2f2f2; /* Warna latar header */
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+tfoot th {
+    text-align: right; /* Rata kanan */
+    font-weight: bold;
+    border-top: 2px solid #000; /* Garis atas untuk pemisah */
+}
+
+tfoot th[colspan="6"] {
+    text-align: right; /* Rata kanan */
+    font-weight: bold;
+}
     </style>
 
 </head>
@@ -175,148 +213,178 @@
 
         <!-- Laporan Penjualan -->
         <section class="analytics mb-5">
-            <h2 class="text-center">Laporan Penjualan</h2>
-            <!-- Tabel Data -->
-            <table id="laporanPenjualan" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Nomor Invoice</th>
-                        <th>Nama Produk</th>
-                        <th>Harga</th>
-                        <th>Total Qty</th>
-                        <th>Total Pesanan</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($dataPenjualan as $penjualan)
-                    <tr>
-                        <td>{{ $penjualan->invoice }}</td>
-                        <td>{{ $penjualan->nama_produk }}</td>
-                        <td>{{ number_format($penjualan->harga, 2) }}</td>
-                        <td>{{ $penjualan->total_qty }}</td>
-                        <td>{{ number_format($penjualan->total_pesanan, 2) }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </section>
+    <h1>Laporan Penjualan</h1>
 
-        <section class="analytics mb-5">
-            <h2 class="text-center">Pesanan Terbaru</h2>
-            <!-- Tabel Data -->
-            <table id="pesananTerbaru" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Nomor Invoice</th>
-                        <th>Nama Produk</th>
-                        <th>Harga</th>
-                        <th>Total Qty</th>
-                        <th>Total Pesanan</th>
-                        <th>Detail Pesanan</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($dataPenjualan as $penjualan)
-                    <tr>
-                        <td>{{ $penjualan->invoice }}</td>
-                        <td>{{ $penjualan->nama_produk }}</td>
-                        <td>{{ number_format($penjualan->harga, 2) }}</td>
-                        <td>{{ $penjualan->total_qty }}</td>
-                        <td>{{ number_format($penjualan->total_pesanan, 2) }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </section>
+    @if (!empty($dataPenjualanArray))
+    <table id="laporanTable" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Invoice</th>
+                <th>Nama Pelanggan</th>
+                <th>Nomor Telepon</th>
+                <th>Alamat</th>
+                <th>Tanggal Penjualan</th>
+                <th>Total Harga Penjualan</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($dataPenjualanArray as $item)
+                <tr>
+                    <td>{{ $item['ID_Penjualan'] }}</td>
+                    <td>{{ $item['Nama_Pelanggan'] }}</td>
+                    <td>{{ $item['Nomor_Telepon'] }}</td>
+                    <td>{{ $item['Alamat_Pelanggan'] }}</td>
+                    <td>{{ $item['Tanggal_Penjualan'] }}</td>
+                    <td>{{ $item['Total_Harga_Penjualan'] }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+        <tfoot>
+    <tr>
+        <th colspan="6" style="text-align: right;">Total Keseluruhan Penjualan : {{ number_format($totalKeseluruhanPenjualan, 0, ',', '.') }}</th>
+    </tr>
+</tfoot>
+    </table>
+    @else
+    <p>Tidak ada data laporan penjualan.</p>
+    @endif
+</section>
 
 <section class="top-products mb-5">
-    <!-- Top Produk -->
-    <div class="col-lg-6 mb-4">
-        <h2 class="text-center">Top Produk</h2>
-        <div class="product-container">
-            <div class="product-item">
-                <img src="../assets/img/ban.jpeg" alt="NIKE Shoes" style="width: 80px; margin-right: 15px;">
-                <div>
-                    <h5>NIKE Shoes Black Pattern</h5>
-                    <p class="price mb-0">$87</p>
-                </div>
-            </div>
-            <div class="product-item">
-                <img src="../assets/img/ban.jpeg" alt="iPhone 12" style="width: 80px; margin-right: 15px;">
-                <div>
-                    <h5>iPhone 12</h5>
-                    <p class="price mb-0">$987</p>
-                </div>
-            </div>
-        </div>
+    <div class="container mt-5">
+        <h2 class="mb-4">Top 10 Produk Berdasarkan Penjualan</h2>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Produk</th>
+                    <th>Total Terjual</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($topProducts as $index => $product)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $product->product_name }}</td>
+                        <td>{{ $product->total_quantity_sold }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 </section>
 
 </div>
 
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="script.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
     <script>
+    $.ajax({
+        url: '/api/dashboard-data',
+        method: 'GET',
+        success: function(data) {
+            $('.pengguna').text(data.jumlahPengguna + ' Pengguna Aktif');
+            $('.pegawai').text(data.jumlahPegawai + ' Pegawai Aktif');
+            $('.produk').text(data.jumlahProduk + ' Produk Tersedia');
+        },
+        error: function(err) {
+            console.error("Gagal memuat data", err);
+        }
+    });
+
     // Ambil data penjualan dari server-side Laravel
     const penjualanData = @json($penjualanHarian);
 
     // Ubah data menjadi array untuk grafik
     const labels = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
-    const dataValues = labels.map(day => penjualanData[day] || 0);
+const dataValues = labels.map(day => penjualanData[day] || 0);
 
-    // Inisialisasi Chart.js
-    const ctx = document.getElementById('reportChart').getContext('2d');
-    const reportChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Penjualan Harian',
-                data: dataValues,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 2,
-                fill: true,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            }]
+const ctx = document.getElementById('reportChart').getContext('2d');
+const reportChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Penjualan Harian',
+            data: dataValues,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 2,
+            fill: true,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: true
+            }
         },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: true
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        scales: {
+            y: {
+                beginAtZero: true
             }
         }
-    });
+    }
+});
 
-    $(document).ready(function() {
-        $.ajax({
-            url: '/api/dashboard-data',
-            method: 'GET',
-            success: function(data) {
-                $('.pengguna').text(data.jumlahPengguna + ' Pengguna Aktif');
-                $('.pegawai').text(data.jumlahPegawai + ' Pegawai Aktif');
-                $('.produk').text(data.jumlahProduk + ' Produk Tersedia');                
-            },
-            error: function(err) {
-                console.error("Gagal memuat data", err);
-            }
-        });
-    });
-
-    $('#laporanPenjualan').DataTable({
+    $('#laporanTable').DataTable({
     dom: '<"top d-flex justify-content-between"Bfr>t<"bottom d-flex justify-content-between"lp><"clear">',
-    buttons: ['copy', 'excel', 'print'],
+    buttons: [
+        {
+            extend: 'copy',
+            footer: true, // Sertakan footer saat copy
+        },
+        {
+            extend: 'excel',
+            footer: true, // Sertakan footer
+            customize: function (xlsx) {
+                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                // Temukan baris terakhir (footer)
+                var rows = $('row', sheet);
+                var lastRowIndex = rows.last().attr('r'); // Dapatkan index baris terakhir
+                var newRowIndex = parseInt(lastRowIndex) + 1; // Tentukan index baris baru untuk footer
+
+                var totalText = 'Total Keseluruhan Penjualan: 7.472.000';
+
+                // Tambahkan baris baru dengan 1 sel yang digabung (merge)
+                var mergeCells = `
+                    <mergeCells count="1">
+                        <mergeCell ref="A${newRowIndex}:F${newRowIndex}" />
+                    </mergeCells>
+                `;
+                // Tambahkan baris footer ke XML
+                var totalRow = `
+                    <row r="${newRowIndex}">
+                        <c t="inlineStr" r="A${newRowIndex}">
+                            <is><t>${totalText}</t></is>
+                        </c>
+                    </row>
+                `;
+                // Tambahkan mergeCells dan baris footer
+                $('mergeCells', sheet).remove(); // Hapus mergeCells lama (jika ada)
+                $('worksheet', sheet).append(mergeCells); // Tambahkan mergeCells baru
+                sheet.childNodes[0].appendChild($.parseXML(totalRow).documentElement);
+            }
+        },
+        {
+            extend: 'pdf',
+            customize: function (doc) {
+                // Tambahkan colspan pada footer di PDF
+                doc.content[1].table.body.push([
+                    { text: 'Total Keseluruhan Penjualan:', alignment: 'right', colSpan: 5 },
+                    {}, {}, {}, {},
+                    { text: '{{ number_format($totalKeseluruhanPenjualan, 0, ",", ".") }}', alignment: 'right' }
+                ]);
+            }
+        }
+    ],
     searching: true,
     info: true,
     language: {
@@ -330,22 +398,6 @@
     }
 });
 
-    $('#pesananTerbaru').DataTable({
-        dom: '<"top"Bfr>t<"bottom d-flex justify-content-between align-items-center"lp><"clear">',
-        buttons: [],
-        searching: true, // Mengaktifkan search box
-        info: true,
-        language: {
-            lengthMenu: "Tampilkan &nbsp _MENU_ &nbsp data per halaman",
-            info: "Menampilkan _START_ data sampai _END_ dari _TOTAL_ data",
-            paginate: {
-                next: "Selanjutnya",
-                previous: "Sebelumnya",
-            },
-            search: "Cari : &nbsp",
-        }
-
-});
     </script>
 </body>
 </html>

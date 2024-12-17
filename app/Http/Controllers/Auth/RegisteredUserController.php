@@ -28,23 +28,26 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+{
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+        'phone_number' => ['required', 'regex:/^[0-9]{10,13}$/'], // Validasi nomor telepon
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+    ], [
+        'phone_number.required' => 'Nomor telepon wajib diisi.',
+        'phone_number.regex' => 'Nomor telepon tidak valid. Harus berupa angka 10-13 digit.',
+    ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'phone_number' => $request->phone_number,
+        'password' => Hash::make($request->password),
+    ]);
 
-        event(new Registered($user));
+    event(new Registered($user));
 
-        // Auth::login($user);
-
-        return redirect(route('login', absolute: false));
+    return redirect(route('login', absolute: false));
     }
 }

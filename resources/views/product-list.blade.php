@@ -93,7 +93,7 @@
 <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="">
+        <form method="POST" action="{{ route('add-product') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="addProductModalLabel">Tambah Produk</h5>
@@ -121,16 +121,16 @@
                         <input type="text" class="form-control" id="product_description" name="product_description" required>
                     </div>
                     <div class="mb-3">
-                        <label for="product_photo" class="form-label">Foto Produk</label>
-                        <input type="text" class="form-control" id="product_photo" name="product_photo" required>
-                    </div>
-                    <div class="mb-3">
                         <label for="stock" class="form-label">Stok Produk</label>
                         <input type="number" class="form-control" id="stock" name="stock" required>
                     </div>
                     <div class="mb-3">
                         <label for="product_sell_price" class="form-label">Harga Produk</label>
                         <input type="number" class="form-control" id="product_sell_price" name="product_sell_price" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="product_photo" class="form-label">Foto Produk</label>
+                        <input type="file" class="form-control" id="product_photo" name="product_photo" accept="image/*" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -216,36 +216,36 @@
 </div>
 
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Produk</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="editForm">
-                    <div class="mb-3">
-                        <label for="editNama" class="form-label">Nama Produk</label>
-                        <input type="text" class="form-control" id="editNama" name="nama">
-                    </div>
-                    <div class="mb-3">
-                        <label for="editStok" class="form-label">Stok</label>
-                        <input type="number" class="form-control" id="editStok" name="stok">
-                    </div>
-                    <div class="mb-3">
-                        <label for="editStatus" class="form-label">Status</label>
-                        <select class="form-control" id="editStatus" name="status">
-                            <option value="Tersedia">Tersedia</option>
-                            <option value="Habis">Habis</option>
-                        </select>
-                    </div>
-                    <input type="hidden" id="editId" name="id">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </form>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Produk</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <div class="mb-3">
+                            <label for="editNama" class="form-label">Nama Produk</label>
+                            <input type="text" class="form-control" id="editNama" name="nama">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editStok" class="form-label">Stok</label>
+                            <input type="number" class="form-control" id="editStok" name="stok">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editStatus" class="form-label">Status</label>
+                            <select class="form-control" id="editStatus" name="status">
+                                <option value="Tersedia">Tersedia</option>
+                                <option value="Habis">Habis</option>
+                            </select>
+                        </div>
+                        <input type="hidden" id="editId" name="id">
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <!-- SweetAlert2 CSS -->

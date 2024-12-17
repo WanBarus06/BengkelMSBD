@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-// use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CartController;
@@ -34,23 +33,11 @@ Route::get('/about', function () {
     return view('about');
 })->name('about'); 
 
-// Tidak diperlukan, kita pakai satu file saja
-// Route::get('/user', function () {
-//     return view('user');
-// })->name('user');
-
 Route::get('/login-register', function () {
     return view('/login-register');
 })->name('/login-register');
 
 Route::get('/products', [ProductsController::class, 'index'])->name('products');
-
-// Rute ke dashboard owner
-
-// Engga semua view butuh controller untuk nampilin filenya
-// Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
-
-// Route::get('/products', [ProductsController::class, 'index'])->name('products');
 
 Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction');
 
@@ -63,12 +50,11 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/cart/add/{product_id}', [CartController::class, 'store'])->name('cart.store');
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::get('/cart/{cartId}', [TransactionController::class, 'show'])->name('transaction.show');
     Route::delete('/cart/{cartItemId}', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::delete('/cart', [CartController::class, 'deleteAllItems'])->name('cart.deleteAllItems');
     Route::post('/cart/increase/{cartItemId}', [CartController::class, 'increaseQuantity'])->name('cart.increase');
     Route::post('/cart/decrease/{cartItemId}', [CartController::class, 'decreaseQuantity'])->name('cart.decrease');
-    Route::post('/cart/booking/{cartId}', [CartController::class, 'booking'])->name('cart.booking');
+    Route::post('/cart  /booking/{cartId}', [CartController::class, 'booking'])->name('cart.booking');
 });
 
 Route::middleware(['auth', StaffMiddleware::class])->group(function () {
@@ -98,6 +84,16 @@ Route::middleware(['auth', StaffMiddleware::class])->group(function () {
 
 Route::middleware(['auth', OwnerMiddleware::class])->group(function () {
     // Rute yang hanya dapat diakses oleh pengguna dengan peran 'owner'
+    Route::get('/dashboard-owner', [dashboardOwnerController::class, 'dashboardOwner'])->name('dashboard-owner');
+
+    Route::get('/api/dashboard-data', function () {
+        return response()->json([
+            'jumlahPengguna' => User::where('role', 'user')->where('is_active', '1')->count(),
+            'jumlahPegawai' => User::where('role', 'staff')->where('is_active', '1')->count(),
+            'jumlahProduk' => Product::where('is_active', '1')->count(),
+        ]);
+        });
+
     Route::get('/user-list', [UserController::class, 'index'])->name('user-list');
     Route::get('/users/toggle-status/{id}', [UserController::class, 'toggleStatus'])->name('users.toggleStatus');
     
@@ -108,17 +104,17 @@ Route::middleware(['auth', OwnerMiddleware::class])->group(function () {
     Route::get('/staff/toggle-status/{id}', [StaffController::class, 'toggleStatus'])->name('staff.toggleStatus');
     Route::put('/staff/update/{id}', [StaffController::class, 'update'])->name('staff.update');
     Route::post('/staff/add', [StaffController::class, 'addStaff'])->name('staff.add');
-    Route::get('/dashboard-owner', [dashboardOwnerController::class, 'dashboardOwner'])->name('dashboard-owner');
 
-    Route::get('/api/dashboard-data', function () {
-    return response()->json([
-        'jumlahPengguna' => User::where('role', 'user')->where('is_active', '1')->count(),
-        'jumlahPegawai' => User::where('role', 'staff')->where('is_active', '1')->count(),
-        'jumlahProduk' => Product::where('is_active', '1')->count(),
-    ]);
-});
+    //Daftar Produk
     Route::get('/product-list', [productListController::class, 'getProductList'])->name('product-list');
-});
+    Route::post('/product/store', [productListController::class, 'store'])->name('product.store');
+    Route::post('/add-product', [productListController::class, 'store'])->name('add-product');
+    Route::get('/get-products', [productListController::class, 'getProducts'])->name('get-products');
 
+    Route::get('/api/products', function () {
+        $products = Product::where('is_active', '1')->get();
+        return response()->json($products);
+    });
+});
 
 require __DIR__.'/auth.php';
