@@ -61,6 +61,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        DB::unprepared('DROP PROCEDURE IF EXISTS CompleteOfflineOrder');
     }
 };

@@ -85,62 +85,7 @@
         <div class="container">
 
         <!-- Tombol untuk membuka modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
-    Tambah Produk
-</button>
-
-        <!-- Modal Tambah Produk -->
-<div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <form method="POST" action="{{ route('add-product') }}" enctype="multipart/form-data">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addProductModalLabel">Tambah Produk</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="brand_name" class="form-label">Brand Produk</label>
-                        <input type="text" class="form-control" id="brand_name" name="brand_name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="size_name" class="form-label">Ukuran Produk</label>
-                        <input type="text" class="form-control" id="size_name" name="size_name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="variant_name" class="form-label">Jenis Produk</label>
-                        <input type="text" class="form-control" id="variant_name" name="variant_name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="product_name" class="form-label">Nama Produk</label>
-                        <input type="text" class="form-control" id="product_name" name="product_name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="product_description" class="form-label">Deskripsi Produk</label>
-                        <input type="text" class="form-control" id="product_description" name="product_description" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="stock" class="form-label">Stok Produk</label>
-                        <input type="number" class="form-control" id="stock" name="stock" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="product_sell_price" class="form-label">Harga Produk</label>
-                        <input type="number" class="form-control" id="product_sell_price" name="product_sell_price" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="product_photo" class="form-label">Foto Produk</label>
-                        <input type="file" class="form-control" id="product_photo" name="product_photo" accept="image/*" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+  <a href="{{ route('add.product') }}" class="btn btn-primary">TAMBAH PRODUK</a> 
 
             <h1>Daftar Produk</h1>
             <table id="example" class="table table-striped">
@@ -151,41 +96,41 @@
             <th>Stok</th>
             <th>Status</th>
             <th>Detail</th>
-            <th>Aksi</th> 
+            <th>Aksi</th>
         </tr>
     </thead>
     <tbody>
         @foreach($products as $product)
             <tr>
-                <td>{{ $product->No }}</td>
-                <td>{{ $product->Nama }}</td>
-                <td>{{ $product->Stok }}</td>
-                <td>{{ $product->Status }}</td>
+                <td>{{ $product->product_id }}</td>
+                <td>{{ $product->product_name }}</td>
+                <td>{{ $product->productDetail->stock }}</td>
+                <td>{{ $product->is_active ? 'Aktif' : "Non-aktif" }}</td>
                 <td>
-                    <button class="btn btn-sm btn-primary" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#productModal" 
-                            data-detail="{{ json_encode([
-                                'harga' => $product->Harga,
-                                'deskripsi' => $product->Deskripsi,
-                                'brand' => $product->Brand,
-                                'ukuran' => $product->Ukuran,
-                                'varian' => $product->Varian,
-                            ]) }}">
-                        Lihat Detail
-                    </button>
+                    <form action="{{ route('owner-product.show', ['id' => $product->product_id]) }}" method="GET">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            Lihat Detail
+                        </button>
+                    </form>
                 </td>
                 <td>
-                    <button class="btn btn-sm btn-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#editModal"
-                            data-id="{{ $product->No }}"
-                            data-nama="{{ $product->Nama }}"
-                            data-stok="{{ $product->Stok }}"
-                            data-status="{{ $product->Status }}">
+                    {{-- <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal" 
+                    data-id="{{ $product->product_id }}" data-nama="{{ $product->product_name }}" data-stok="{{ $product->productDetail->stock }}" data-status="{{ $product->is_active ? 'Aktif' : 'Non-aktif' }}">
                         Edit
-                    </button>
-                </td>
+                    </button> --}}
+                    @if ($product->is_active)
+                    <form action="{{ route('product.status', $product->product_id) }}" method="POST" id="deleteForm{{ $product->product_id }}">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-warning" onclick="confirmDelete({{ $product->product_id }})">Nonaktifkan</button>
+                    </form>
+                @else
+                    <form action="{{ route('product.status', $product->product_id) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-success">Aktifkan</button>
+                    </form>
+                @endif  
             </tr>
         @endforeach
     </tbody>
@@ -209,6 +154,7 @@
                     <li><strong>Brand : </strong> <span id="productBrand"></span></li>
                     <li><strong>Ukuran : </strong> <span id="productUkuran"></span></li>
                     <li><strong>Varian :</strong> <span id="productVarian"></span></li>
+                    
                 </ul>
             </div>
         </div>
@@ -226,11 +172,11 @@
                     <form id="editForm">
                         <div class="mb-3">
                             <label for="editNama" class="form-label">Nama Produk</label>
-                            <input type="text" class="form-control" id="editNama" name="nama">
+                            <input type="text" class="form-control" id="editNama" name="product_name">
                         </div>
                         <div class="mb-3">
                             <label for="editStok" class="form-label">Stok</label>
-                            <input type="number" class="form-control" id="editStok" name="stok">
+                            <input type="number" class="form-control" id="editStok" name="stock">
                         </div>
                         <div class="mb-3">
                             <label for="editStatus" class="form-label">Status</label>
@@ -321,7 +267,26 @@ $('#editForm').on('submit', function(e) {
     });
 
 });
+function confirmDelete(productId) {
+    event.preventDefault(); // Mencegah form langsung dikirimkan
+    Swal.fire({
+        title: 'Apakah Anda yakin?',
+        text: "Status produk akan diubah!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, ubah status!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Jika konfirmasi, kirimkan form
+            document.getElementById('deleteForm' + productId).submit();
+        }
+    });
+}
 </script>
+
+
 
 </body>
 </html>

@@ -30,7 +30,7 @@ return new class extends Migration
         DB::statement("
         ALTER TABLE product_details 
         ADD CONSTRAINT check_warning_stock_valid 
-        CHECK (warning_stock >= 0 AND warning_stock <= stock);
+        CHECK (warning_stock >= 0);
         ");
 
         DB::statement("

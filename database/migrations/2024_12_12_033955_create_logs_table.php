@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
-            $table->enum('action_type', ['INSERT', 'UPDATE', 'DELETE']); // ENUM untuk jenis aksi
+            $table->enum('action_type', ['INSERT', 'UPDATE', 'DELETE']);
             $table->string('table_name', 50); // Nama tabel
             $table->unsignedBigInteger('record_id'); // ID data yang diubah
             $table->string('old_value', 255)->nullable(); // Nilai sebelum perubahan

@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        DB::unprepared('DROP FUNCTION IF EXISTS saleTotal');
     }
 };

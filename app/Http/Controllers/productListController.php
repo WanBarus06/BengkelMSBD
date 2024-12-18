@@ -14,11 +14,11 @@ use App\Models\ProductDetail;
 
 class productListController extends Controller
 {
-    public function getProductList()
+    public function index()
     {
         // Existing method remains the same
-        $products = DB::select('CALL GetProductList()');
-        return view('product-list', compact('products'));
+        $products = Product::all();
+        return view('product-list', ['products' => $products]);
     }
 
     public function updateProduct(Request $request)
@@ -53,63 +53,98 @@ class productListController extends Controller
         }
     }
     
-    public function addProduct(Request $request)
+    public function indexAddProduct(Request $request)
     {
-        // Validasi input
+       $brands = Brand::all();
+       $sizes = Size::all();
+       $variants = Variant::all();
+
+       return view('owner.add-product', compact('brands', 'sizes', 'variants'));
+    }    
+
+    public function store(Request $request)
+    {
+      
+        $request->validate([
+            'product_name' => 'required|string|max:255',
+            'product_sell_price' => 'required|numeric',
+            'warning_stock' => 'required|integer',
+            'variant_id' => 'required|integer',
+            'brand_id' => 'required|integer',
+            'size_id' => 'required|integer',
+            'product_description' => 'required|string',
+        ]);
+        
+        try {
+            DB::statement('CALL InsertProduct(?, ?, ?, ?, ?, ?, ?)', [
+                $request->product_name,
+                $request->product_sell_price,
+                $request->warning_stock,
+                $request->variant_id,
+                $request->brand_id,
+                $request->size_id,
+                $request->product_description,
+            ]);
+
+            return redirect()->route('product-list')->with('success', 'Product inserted successfully!');
+        } catch (\Exception $e) {
+            \Log::error('Error while calling stored procedure: ' . $e->getMessage());
+        }
+    }
+
+    public function show($id)
+    {
+        $product = Product::with('productDetail')->findOrFail($id);
+        $brands = Brand::all();
+        $sizes = Size::all();
+        $variants = Variant::all();
+        return view('owner.owner-detail-product', compact('product', 'brands', 'sizes', 'variants'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
         $validatedData = $request->validate([
-            'brand_name' => 'required|string|max:255',
-            'size_name' => 'required|string|max:255',
-            'variant_name' => 'required|string|max:255',
             'product_name' => 'required|string|max:255',
             'product_description' => 'required|string|max:255',
-            'product_photo' => 'nullable|string|max:255',
-            'stock' => 'required|integer',
-            'product_sell_price' => 'required|integer',
+            'size_id' => 'required|integer',
+            'brand_id' => 'required|integer',
+            'variant_id' => 'required|integer',
+            'warning_stock' => 'required|integer|min:1',
+            'product_sell_price' => 'required|integer|min:1',
+            'stock' => 'required|integer|min:0',
         ]);
-    
-        // Mulai transaksi
-        DB::beginTransaction();
-    
-        try {
-            // Insert ke tabel brands jika belum ada
-            $brand_id = Brand::firstOrCreate(['brand_name' => $validatedData['brand_name']])->id;
-    
-            // Insert ke tabel sizes jika belum ada
-            $size_id = Size::firstOrCreate(['size_name' => $validatedData['size_name']])->id;
-    
-            // Insert ke tabel variants jika belum ada
-            $variant_id = Variant::firstOrCreate(['variant_name' => $validatedData['variant_name']])->id;
-    
-            // Insert ke tabel product_descriptions
-            $description_id = ProductDescription::create([
-                'brand_id' => $brand_id,
-                'size_id' => $size_id,
-                'variant_id' => $variant_id,
-                'product_description' => $validatedData['product_description'],
-                'product_photo' => $request->product_photo ?? null,
-            ])->id;
-    
-            // Insert ke tabel products
-            $product_id = Product::create([
-                'product_name' => $validatedData['product_name'],
-                'description_id' => $description_id,
-                'is_active' => 1,
-            ])->id;
-    
-            // Insert ke tabel product_details
-            ProductDetail::create([
-                'product_id' => $product_id,
-                'stock' => $validatedData['stock'],
-                'product_sell_price' => $validatedData['product_sell_price'],
-            ]);
-    
-            DB::commit(); // Commit transaksi
+        DB::statement('CALL UpdateProduct(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+            $id,
+            $validatedData['product_name'],
+            $validatedData['product_description'],
+            $validatedData['size_id'],
+            $validatedData['brand_id'],
+            $validatedData['variant_id'],
+            $validatedData['warning_stock'],
+            $validatedData['product_sell_price'],
+            $validatedData['stock']
+        ]);
+
+        return redirect()->route('product-list')->with('success', 'Product updated successfully!');
         } catch (\Exception $e) {
-            DB::rollBack(); // Rollback transaksi jika ada error
-            return redirect()->back()->withErrors(['error' => 'Gagal menambahkan produk: ' . $e->getMessage()]);
+            \Log::error('Error while calling stored procedure: ' . $e->getMessage());
         }
-    
-        return redirect()->route('product-list')->with('success', 'Produk berhasil ditambahkan!');
-    }    
+    }
+
+    public function toggleStatus($id)
+    {
+        // Cari produk berdasarkan ID
+        $product = Product::findOrFail($id);
+
+        // Toggle status produk (1 menjadi 0, dan sebaliknya)
+        $product->is_active = !$product->is_active;
+
+        // Simpan perubahan
+        $product->save();
+
+        // Redirect kembali ke daftar produk dengan pesan sukses
+        return redirect()->route('product-list')->with('success', 'Product status updated successfully!');
+    }
 
 }

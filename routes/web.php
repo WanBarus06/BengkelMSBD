@@ -106,9 +106,14 @@ Route::middleware(['auth', OwnerMiddleware::class])->group(function () {
     Route::post('/staff/add', [StaffController::class, 'addStaff'])->name('staff.add');
 
     //Daftar Produk
-    Route::get('/product-list', [productListController::class, 'getProductList'])->name('product-list');
-    Route::post('/product/store', [productListController::class, 'store'])->name('product.store');
-    Route::post('/add-product', [productListController::class, 'store'])->name('add-product');
+    Route::get('/product-list', [productListController::class, 'index'])->name('product-list');
+    Route::get('/product/{id}', [productListController::class, 'show'])->name('owner-product.show');
+    // In your routes file
+    Route::get('/add-product', [productListController::class, 'indexAddProduct'])->name('add.product');
+    Route::put('/product/{id}', [productListController::class, 'update'])->name('product-update');
+    Route::patch('/product/{id}/status', [productListController::class, 'toggleStatus'])->name('product.status');
+    Route::post('/product/add', [productListController::class, 'store'])->name('product.store');
+
     Route::get('/get-products', [productListController::class, 'getProducts'])->name('get-products');
 
     Route::get('/api/products', function () {
