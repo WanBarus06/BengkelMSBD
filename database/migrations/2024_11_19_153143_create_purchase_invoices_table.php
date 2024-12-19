@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('purchase_invoices', function (Blueprint $table) {
-            $table->id('invoice_id');
-            $table->timestamp('invoice_date');
+            $table->id('invoice_id'); // primary key
             $table->foreignId('supplier_id')->constrained('suppliers', 'supplier_id');
+            $table->foreignId('staff_id')->constrained('users', 'id'); // Ensure this matches 'users.id'
             $table->timestamps();
+
         });
     }
 

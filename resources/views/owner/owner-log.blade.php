@@ -183,110 +183,46 @@ tfoot th[colspan="6"] {
             </div>
         </div>
     </nav>
-    <!-- Navbar End -->
-    
-    <!-- Product Detail Start -->
-    <div class="container mt-5">
-        <h3 class="text-center mb-4">Detail Produk</h3>
-        <form method="POST" action="{{ route('product-update', $product->product_id) }}">
-            @csrf
-            @method('PUT')
-    
-            <div class="row g-3">
-                <!-- Nama Produk -->
-                <div class="col-md-6">
-                    <label for="product_name" class="form-label">Nama Produk</label>
-                    <input type="text" id="product_name" name="product_name" class="form-control" value="{{ $product->product_name }}">
-                </div>
-    
-                <!-- Status Produk -->
-                <div class="col-md-6">
-                    <label for="is_active" class="form-label">Status</label>
-                    <input type="text" id="is_active" name="is_active" class="form-control" value="{{ $product->is_active ? 'Aktif' : 'Non-aktif' }}" readonly>
-                </div>
-            </div>
-            <div class="row g-3 mt-3">
-                <!-- Stok Produk -->
-                <div class="col-md-6">
-                    <label for="stock" class="form-label">Stok</label>
-                    <input type="text" id="stock" name="stock" class="form-control" value="{{ $product->productDetail->stock }}">
-                </div>
-    
-                <!-- Harga -->
-                <div class="col-md-6">
-                    <label for="price" class="form-label">Harga</label>
-                    <input type="number" id="price" name="product_sell_price" class="form-control" value="{{ $product->productDetail->product_sell_price }}">
-                </div>
-            </div>
-            <div class="row g-3 mt-3">
-                <!-- Deskripsi -->
-                <div class="col-md-6">
-                    <label for="product_description" class="form-label">Deskripsi</label>
-                   <input type ="text" id="oroduct_description" name="product_description" class="form-control" value="{{ $product->productDescription->product_description }}">
-                </div>
-    
-                <!-- Brand -->
-                <div class="col-md-6">
-                    <label for="brand" class="form-label">Brand</label>
-                    <select id="brand" name="brand_id" class="form-select">
-                        @foreach($brands as $brand)
-                            <option value="{{ $brand->brand_id }}" 
-                                {{ $brand->brand_id == $product->productDescription->brand_id ? 'selected' : '' }}>
-                                {{ $brand->brand_name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>          
-    
-            <div class="row g-3 mt-3">
-                <!-- Ukuran -->
-                <div class="col-md-6">
-                    <label for="size" class="form-label">Ukuran</label>
-                    <select id="size" name="size_id" class="form-select">
-                        @foreach($sizes as $size)
-                            <option value="{{ $size->size_id }}" 
-                                {{ $size->size_id == $product->productDescription->size_id ? 'selected' : '' }}>
-                                {{ $size->size_name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-    
-                <!-- Variasi -->
-                <div class="col-md-6">
-                    <label for="variant" class="form-label">Variasi</label>
-                    <select id="variant" name="variant_id" class="form-select">
-                        @foreach($variants as $variant)
-                            <option value="{{ $variant->variant_id }}" 
-                                {{ $variant->variant_id == $product->productDescription->variant_id ? 'selected' : '' }}>
-                                {{ $variant->variant_name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="row g-3 mt-3">
-                <!-- Ukuran -->
-                <div class="col-md-6">
-                    <label for="size" class="form-label">Stok Warning</label>
-                    <input type="number" name="warning_stock" class="form-select" value="{{ $product->productDetail->warning_stock }}">
-                </div>
-    
-                <!-- Variasi -->
-                {{-- <div class="col-md-6">
-                    <label for="variant" class="form-label">Variasi</label>
-                    <input type="text" name>
-                </div> --}}
-            </div>
-    
-            <!-- Update Button -->
-            <div class="mt-4 text-center">
-                <button type="submit" class="btn btn-primary">Update Produk</button>
-            </div>
-        </form>
+
+
+    <!-- Log Table Start -->
+    <div class="container my-5">
+        <h3 class="mb-4">Log Aktivitas Penjualan dan Pembelian</h3>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Action Type</th>
+                    <th>Table Name</th>
+                    <th>Record ID</th>
+                    <th>Old Value</th>
+                    <th>New Value</th>
+                    <th>User</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($logs as $log)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $log->action_type }}</td>
+                        <td>{{ $log->table_name }}</td>
+                        <td>{{ $log->record_id }}</td>
+                        <td>{{ $log->old_value }}</td>
+                        <td>{{ $log->new_value }}</td>
+                        <td>{{ $log->user ? $log->user->name : 'N/A' }}</td>
+                        <td>{{ $log->created_at }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <!-- Pagination Links -->
+        <div class="d-flex justify-content-center">
+            {{ $logs->links() }}
+        </div>
     </div>
-    <!-- Product Detail End -->
+    <!-- Log Table End -->
     
 </body>
 </html>

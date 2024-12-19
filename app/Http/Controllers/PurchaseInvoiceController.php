@@ -10,6 +10,7 @@ use App\Models\CartItem;
 use App\Models\PurchaseInvoiceDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PurchaseInvoiceController extends Controller
 {
@@ -115,12 +116,14 @@ class PurchaseInvoiceController extends Controller
         $request->validate([
             'supplier_id' => 'required|exists:suppliers,supplier_id',
         ]);
-    
+        
+        $staffId = Auth::id();
         $supplierId = $request->input('supplier_id');
+        
     
         try {
             // Memanggil stored procedure yang telah dibuat
-            DB::statement('CALL ConfirmPurchaseInvoice(?, ?)', [$cartId, $supplierId]);
+            DB::statement('CALL ConfirmPurchaseInvoice(?, ?, ?)', [$cartId, $supplierId, $staffId]);
     
             return redirect()->route('orders.index')->with('success', 'Purchase Invoice confirmed successfully.');
         } catch (\Exception $e) {

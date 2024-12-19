@@ -7,6 +7,7 @@ use App\Models\CartItem;
 use App\Models\SalesRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -103,9 +104,10 @@ class OrderController extends Controller
 
     public function completeOrder(Request $request, $cartId)
     {
+        $staffId = Auth::id();
         try {
             // Memanggil stored procedure
-            DB::statement('CALL CompleteOrder(:cartId)', ['cartId' => $cartId]);
+            DB::statement('CALL CompleteOrder(:cartId, :StaffId)', ['cartId' => $cartId, 'StaffId' => $staffId]);
             return redirect()->route('orders.index')->with('success', 'Pesanan telah selesai.');
         } catch (\Exception $e) {
             // Tangani kesalahan
@@ -115,7 +117,7 @@ class OrderController extends Controller
     }
 
     public function confirmOrder(Cart $cart)
-    {
+    {   
         DB::statement('CALL ConfirmOrder(:cartId)', ['cartId' => $cart->id]);
 
         return redirect()->route('orders.index')->with('success', 'Pesanan berhasil dikonfirmasi.');
@@ -132,7 +134,7 @@ class OrderController extends Controller
             'cancelled_by' => auth()->user()->id, // Ambil nama user yang membatalkan
             'rejected_at' => now()
         ]);
-
+        
         return redirect()->route('orders.index')->with('success', 'Pesanan telah berhasil ditolak');
     }
 

@@ -9,7 +9,7 @@ use App\Models\SalesRecord;
 use App\Models\SalesRecordDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class OfflineOrderController extends Controller
 {
     /**
@@ -162,11 +162,13 @@ class OfflineOrderController extends Controller
             'offline_customer_address' => 'required|string',
             'is_fully_paid' => 'required|boolean',
         ]);
-    
+
+        $staffId = Auth::id();
         try {
             // Panggil stored procedure dengan DB::unprepared
-            DB::statement("CALL CompleteOfflineOrder(:cartId, :offlineCustomerName, :offlineCustomerPhoneNumber, :offlineCustomerAddress, :isFullyPaid)", [
+            DB::statement("CALL CompleteOfflineOrder(:cartId, :StaffId, :offlineCustomerName, :offlineCustomerPhoneNumber, :offlineCustomerAddress, :isFullyPaid)", [
                 'cartId' => $cartId,
+                'StaffId' => $staffId,
                 'offlineCustomerName' => $request->offline_customer_name,
                 'offlineCustomerPhoneNumber' => $request->offline_customer_phone_number,
                 'offlineCustomerAddress' => $request->offline_customer_address,

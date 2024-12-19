@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Log extends Model
 {
-    protected $table = 'audit_trail';
 
     protected $fillable = [
         'action_type',
@@ -16,4 +15,9 @@ class Log extends Model
         'new_value',
         'user_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

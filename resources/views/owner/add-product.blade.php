@@ -180,6 +180,7 @@ tfoot th[colspan="6"] {
                 <a href="{{ route('user-list') }}" class="nav-item nav-link">Daftar Pengguna</a>
                 <a href="{{ route('staff-list') }}" class="nav-item nav-link">Daftar Pegawai</a>
                 <a href="{{ route('product-list') }}" class="nav-item nav-link">Daftar Produk</a>
+                <a href="{{ route('logs.index') }}" class="nav-item nav-link">Log</a>
             </div>
         </div>
     </nav>

@@ -11,7 +11,8 @@ class ProductsController extends Controller
     public function index(Request $request)
     {
         // Query dasar
-        $products = Product::with(['productDetail']);
+        $products = Product::with(['productDetail'])
+            ->where('is_active', true);
         $variants = Variant::all();
         // Pencarian
         if ($request->has('search') && $request->search) {

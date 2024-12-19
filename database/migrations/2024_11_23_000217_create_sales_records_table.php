@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('sales_records', function (Blueprint $table) {
             $table->id('sales_id');
+            $table->unsignedBigInteger('staff_id')->nullable();
             $table->unsignedBigInteger('customer_id')->nullable(); // Untuk pelanggan online
             $table->string('offline_customer_name')->nullable();  // Untuk pelanggan offline
             $table->string('offline_customer_phone_number')->nullable();  // Untuk pelanggan offline
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->boolean('is_fully_paid')->default(true);
             $table->timestamps();
 
+            $table->foreign('staff_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('customer_id')->references('id')->on('users')->onDelete('set null');
         });
     }

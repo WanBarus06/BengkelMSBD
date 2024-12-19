@@ -16,6 +16,7 @@ class SalesRecord extends Model
         'offline_customer_phone_number',
         'offline_customer_address',
         'is_fully_paid',
+        'staff_id'
     ];
 
     public function details()

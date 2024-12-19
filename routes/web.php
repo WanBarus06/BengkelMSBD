@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\productListController;
 use App\Http\Controllers\dashboardOwnerController;
+use App\Http\Controllers\LogController;
 use Illuminate\Support\Facades\DB; 
 
 use App\Models\User;
@@ -108,6 +109,7 @@ Route::middleware(['auth', OwnerMiddleware::class])->group(function () {
     //Daftar Produk
     Route::get('/product-list', [productListController::class, 'index'])->name('product-list');
     Route::get('/product/{id}', [productListController::class, 'show'])->name('owner-product.show');
+    Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
     // In your routes file
     Route::get('/add-product', [productListController::class, 'indexAddProduct'])->name('add.product');
     Route::put('/product/{id}', [productListController::class, 'update'])->name('product-update');
