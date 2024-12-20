@@ -47,4 +47,17 @@ class TransactionController extends Controller
             'cartTotal' => $cartTotal[0]->total, // Ambil nilai total dari hasil query
         ]);
     }
+
+    public function staffIndex() 
+    {
+        $transactions = DB::table('today_sales')->get();
+
+        return view('staff.transaction-history', compact('transactions'));
+    }
+
+    public function staffPurchase() {
+        $purchases = DB::table('today_purchases')->get();
+
+        return view('staff.purchase-history', compact('purchases'));
+    }
 }

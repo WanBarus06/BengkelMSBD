@@ -81,6 +81,8 @@ Route::middleware(['auth', StaffMiddleware::class])->group(function () {
     Route::post('/suppliers/{supplier}/activate', [SupplierController::class, 'activate'])->name('suppliers.activate');
     Route::post('/purchase-invoice/complete/{cartId}', [PurchaseInvoiceController::class, 'confirmInvoice'])->name('purchase-invoice.confirm');
     Route::post('/purchase-invoice/cart/{cartId}', [PurchaseInvoiceController::class, 'store'])->name('purchase-invoice.store');
+    Route::get('/transactions/today', [TransactionController::class, 'staffIndex'])->name('transactions.today');
+    Route::get('/purchase-history', [TransactionController::class, 'staffPurchase'])->name('purchase.today');
 });
 
 Route::middleware(['auth', OwnerMiddleware::class])->group(function () {
@@ -122,6 +124,7 @@ Route::middleware(['auth', OwnerMiddleware::class])->group(function () {
         $products = Product::where('is_active', '1')->get();
         return response()->json($products);
     });
+    
 });
 
 require __DIR__.'/auth.php';

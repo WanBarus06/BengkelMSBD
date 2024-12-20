@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Manajemen Pemasok</title>
+    <title>Transaksi Hari Ini</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -74,94 +74,46 @@
             </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="{{ 'suppliers.index' }}" class="nav-item nav-link active">Supplier</a>
+                <a href="{{ 'suppliers.index' }}" class="nav-item nav-link">Supplier</a>
                 <a href="{{ route('orders.index') }}" class="nav-item nav-link">Pesanan Online</a>
                 <a href="{{ route('orders.onsite') }}" class="nav-item nav-link">Pesanan Offline</a>
                 <a href="{{ route('purchase-invoice.index') }}" class="nav-item nav-link">Faktur Pembelian</a>
                 <a href="{{ route('transactions.today') }}" class="nav-item nav-link" >Penjualan</a>
+                <a href="{{ route('transactions.today') }}" class="nav-item nav-link active" >Pembelian</a>
                 &nbsp; &nbsp;<img class="img-fluid logo-navbar" src="../assets/img/logo.jpeg" alt="">
             </div>
     </nav>
 <!-- Navbar End -->
 
 <!-- Tabel Data -->
-@if(session('success'))
-<div class="alert alert-success">
-    {{ session('success') }}
-</div>
-@endif
+
 
 <div class="container mt-5">
-    <h1>Manajemen Pemasok Barang</h1>
-    
-    <!-- Form Input Supplier -->
-    <form method="POST" action="{{ route('suppliers.store') }}">
-        @csrf
-        <div class="mb-3">
-            <label for="supplier_name" class="form-label">Nama Pemasok</label>
-            <input type="text" class="form-control" id="supplier_name" name="supplier_name" required>
-            @error('supplier_name')
-            <div class="alert alert-danger mt-2">{{ $message }}</div>
-            @enderror
-        </div>
-        
-        <div class="mb-3">
-            <label for="phone_number" class="form-label">Nomor Telepon</label>
-            <input type="number" class="form-control" id="phone_number" name="phone_number" required>
-            @error('phone_number')
-                <div class="alert alert-danger mt-2">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="mb-3">
-            <label for="address" class="form-label">Alamat</label>
-            <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
-            @error('address')
-            <div class="alert alert-danger mt-2">{{ $message }}</div>
-            @enderror
-        </div>
-        <button type="submit" class="btn btn-primary">Tambahkan</button>
-    </form>
+    <h1>Riwayat Pembelian Hari Ini</h1>
 
-    <hr>
-
-    <!-- Tabel Supplier -->
-    <h2>Daftar Pemasok Barang</h2>
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nama Pemasok</th>
-                    <th>Nomor Telepon</th>
-                    <th>Alamat</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
+                    <th>Tanggal Pembelian</th>
+                    <th>Total Pembelian</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($suppliers as $supplier)
+                @forelse ($purchases as $purchase)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $supplier->supplier_name }}</td>
-                    <td>{{ $supplier->phone_number }}</td>
-                    <td>{{ $supplier->address }}</td>
-                    <td>{{ $supplier->is_active ? 'Aktif' : 'Tidak Aktif' }}</td>
-                    <td>
-                        @if ($supplier->is_active)
-                        <form action="{{ route('suppliers.destroy', $supplier) }}" method="POST" id="deleteForm{{ $supplier->supplier_id }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ $supplier->supplier_id }})">Nonaktifkan</button>
-                        </form>
-                        @else
-                        <form action="{{ route('suppliers.activate', $supplier) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn btn-success btn-sm">Aktifkan</button>
-                        </form>
-                        @endif                     
-                    </td>
+                    <td>{{ $purchase->supplier_name }}</td>
+                    <td>{{ $purchase->created_at }}</td>
+                    <td>{{ number_format($purchase->total, 2) }}</td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="5" class="text-center">Tidak ada pembelian hari ini.</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

@@ -109,6 +109,7 @@
             <a href="{{ route('orders.index') }}" class="nav-item nav-link">Pesanan Online</a>
             <a href="{{ route('orders.onsite') }}" class="nav-item nav-link active">Pesanan Offline</a>
             <a href="{{ route('purchase-invoice.index') }}" class="nav-item nav-link">Faktur Pembelian</a>
+            <a href="{{ route('transactions.today') }}" class="nav-item nav-link" >Penjualan</a>
             &nbsp; &nbsp;<img class="img-fluid logo-navbar" src="../assets/img/logo.jpeg" alt="">
         </div>
     </div>
