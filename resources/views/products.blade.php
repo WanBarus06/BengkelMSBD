@@ -136,11 +136,8 @@
                 <!-- Sort Options -->
                 <div class="filter-section mb-4">
                     <ul class="list-unstyled bg-light p-2 rounded">
-                        <li><a href="?sort=popular">Popular</a></li>
                         <li><a href="?sort=name_asc">Nama A - Z</a></li>
                         <li><a href="?sort=name_desc">Nama Z - A</a></li>
-                        <li><a href="?sort=price_low_high">Harga Rendah - Tinggi</a></li>
-                        <li><a href="?sort=price_high_low">Harga Tinggi - Rendah</a></li>
                         <li><a href="?sort=clear">Hapus Sortiran</a></li>
                     </ul>
                 </div>

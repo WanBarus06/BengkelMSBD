@@ -58,6 +58,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart  /booking/{cartId}', [CartController::class, 'booking'])->name('cart.booking');
 });
 
+Route::get('/cart/{cartId}', [TransactionController::class, 'show'])->name('transaction.show');
+
 Route::middleware(['auth', StaffMiddleware::class])->group(function () {
     // Rute yang hanya dapat diakses oleh pengguna dengan peran 'staff'
     Route::resource('suppliers', SupplierController::class);
@@ -79,6 +81,7 @@ Route::middleware(['auth', StaffMiddleware::class])->group(function () {
     Route::post('/offline-orders/{cart_id}', [OfflineOrderController::class, 'store'])->name('offline-orders.store');
     Route::post('/offline-orders/paid/{saleId}', [OfflineOrderController::class, 'paid'])->name('offline-orders.paid');
     Route::post('/suppliers/{supplier}/activate', [SupplierController::class, 'activate'])->name('suppliers.activate');
+    Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
     Route::post('/purchase-invoice/complete/{cartId}', [PurchaseInvoiceController::class, 'confirmInvoice'])->name('purchase-invoice.confirm');
     Route::post('/purchase-invoice/cart/{cartId}', [PurchaseInvoiceController::class, 'store'])->name('purchase-invoice.store');
     Route::get('/transactions/today', [TransactionController::class, 'staffIndex'])->name('transactions.today');

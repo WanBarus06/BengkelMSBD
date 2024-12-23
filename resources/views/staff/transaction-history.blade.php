@@ -74,7 +74,7 @@
             </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="{{ 'suppliers.index' }}" class="nav-item nav-link">Supplier</a>
+                <a href="{{ route('suppliers.index') }}" class="nav-item nav-link">Supplier</a>
                 <a href="{{ route('orders.index') }}" class="nav-item nav-link">Pesanan Online</a>
                 <a href="{{ route('orders.onsite') }}" class="nav-item nav-link">Pesanan Offline</a>
                 <a href="{{ route('purchase-invoice.index') }}" class="nav-item nav-link">Faktur Pembelian</a>
@@ -117,7 +117,7 @@
                     <td>Online</td>
                     @endif
                     <td>{{ $transaction->is_fully_paid ? 'Lunas' : 'Belum Lunas' }}</td>
-                    <td>{{ number_format($transaction->total) }}</td>
+                    <td>{{ number_format($transaction->total, 2) }}</td>
                 </tr>
                 @empty
                 <tr>

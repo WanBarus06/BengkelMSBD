@@ -74,7 +74,7 @@
             </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="{{ 'suppliers.index' }}" class="nav-item nav-link">Supplier</a>
+                <a href="{{ route('suppliers.index') }}" class="nav-item nav-link">Supplier</a>
                 <a href="{{ route('orders.index') }}" class="nav-item nav-link">Pesanan Online</a>
                 <a href="{{ route('orders.onsite') }}" class="nav-item nav-link">Pesanan Offline</a>
                 <a href="{{ route('purchase-invoice.index') }}" class="nav-item nav-link">Faktur Pembelian</a>
@@ -107,7 +107,7 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $purchase->supplier_name }}</td>
                     <td>{{ $purchase->created_at }}</td>
-                    <td>{{ number_format($purchase->total, 2) }}</td>
+                    <td>{{ number_format($purchase->total) }}</td>
                 </tr>
                 @empty
                 <tr>

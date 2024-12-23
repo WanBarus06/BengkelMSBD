@@ -28,7 +28,7 @@
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="../assets/css/dashboard-owner.css" rel="stylesheet">
+    <link href="../assets/css/owner-log.css" rel="stylesheet">
 
     <!-- Tambahkan jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -45,110 +45,6 @@
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
 
-    <style>
-    .dataTables_wrapper .top {
-        align-items: center; /* Pastikan tombol dan search sejajar */
-        gap: 50px; /* Memberikan jarak antar elemen */
-    }
-
-    .dataTables_wrapper .dataTables_filter {
-        margin-left: auto; /* Posisikan search box ke kanan */
-    }
-
-    .dataTables_wrapper .dt-buttons {
-        margin-right: auto; /* Posisikan tombol ke kiri */
-    }
-
-    .dataTables_wrapper .bottom {
-    display: flex; /* Aktifkan Flexbox */
-    justify-content: space-between; /* Elemen berjauhan ujung ke ujung */
-    align-items: center; /* Elemen sejajar vertikal */
-    padding: 10px 0; /* Tambahkan jarak atas/bawah */
-}
-
-.dataTables_wrapper .dataTables_length {
-    margin-bottom: 0; /* Hilangkan margin bawah bawaan */
-}
-
-.dataTables_wrapper .dataTables_paginate {
-    margin-bottom: 0; /* Hilangkan margin bawah bawaan */
-}
-
-.dataTables_paginate {
-    display: flex; /* Membuat tombol tampil sejajar */
-    justify-content: center; /* Menempatkan di tengah */
-    gap: 10px; /* Jarak antar tombol */
-}
-
-.dataTables_paginate .paginate_button {
-    margin: 0 5px; /* Tambahkan margin horizontal antar tombol */
-    padding: 5px 10px; /* Sesuaikan padding untuk tampilan yang lebih rapi */
-    border: 1px solid #ccc; /* Tambahkan border jika diperlukan */
-    border-radius: 5px; /* Membuat sudut tombol lebih halus */
-    color: #333; /* Warna teks */
-    background-color: #fff; /* Warna latar belakang */
-    cursor: pointer;
-    text-decoration: none; /* Hilangkan garis bawah */
-}
-
-.dataTables_paginate .paginate_button:hover {
-    background-color: #f0f0f0; /* Efek hover */
-    border-color: #aaa;
-}
-
-.dataTables_paginate .paginate_button.current {
-    background-color: #007bff; /* Warna tombol aktif */
-    color: #fff;
-    border-color: #007bff;
-}
-
-/* Responsif untuk layar kecil */
-@media (max-width: 768px) {
-    .dataTables_wrapper .bottom {
-        flex-direction: column; /* Elemen vertikal pada layar kecil */
-        gap: 10px; /* Tambahkan jarak antar elemen */
-    }
-}
-
-@media pdf {
-    table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    table th, table td {
-        border: 1px solid black;
-        padding: 8px;
-        text-align: left;
-    }
-
-    tfoot th[colspan="5"] {
-        text-align: right; /* Agar tulisan total kesemua penjualan rata kanan */
-        font-weight: bold;
-    }
-
-    table thead th {
-        background-color: #f2f2f2; /* Warna latar header */
-    }
-
-    body {
-        margin: 0;
-        padding: 0;
-    }
-}
-
-tfoot th {
-    text-align: right; /* Rata kanan */
-    font-weight: bold;
-    border-top: 2px solid #000; /* Garis atas untuk pemisah */
-}
-
-tfoot th[colspan="6"] {
-    text-align: right; /* Rata kanan */
-    font-weight: bold;
-}
-    </style>
-
 </head>
 <body>
 
@@ -156,8 +52,8 @@ tfoot th[colspan="6"] {
         <div class="row gx-0 d-none d-lg-flex">
             <div class="col-lg-7 px-5 text-start">
                 <div class="h-100 d-inline-flex align-items-center py-3 me-4">
-                    <small class="fa fa-home text-primary me-2"></small>
-                    <small><a href="{{ route('dashboard-owner') }}" class="">Beranda</a></small>
+                    <small class="fas fa-file-alt text-primary me-2"></small>
+                    <small><a href="{{ route('logs.index') }}" class="">Log</a></small>
                 </div>
                 <div class="h-100 d-inline-flex align-items-center py-3">
                     <small class="fas fa-user-cog text-primary me-2"></small>
@@ -175,11 +71,12 @@ tfoot th[colspan="6"] {
         </a>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="{{ route('dashboard-owner') }}" class="nav-item nav-link active">Beranda</a>
+                <a href="{{ route('dashboard-owner') }}" class="nav-item nav-link">Beranda</a>
                 <a href="{{ route('user-list') }}" class="nav-item nav-link">Daftar Pengguna</a>
                 <a href="{{ route('staff-list') }}" class="nav-item nav-link">Daftar Pegawai</a>
                 <a href="{{ route('product-list') }}" class="nav-item nav-link">Daftar Produk</a>
-                <a href="{{ route('logs.index') }}" class="nav-item nav-link">Log</a>
+                <a href="{{ route('logs.index') }}" class="nav-item nav-link active">Log</a>
+                &nbsp; &nbsp;<img class="img-fluid logo-navbar" src="../assets/img/logo.jpeg" alt="">
             </div>
         </div>
     </nav>
@@ -202,14 +99,30 @@ tfoot th[colspan="6"] {
                 </tr>
             </thead>
             <tbody>
-                @foreach ($logs as $log)
+            @foreach ($logs as $log)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $log->action_type }}</td>
                         <td>{{ $log->table_name }}</td>
                         <td>{{ $log->record_id }}</td>
-                        <td>{{ $log->old_value }}</td>
-                        <td>{{ $log->new_value }}</td>
+                        @if($log->old_value == '[]')
+                            <td>NULL</td>
+                        @elseif($log->old_value == 'is_fully_paid: 0')
+                            <td>Hutang</td>
+                        @elseif($log->old_value == 'is_fully_paid: 1')
+                            <td>Lunas</td>
+                        @else
+                            <td>{{ $log->old_value }}</td>
+                        @endif
+                        @if($log->new_value == '[]')
+                        <td>NULL</td>
+                        @elseif($log->new_value == 'is_fully_paid: 0')
+                            <td>Hutang</td>
+                        @elseif($log->new_value == 'is_fully_paid: 1')
+                            <td>Lunas</td>
+                        @else
+                            <td>{{ $log->new_value }}</td>
+                        @endif
                         <td>{{ $log->user ? $log->user->name : 'N/A' }}</td>
                         <td>{{ $log->created_at }}</td>
                     </tr>
